@@ -1,0 +1,33 @@
+server:
+  port: 8081
+  context-path: /
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    default-property-inclusion: non_null
+  messages:
+    basename: i18n/messages,i18n/errors
+  executor:
+    thread-pool:
+      core-pool-size: 20
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+
+ribbon:
+  eager-load:
+    enabled: false
+  ConnectTimeout: 1000
+  ReadTimeout: 5000
+#  retry
+  OkToRetryOnAllOperations: true
+  MaxAutoRetries: 1
+  MaxAutoRetriesNextServer: 1
+
+
+
+
+

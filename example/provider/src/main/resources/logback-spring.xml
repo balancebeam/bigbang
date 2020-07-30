@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+    <include resource="logging/logback.xml" />
+
+    <springProfile name="dev,test">
+        <root level="INFO">
+            <appender-ref ref="ASYNC_TXT_CONSOLE" />
+        </root>
+    </springProfile>
+
+    <springProfile name="prod,staging">
+        <root level="INFO">
+            <appender-ref ref="ASYNC_JSON_CONSOLE" />
+        </root>
+    </springProfile>
+
+</configuration>

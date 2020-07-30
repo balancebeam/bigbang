@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    default-property-inclusion: non_null
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+
+ribbon:
+  eager-load:
+    enabled: false
+#  ConnectionTimeout: 1000
+#  ReadTimeout: 1000
+#  OkToRetryOnAllOperations: true
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 1
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
+
+
+

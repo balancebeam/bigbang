@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    gateway:
+      discovery:
+        locator:
+          lower-case-sehttpclientrvice-id: true
+
+ribbon:
+  eager-load:
+    enabled: false
+#  ConnectionTimeout: 1000
+#  ReadTimeout: 1000
+#  OkToRetryOnAllOperations: true
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 1
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
+
+
+

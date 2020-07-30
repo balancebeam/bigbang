@@ -1,0 +1,70 @@
+buildscript {
+	repositories{
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url repositoryMavenCentral
+        }
+        maven {
+            url 'https://repo1.maven.org/maven2/'
+        }
+	}
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.2.RELEASE")
+    }
+}
+
+allprojects{
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    configurations {
+        provided
+    }
+
+    sourceSets.main.compileClasspath += configurations.provided
+    sourceSets.test.compileClasspath += configurations.provided
+    sourceSets.test.runtimeClasspath += configurations.provided
+
+    repositories {
+        maven {
+            url repositoryMavenCentral
+        }
+        maven {
+            url 'https://repo1.maven.org/maven2/'
+        }
+    }
+
+    dependencyManagement {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
+        imports {
+            mavenBom "io.anyway.bigbang:dependency-management:1.0.0-SNAPSHOT"
+        }
+    }
+
+    dependencies {
+
+        testCompile("org.testcontainers:testcontainers:1.14.1")
+        testCompile("org.awaitility:awaitility:3.0.0")
+        testCompile("com.github.tomakehurst:wiremock-standalone:2.6.0")
+        testCompile("org.apache.httpcomponents:fluent-hc:4.5.6")
+        testCompile("org.springframework.boot:spring-boot-starter-test:2.1.15.RELEASE")
+    }
+
+}
+
+

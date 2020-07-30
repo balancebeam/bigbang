@@ -1,0 +1,8 @@
+description = "the consumer of example project"
+archivesBaseName = 'io.anyway.bigbang.example.consumer'
+apply plugin: "org.springframework.boot"
+
+dependencies {
+    compile(project(":example:api"))
+    compile(project(":framework:microservice-kernel"))
+}

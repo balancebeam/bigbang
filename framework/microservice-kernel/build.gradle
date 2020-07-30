@@ -1,0 +1,27 @@
+apply from: "../../publish.gradle"
+description = "the microservice kernal of framework"
+archivesBaseName = 'io.anyway.bigbang.framework.microservice-kernal'
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+}
+dependencies {
+    compile(project(":framework:kernel"))
+    compile("org.springframework.boot:spring-boot-starter-web:2.3.0.RELEASE")
+    compile("org.springframework.cloud:spring-cloud-starter-openfeign:2.2.3.RELEASE")
+    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2.2.1.RELEASE")
+    compile("com.alibaba:transmittable-thread-local:2.11.5")
+    compile("net.logstash.logback:logstash-logback-encoder:6.4")
+    compile("org.springframework.boot:spring-boot-starter-actuator:2.3.0.RELEASE")
+    compile("io.micrometer:micrometer-registry-prometheus:1.5.2")
+    compile("io.springfox:springfox-swagger2:2.9.2")
+    compile("io.springfox:springfox-swagger-ui:2.9.2")
+    annotationProcessor("org.projectlombok:lombok:1.18.12")
+    compileOnly("org.projectlombok:lombok:1.18.12")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.12")
+    testCompileOnly("org.projectlombok:lombok:1.18.12")
+
+//    compile("org.javassist:javassist:3.27.0-GA")
+
+}
