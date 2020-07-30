@@ -1,0 +1,16 @@
+spring:
+  redis:
+    host: redis.bigang.internal
+    port: 6379
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://reg1.bigbang.internal:8761/eureka/,reg2.bigbang.internal:8761/eureka/,reg3.bigbang.internal:8761/eureka/
+
+zookeeper:
+  server-list: zk1.bigang.internal:2181,zk2.bigang.internal:2181,zk3.bigang.internal:2181
+
+management:
+  server:
+    port: 9090

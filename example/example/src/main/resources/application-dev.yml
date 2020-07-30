@@ -1,0 +1,76 @@
+server:
+  port: 8082
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    max-connections: 20000
+    min-SpareThreads: 20
+    acceptCount: 700
+
+spring:
+  bigbang:
+    tenant:
+      tenant-list:
+        - id: 1
+          token: bce7bd01-p049-4d86-86ca-11508376d4a0
+          name: tenant_1
+        - id: 2
+          token: cf3cfc61-ek56-4923-917a-0f54a7960534
+          name: tenant_2
+    redis:
+      service-list:
+        - name: tenant_1
+          host: 127.0.0.1
+          port: 6379
+    datasource:
+      tenant-datasource-config:
+        tenant_1:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/bigbang_oauth2?zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+          username: bigbang
+          password: bigbang
+          initial-size: 10
+          min-idle: 10
+          max-active: 50
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
+          filters: stat,wall
+          connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+          time-between-eviction-runs-millis: 60000
+          min-evictable-idle-time-millis: 300000
+          validation-query: select 1
+          test-while-idle: true
+          test-on-borrow: true
+          test-on-return: false
+        tenant_2:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/bigbang_oauth2?zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+          username: bigbang
+          password: bigbang
+          initial-size: 10
+          min-idle: 10
+          max-active: 50
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
+          filters: stat,wall
+          connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+          time-between-eviction-runs-millis: 60000
+          min-evictable-idle-time-millis: 300000
+          validation-query: select 1
+          test-while-idle: true
+          test-on-borrow: true
+          test-on-return: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    metadata-map:
+      abc: 123
+
+zookeeper:
+  server-list: 127.0.0.1:2181
+

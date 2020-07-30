@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+
+    <appender name="TXT_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="io.anyway.bigbang.framework.core.logging.XPatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="io.anyway.bigbang.framework.core.logging.XLoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                </timestamp>
+                <pattern >
+                    <pattern>
+                        {
+                        "appName": "${appName}",
+                        "level": "%level",
+                        "thread": "%thread",
+                        "caller": "%logger{40}.%method:%line",
+                        "message": "%.-500message",
+                        "stack_trace": "%exception{full}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_TXT_CONSOLE" class="io.anyway.bigbang.framework.core.logging.InheritableThreadAsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>2048</queueSize>
+        <appender-ref ref="TXT_CONSOLE"/>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+    <appender name="ASYNC_JSON_CONSOLE" class="io.anyway.bigbang.framework.core.logging.InheritableThreadAsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>2048</queueSize>
+        <appender-ref ref="JSON_CONSOLE"/>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+</included>

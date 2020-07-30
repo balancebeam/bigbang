@@ -1,0 +1,13 @@
+description = "The service module of kernal project"
+archivesBaseName = 'io.anyway.bigbang.framework.message'
+
+dependencies {
+    compile(libraries.lombok)
+    compile(libraries.alibaba_fastjson)
+    compile(libraries.skywalking)
+    compile(libraries.spring_boot)
+    compile(libraries.spring_boot_web)
+    compile(libraries.spring_cloud_eureka_client)
+}
+
+

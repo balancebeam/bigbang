@@ -1,0 +1,10 @@
+description = "The service module of kernal project"
+archivesBaseName = 'io.anyway.bigbang.framework.metrics'
+
+dependencies {
+    compile(project(":framework:framework-core"))
+    compile(libraries.spring_boot_actuator)
+    compile(libraries.prometheus)
+}
+
+

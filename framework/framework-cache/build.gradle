@@ -1,0 +1,14 @@
+description = "The service module of kernal project"
+archivesBaseName = 'io.anyway.bigbang.framework.cache'
+
+dependencies {
+    compile(project(":framework:framework-core"))
+    compile(libraries.spring_boot_redis)
+    compile(libraries.commons_pool2)
+    provided(project(":framework:framework-tenant"))
+    compile(libraries.redisson)
+    compile(libraries.redisson_spring_data)
+    provided(libraries.jedis)
+    }
+
+

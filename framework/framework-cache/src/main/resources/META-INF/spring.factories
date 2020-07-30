@@ -1,0 +1,7 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.framework.cache.autoconfigure.TenantCacheConfiguration,\
+io.anyway.bigbang.framework.cache.autoconfigure.ConnectionFactoryConfiguration$JedisCacheConfiguration,\
+io.anyway.bigbang.framework.cache.autoconfigure.ConnectionFactoryConfiguration$RedissonCacheConfiguration,\
+io.anyway.bigbang.framework.cache.autoconfigure.ConnectionFactoryConfiguration$LettuceCacheConfiguration,\
+io.anyway.bigbang.framework.cache.autoconfigure.BasicCacheConfiguration

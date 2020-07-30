@@ -1,0 +1,18 @@
+description = "The service of api gateway"
+archivesBaseName = 'io.anyway.bigbang.gateway'
+configurations {
+    all*.exclude group: "org.springframework.boot" ,module: "spring-boot-starter-web"
+}
+dependencies {
+    compile(project(":framework:framework-core"))
+    compile(project(":framework:framework-metrics"))
+    compile(project(":framework:framework-tenant"))
+    compile(project(":framework:framework-beam"))
+    compile(libraries.spring_oauth2_client)
+    compile(libraries.nimbus_jose_jwt)
+    compile(libraries.spring_cloud_gateway)
+    compile(libraries.spring_cloud_eureka_client)
+
+}
+
+

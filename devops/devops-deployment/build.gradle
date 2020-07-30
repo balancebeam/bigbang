@@ -1,0 +1,8 @@
+description = "The service module of devops project"
+archivesBaseName = 'io.anyway.bigbang.devops.deployment'
+
+dependencies {
+    compile(project(":framework:framework-beam"))
+}
+
+

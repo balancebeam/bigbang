@@ -1,0 +1,21 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: RegCenterServer
+  profiles:
+    active: dev
+
+eureka:
+  server:
+    enable-self-preservation: false
+    response-cache-update-interval-ms: 3000  #Synchronize from ReadWriteCache to ReadOnlyCache
+    eviction-interval-timer-in-ms: 3000  #Check client lease time
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    lease-expiration-duration-in-seconds: 6  #If client lease time exceed this time will kill the client
+
+

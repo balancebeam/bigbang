@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: devops-deployment
+  profiles:
+    active: dev
+  messages:
+    basename: i18n/messages,i18n/errors
+  jackson:
+    default-property-inclusion: non_null
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"

@@ -1,0 +1,12 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: test
+  profiles:
+    active: dev
+  messages:
+    basename: i18n/messages,i18n/errors
+  jackson:
+    default-property-inclusion: non_null

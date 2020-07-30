@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: oauth2-srv
+  profiles:
+    active: dev
+  datasource:
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+
+eureka:
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
+
+bigbang:
+  keystore:
+    cert-path: certificate/jwt-cert.jks
+    password: keystorepass
+    keypair:
+      alias: jwt
+      password: keypairpass
+

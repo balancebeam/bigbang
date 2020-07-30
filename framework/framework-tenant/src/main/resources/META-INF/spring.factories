@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.framework.tenant.autoconfigure.TenantContextConfiguration,\
+io.anyway.bigbang.framework.tenant.autoconfigure.TomcatEnvironmentConfiguration

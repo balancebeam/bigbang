@@ -1,0 +1,24 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/bigbang_oauth2?zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: bigbang
+      password: bigbang
+      initial-size: 10
+      min-idle: 10
+      max-active: 50
+  redis:
+    host: localhost
+    database: 1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+zookeeper:
+  server-list: localhost:2181
+

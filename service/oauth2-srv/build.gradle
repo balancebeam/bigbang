@@ -1,0 +1,19 @@
+description = "The service of api oauth2"
+archivesBaseName = 'io.anyway.bigbang.oauth2'
+
+dependencies {
+    compile(project(":framework:framework-core"))
+    compile(project(":framework:framework-metrics"))
+    compile(project(":framework:framework-beam"))
+    compile(libraries.spring_boot_security)
+    compile(libraries.sprint_cloud_oauth2)
+    compile(libraries.spring_boot_redis)
+    compile(libraries.nimbus_jose_jwt)
+    compile(libraries.alibaba_druid)
+    compile(libraries.spring_boot_druid)
+    compile(libraries.mysql_connector)
+    compile(libraries.spring_jdbc)
+    compile(libraries.spring_cloud_eureka_client)
+}
+
+

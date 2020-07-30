@@ -1,0 +1,6 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://reg1.bigbang.internal:8761/eureka/,http://reg2.bigbang.internal:8761/eureka/
+  instance:
+    hostname: reg3.bigbang.internal

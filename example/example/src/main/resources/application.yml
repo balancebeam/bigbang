@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: example
+  profiles:
+    active: dev
+  messages:
+    basename: i18n/messages,i18n/errors
+  jackson:
+    default-property-inclusion: non_null
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  config-locations: classpath:mybatis/config.xml
+
+management:
+  server:
+    port: 9090
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"

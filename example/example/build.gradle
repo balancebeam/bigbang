@@ -1,0 +1,16 @@
+description = "The service module of example project"
+archivesBaseName = 'io.anyway.bigbang.example'
+
+dependencies {
+    compile(libraries.mybatis)
+    compile(project(":framework:framework-core"))
+    compile(project(":framework:framework-tenant"))
+    compile(project(":framework:framework-beam"))
+    compile(project(":framework:framework-cache"))
+    compile(project(":framework:framework-metrics"))
+    compile(project(":framework:framework-datasource-sharding"))
+    compile(libraries.ribbon_eureka)
+    //compile(libraries.spring_cloud_eureka_client)
+}
+
+

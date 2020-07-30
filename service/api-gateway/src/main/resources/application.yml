@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: dev
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 3  #client lease heart time
+  client:
+    registry-fetch-interval-seconds: 3  #fetch the service list interval this time
+
+ribbon:
+  eager-load:
+    enabled: false
+#  ConnectionTimeout: 1000
+#  ReadTimeout: 1000
+#  OkToRetryOnAllOperations: true
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 1
+
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
+
+
+

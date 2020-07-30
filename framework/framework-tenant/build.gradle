@@ -1,0 +1,6 @@
+description = "The service module of kernal component"
+archivesBaseName = 'io.anyway.bigbang.framework.tenant'
+
+dependencies {
+    compile(project(":framework:framework-core"))
+}

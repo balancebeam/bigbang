@@ -1,0 +1,7 @@
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/plugin/*.xml
+  config-location: classpath:mybatis/config.xml
+
+abc: 123
+

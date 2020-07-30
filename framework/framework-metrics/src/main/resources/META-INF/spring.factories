@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.framework.metrics.autoconfigure.PlatformMetricConfiguration,\
+io.anyway.bigbang.framework.metrics.autoconfigure.TomcatEnvironmentConfiguration

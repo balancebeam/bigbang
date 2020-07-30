@@ -1,0 +1,65 @@
+apply from: "./libraries.gradle"
+
+buildscript {
+	repositories{
+        mavenLocal()
+        mavenCentral()
+	}
+}
+
+allprojects{
+
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    //打包源码
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
+                artifact sourceJar {
+                    classifier "sources"
+                }
+
+            }
+        }
+        repositories {
+            maven {
+                url ='https://repo1.maven.org/maven2/'
+            }
+        }
+    }
+
+    configurations {
+        provided
+    }
+
+    sourceSets.main.compileClasspath += configurations.provided
+    sourceSets.test.compileClasspath += configurations.provided
+    sourceSets.test.runtimeClasspath += configurations.provided
+
+    repositories {
+        maven {
+            url 'https://repo1.maven.org/maven2/'
+        }
+    }
+}
+
+
+

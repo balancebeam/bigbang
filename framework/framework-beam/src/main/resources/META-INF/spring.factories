@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.framework.beam.autoconfigure.TenantBeamContextConfiguration,\
+io.anyway.bigbang.framework.beam.autoconfigure.XLoadBalancerConfiguration,\
+io.anyway.bigbang.framework.beam.autoconfigure.XRibbonClientsConfiguration

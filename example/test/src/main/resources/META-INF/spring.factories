@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.test.config.HelloConfig,\
+io.anyway.bigbang.test.config2.HelloConfig2,\
+io.anyway.bigbang.test.config.ReferenceConfig

@@ -1,0 +1,16 @@
+
+shardingRule:
+  defaultDataSourceName: ds
+  tables:
+    bigbang_user:
+      actualDataNodes: ds.bigbang_user_${0..1}
+      tableStrategy:
+        inline:
+          shardingColumn: id
+          algorithmExpression: bigbang_user_${id % 2}
+      keyGenerator:
+        column: id
+        type: SNOWFLAKE
+
+props:
+  sql.show: true

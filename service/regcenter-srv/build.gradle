@@ -1,0 +1,11 @@
+description = "The service of register center project"
+archivesBaseName = 'io.anyway.bigbang.regcenter'
+
+dependencies {
+    compile(libraries.gson)
+    compile(libraries.spring_boot_web)
+    compile(project(":framework:framework-core"))
+    compile(libraries.eureka_server)
+}
+
+

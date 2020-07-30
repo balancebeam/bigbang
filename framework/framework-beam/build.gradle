@@ -1,0 +1,19 @@
+description = "The service module of kernal project"
+archivesBaseName = 'io.anyway.bigbang.framework.beam'
+
+dependencies {
+    compile(project(":framework:framework-core"))
+    compile(libraries.ribbon_core)
+    compile(libraries.ribbon_loadbalancer)
+    compile(libraries.spring_cloud_ribbon)
+    compile(libraries.spring_cloud_commons)
+    compile(libraries.spring_cloud_context)
+    compile(libraries.archaius_core)
+    compile(libraries.commons_configuration)
+    compile(libraries.curator)
+    compile(libraries.gson)
+    compile(libraries.ribbon_eureka)
+    provided(project(":framework:framework-tenant"))
+}
+
+

@@ -1,0 +1,38 @@
+server:
+  port: 8000
+
+#spring.cloud.gateway.routers:
+#  - id: example
+#    uri: lb://example
+#    predicates:
+#      - Path=/api/foo/**
+#    filters:
+#      - RewritePath= /api/foo/(?<segment>.*), /$\{segment}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+zookeeper:
+  server-list: localhost:2181
+
+spring:
+  bigbang:
+    gateway:
+      ip-black-list:
+        - 192.168.1.1
+      path-white-list:
+        - /api/**/login**
+        - /api/**/logout**
+    tenant:
+      tenant-list:
+        - id: 1
+          token: bce7bd01-p049-4d86-86ca-11508376d4a0
+          name: tenant_1
+        - id: 2
+          token: cf3cfc61-ek56-4923-917a-0f54a7960534
+          name: tenant_2
+  cloud:
+    gateway:
+      routes:

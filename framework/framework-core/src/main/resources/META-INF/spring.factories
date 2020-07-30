@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.anyway.bigbang.framework.core.autoconfigure.AmazonECSEurekaConfig,\
+io.anyway.bigbang.framework.core.autoconfigure.PlatformEnvironmentConfiguration,\
+io.anyway.bigbang.framework.core.autoconfigure.TomcatEnvironmentConfiguration
