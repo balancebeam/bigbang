@@ -1,0 +1,12 @@
+description = "bigbang exception module"
+archivesBaseName = 'io.anyway.bigbang.framework.exception'
+
+dependencies {
+    compile(project(":framework-kernel-model"))
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

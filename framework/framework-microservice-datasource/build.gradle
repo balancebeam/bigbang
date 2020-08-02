@@ -1,0 +1,10 @@
+description = "bigbang datasource module"
+archivesBaseName = 'io.anyway.bigbang.framework.datasource'
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

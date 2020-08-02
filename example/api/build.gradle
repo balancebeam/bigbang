@@ -1,11 +1,11 @@
-apply from: "../../publish.gradle"
-description = "the api of example project"
+apply from: "../publish.gradle"
+description = "example api project"
 archivesBaseName = 'io.anyway.bigbang.example.api'
 
 dependencies {
-    annotationProcessor("org.projectlombok:lombok:1.18.12")
-    compileOnly("org.projectlombok:lombok:1.18.12")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.12")
-    testCompileOnly("org.projectlombok:lombok:1.18.12")
-    compile("org.springframework.cloud:spring-cloud-starter-openfeign:2.2.3.RELEASE")
+    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
 }

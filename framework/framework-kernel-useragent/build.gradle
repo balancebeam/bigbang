@@ -1,0 +1,12 @@
+description = "bigbang useragent module"
+archivesBaseName = 'io.anyway.bigbang.framework.useragent'
+
+dependencies {
+    compile(project(":framework-kernel-header"))
+    compile(project(":framework-kernel-logging"))
+    compile("com.alibaba:fastjson:1.2.73")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

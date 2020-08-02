@@ -1,0 +1,11 @@
+description = "bigbang discovery module"
+archivesBaseName = 'io.anyway.bigbang.framework.discovery'
+
+dependencies {
+    compile(project(':framework-kernel-header'))
+    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

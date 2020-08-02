@@ -51,9 +51,9 @@ allprojects{
         resolutionStrategy {
             cacheChangingModulesFor 0, 'seconds'
         }
-        imports {
-            mavenBom "io.anyway.bigbang:dependency-management:1.0.0-SNAPSHOT"
-        }
+#        imports {
+#            mavenBom "io.anyway.bigbang:dependency-management:1.0.0-SNAPSHOT"
+#        }
     }
 
     dependencies {

@@ -1,0 +1,10 @@
+description = "bigbang trace module"
+archivesBaseName = 'io.anyway.bigbang.framework.trace'
+
+dependencies {
+    compile(project(":framework-kernel-logging"))
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

@@ -1,0 +1,14 @@
+description = "bigbang logging module"
+archivesBaseName = 'io.anyway.bigbang.framework.logging'
+
+dependencies {
+    compile("ch.qos.logback:logback-classic")
+    compile("org.springframework.boot:spring-boot")
+    compile("com.alibaba:transmittable-thread-local")
+    compile("net.logstash.logback:logstash-logback-encoder")
+    compile("org.aspectj:aspectjweaver")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

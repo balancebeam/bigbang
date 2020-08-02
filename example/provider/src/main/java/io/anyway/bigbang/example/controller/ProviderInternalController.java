@@ -2,7 +2,7 @@ package io.anyway.bigbang.example.controller;
 
 import io.anyway.bigbang.example.model.User;
 import io.anyway.bigbang.example.service.UserService;
-import io.anyway.bigbang.framework.kernel.exception.ApiException;
+import io.anyway.bigbang.framework.exception.ApiException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,0 +1,13 @@
+description = "bigbang grayroute module"
+archivesBaseName = 'io.anyway.bigbang.framework.grayroute'
+
+dependencies {
+    compile(project(':framework-kernel-discovery'))
+
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

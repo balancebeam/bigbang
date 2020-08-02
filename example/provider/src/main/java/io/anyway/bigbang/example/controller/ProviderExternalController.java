@@ -2,8 +2,8 @@ package io.anyway.bigbang.example.controller;
 
 import io.anyway.bigbang.example.model.User;
 import io.anyway.bigbang.example.service.UserService;
-import io.anyway.bigbang.framework.kernel.api.APIResponse;
-import io.anyway.bigbang.framework.kernel.exception.ApiException;
+import io.anyway.bigbang.framework.exception.ApiException;
+import io.anyway.bigbang.framework.model.api.APIResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -45,9 +45,7 @@ public class ProviderExternalController {
     @ResponseBody
     @GetMapping("/exception")
     public APIResponse<String> exception(){
-        ApiException ex= new ApiException(4001,new Object[]{"1","2"});
-        ex.setHttpStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
-        throw ex;
+        throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,4001,new Object[]{"1","2"});
     }
 
 }

@@ -1,0 +1,12 @@
+description = "bigbang executor module"
+archivesBaseName = 'io.anyway.bigbang.framework.executor'
+
+dependencies {
+    compile(project(":framework-microservice-metrics"))
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.alibaba:transmittable-thread-local")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

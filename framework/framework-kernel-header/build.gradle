@@ -1,0 +1,6 @@
+description = "bigbang header module"
+archivesBaseName = 'io.anyway.bigbang.framework.header'
+
+dependencies {
+    compile("com.alibaba:transmittable-thread-local")
+}
