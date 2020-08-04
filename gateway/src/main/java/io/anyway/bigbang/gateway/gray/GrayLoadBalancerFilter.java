@@ -1,8 +1,10 @@
 package io.anyway.bigbang.gateway.gray;
 
 import com.alibaba.fastjson.JSONObject;
-import io.anyway.bigbang.framework.kernel.security.UserDetail;
-import io.anyway.bigbang.framework.kernel.useragent.UserAgent;
+import io.anyway.bigbang.framework.discovery.GrayRouteContext;
+import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
+import io.anyway.bigbang.framework.security.UserDetailContext;
+import io.anyway.bigbang.framework.useragent.UserAgentContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -28,12 +30,13 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.Map;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_ROUTE_NAME;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.*;
 
 public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteListener {
@@ -43,7 +46,7 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
     private final LoadBalancerClientFactory clientFactory;
     private LoadBalancerProperties properties;
     private Random random= new Random();
-    private AtomicReference<GrayRouteStrategy> strategyRef= new AtomicReference<>(new GrayRouteStrategy());
+    private volatile GrayRouteStrategy strategy= new GrayRouteStrategy();
     private ConcurrentHashMap<String, GrayLoadBalancer> grayLoadBalancerMap= new ConcurrentHashMap<>();
 
     public GrayLoadBalancerFilter(LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
@@ -119,7 +122,12 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
         }
         grayLoadBalancerMap.putIfAbsent(uri.getHost(),new GrayLoadBalancer(provider,uri.getHost()));
         GrayLoadBalancer loadBalancer = grayLoadBalancerMap.get( uri.getHost());
-        return loadBalancer.choose(this.createRequest(exchange));
+        try {
+            return loadBalancer.choose(this.createRequest(exchange));
+        }
+        finally {
+            GrayRouteContextHolder.removeGrayRouteContext();
+        }
     }
 
     private Request createRequest(ServerWebExchange exchange) {
@@ -130,63 +138,86 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
 
     private ServerWebExchange makeupGrayWebExchange(ServerWebExchange exchange){
         HttpHeaders headers= exchange.getRequest().getHeaders();
-        String unit= headers.getFirst(GRAY_UNIT_NAME);
-        if(!StringUtils.isEmpty(unit)){
-            return exchange;
+        String text= headers.getFirst(GRAY_ROUTE_NAME);
+        if(!StringUtils.isEmpty(text)){
+            GrayRouteContext context= JSONObject.parseObject(text, GrayRouteContext.class);
+            return buildNewExchange(exchange,context);
         }
-        Map<Pattern,String> operator= strategyRef.get().getOperator();
-        if(!operator.isEmpty()){
-            String detail= headers.getFirst(UserDetail.USER_HEADER_NAME);
+        //use uat tester
+        List<GrayRouteStrategy.TesterDefinition> uatList= strategy.getUatList();
+        if(!uatList.isEmpty()){
+            String detail= headers.getFirst(UserDetailContext.USER_HEADER_NAME);
             if(!StringUtils.isEmpty(detail)){
-                UserDetail userDetail= JSONObject.parseObject(detail, UserDetail.class);
+                UserDetailContext userDetail= JSONObject.parseObject(detail, UserDetailContext.class);
+                if(Objects.isNull(userDetail.getUid())){
+                    userDetail.setUid(Long.parseLong(detail));
+                }
                 String candidate= "usr_"+userDetail.getType()+"_"+userDetail.getUid();
-                for(Pattern each: operator.keySet()){
-                    if(each.matcher(candidate).find()){
-                        return buildNewExchange(exchange,operator.get(each));
+                for(GrayRouteStrategy.TesterDefinition each: uatList){
+                    for(Pattern user: each.getTesters()){
+                        if(user.matcher(candidate).find()){
+                            return buildNewExchange(exchange, each);
+                        }
                     }
                 }
             }
-            detail= headers.getFirst(UserAgent.USER_AGENT_NAME);
+            detail= headers.getFirst(UserAgentContext.USER_AGENT_NAME);
             if(!StringUtils.isEmpty(detail)){
-                UserAgent userAgent= JSONObject.parseObject(detail, UserAgent.class);
+                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgentContext.class);
                 String candidate= "cli_"+userAgent.getPlatform()+"_"+userAgent.getVersion();
-                for(Pattern each: operator.keySet()){
-                    if(each.matcher(candidate).find()){
-                        return buildNewExchange(exchange,operator.get(each));
+                for(GrayRouteStrategy.TesterDefinition each: uatList){
+                    for(Pattern user: each.getTesters()){
+                        if(user.matcher(candidate).find()){
+                            return buildNewExchange(exchange, each);
+                        }
                     }
                 }
             }
-            String defaultValue= headers.getFirst(GRAY_INDICATOR_DEFAULT_VALUE_NAME);
-            if(StringUtils.isEmpty(defaultValue)){
-                defaultValue= GRAY_DEFAULT_UNIT;
-            }
-            return buildNewExchange(exchange,defaultValue);
         }
-        Map<String,Integer> weight= strategyRef.get().getWeight();
-        if(!weight.isEmpty()){
-            int total= weight.values().stream().reduce((a1, a2) -> a1+a2).get();
+        //use random weight
+        List<GrayRouteStrategy.WeightDefinition> wgtList= strategy.getWgtList();
+        if(!wgtList.isEmpty()){
+            int total= 0;
+            for(GrayRouteStrategy.WeightDefinition each: wgtList){
+                total+=each.getWeight();
+            }
             int rdm= random.nextInt(total);
             int sum= 0;
-            for(Map.Entry<String,Integer> each: weight.entrySet()){
-                sum+= each.getValue();
+            for(GrayRouteStrategy.WeightDefinition each: wgtList){
+                sum+= each.getWeight();
                 if(sum>rdm){
-                    return buildNewExchange(exchange,each.getKey());
+                    return buildNewExchange(exchange,each);
                 }
             }
+        }
+        //use the default route context
+        GrayRouteContext ctx= strategy.getDefaultContext();
+        if(ctx!= null){
+            if(StringUtils.isEmpty(ctx.getGroup())){
+                ctx.setGroup("DEFAULT_GROUP");
+            }
+            if(StringUtils.isEmpty(ctx.getClusterName())){
+                ctx.setGroup("DEFAULT");
+            }
+            return buildNewExchange(exchange, ctx);
         }
         return exchange;
     }
 
-    private ServerWebExchange buildNewExchange(ServerWebExchange exchange,String unit){
+    private ServerWebExchange buildNewExchange(ServerWebExchange exchange,GrayRouteContext ctx){
+        if(StringUtils.isEmpty(ctx.getGroup()) || StringUtils.isEmpty(ctx.getClusterName())){
+            throw new IllegalArgumentException("group or clusterName was empty.");
+        }
+        GrayRouteContextHolder.setGrayRouteContext(ctx);
         ServerHttpRequest req = exchange.getRequest();
         ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());
-        builder.header(GRAY_UNIT_NAME,unit);
+        builder.header(GRAY_ROUTE_NAME,JSONObject.toJSONString(ctx));
         return exchange.mutate().request(builder.build()).build();
     }
 
     @Override
     public void onRouteChange(GrayRouteStrategy strategy) {
-        strategyRef.set(strategy);
+        this.strategy= strategy;
     }
 
 }

@@ -3,13 +3,14 @@ package io.anyway.bigbang.example.service.impl;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import io.anyway.bigbang.example.service.UserService;
 import io.anyway.bigbang.example.model.User;
+import io.anyway.bigbang.framework.logging.marker.LoggingMarker;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -25,12 +26,16 @@ public class UserServiceImpl implements UserService {
     @Resource
     private Executor executor;
 
+    @Resource
+    private DataSource dataSource;
+
     @Value("${dynamic.location:}")
     public void setLocation(String location){
         log.info("dynamic.location: {}",location);
     }
 
     @Override
+    @LoggingMarker(value="user",markers = {"x","y"})
     public Optional<User> getUser(String name) {
         User user= new User();
         user.setName(name);

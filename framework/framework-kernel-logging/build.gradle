@@ -5,6 +5,7 @@ dependencies {
     compile("ch.qos.logback:logback-classic")
     compile("org.springframework.boot:spring-boot")
     compile("com.alibaba:transmittable-thread-local")
+    compile("com.alibaba:fastjson:1.2.73")
     compile("net.logstash.logback:logstash-logback-encoder")
     compile("org.aspectj:aspectjweaver")
     annotationProcessor("org.projectlombok:lombok")

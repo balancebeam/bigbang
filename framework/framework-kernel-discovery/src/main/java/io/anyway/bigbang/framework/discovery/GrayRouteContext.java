@@ -9,10 +9,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class GrayRouteContext {
-
-    final public static String GRAY_CLUSTER_NAME= "x-gray-cluster";
-
-    private String value;
-    private String indicator;
-    private String defaultValue;
+    final public static String GRAY_ROUTE_NAME = "x-gray-route";
+    final public static String ATTRIBUTE_GROUP= "spring.cloud.nacos.discovery.group";
+    final public static String ATTRIBUTE_CLUSTER_NAME= "spring.cloud.nacos.discovery.cluster-name";
+    private String group;
+    private String clusterName;
 }

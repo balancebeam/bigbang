@@ -17,7 +17,20 @@ include 'services:webservice'
 
 rootProject.name = 'gateway'
 
-// include 'dependency-management'
+include ':framework'
+project(':framework').projectDir = new File(settingsDir, '../framework')
+include ':framework:framework-kernel-header'
+project(':framework:framework-kernel-header').projectDir = new File(settingsDir, '../framework/framework-kernel-header')
+include ':framework:framework-kernel-discovery'
+project(':framework:framework-kernel-discovery').projectDir = new File(settingsDir, '../framework/framework-kernel-discovery')
+include ':framework:framework-kernel-security'
+project(':framework:framework-kernel-security').projectDir = new File(settingsDir, '../framework/framework-kernel-security')
+include ':framework:framework-kernel-useragent'
+project(':framework:framework-kernel-useragent').projectDir = new File(settingsDir, '../framework/framework-kernel-useragent')
+include ':framework:framework-kernel-logging'
+project(':framework:framework-kernel-logging').projectDir = new File(settingsDir, '../framework/framework-kernel-logging')
+
+
 
 
 

@@ -25,7 +25,7 @@ public interface LoggingExtensionConverterManager {
                 String className= properties.getProperty(each);
                 Class clazz= classLoader.loadClass(className);
                 PatternLayout.defaultConverterMap.put(each, className);
-                if(clazz.isAssignableFrom(InheritableThreadClassicConverter.class)){
+                if(InheritableThreadClassicConverter.class.isAssignableFrom(clazz)){
                     InheritableThreadAsyncAppender.addInheritableThreadClassicConverter((InheritableThreadClassicConverter)clazz.newInstance());
                 }
             }

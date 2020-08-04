@@ -2,7 +2,7 @@ description = "bigbang feign module"
 archivesBaseName = 'io.anyway.bigbang.framework.feign'
 
 dependencies {
-    compile(project(":framework-kernel-header"))
+    compile(project(":framework:framework-kernel-header"))
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.cloud:spring-cloud-starter-openfeign")
     annotationProcessor("org.projectlombok:lombok")

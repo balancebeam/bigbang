@@ -1,11 +1,13 @@
 package io.anyway.bigbang.framework.autoconfigure;
 
+import io.anyway.bigbang.framework.datasource.DataSourceConfig;
 import io.anyway.bigbang.framework.exception.FeignClientErrorDecoder;
 import io.anyway.bigbang.framework.exception.GlobalExceptionHandler;
 import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
 import io.anyway.bigbang.framework.grayroute.GrayRouteConfig;
 import io.anyway.bigbang.framework.header.HeaderContext;
 import io.anyway.bigbang.framework.header.HeaderContextHolder;
+import io.anyway.bigbang.framework.logging.marker.LoggingMarkerAspect;
 import io.anyway.bigbang.framework.metrics.FrameworkMetricsConfig;
 import io.anyway.bigbang.framework.swagger.Swagger2Config;
 import io.anyway.bigbang.framework.useragent.UserAgentContextConfig;
@@ -36,10 +38,12 @@ import java.util.Map;
 @Configuration
 @AutoConfigureBefore(TaskExecutionAutoConfiguration.class)
 @ImportAutoConfiguration({
+        LoggingMarkerAspect.class,
         FeignClientErrorDecoder.class,
         TransmittableTaskExecutionConfig.class,
         FrameworkMetricsConfig.class,
         SecurityConfig.class,
+        DataSourceConfig.class,
         UserAgentContextConfig.class,
         GlobalExceptionHandler.class,
         GrayRouteConfig.class,

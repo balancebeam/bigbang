@@ -4,5 +4,5 @@ apply plugin: "org.springframework.boot"
 
 dependencies {
     compile(project(":api"))
-    compile(project(":framework-microservice-autoconfigure"))
+    compile(project(":framework:framework-microservice-autoconfigure"))
 }

@@ -20,7 +20,8 @@ spring:
       discovery:
         register-enabled: true
         server-addr: ${spring.cloud.nacos.config.server-addr}
-        metadata-map:
+        cluster-name: green
+        metadata:
           gray.unit: blue
           tag: reg_20200529_02
 #        namespace: ${spring.cloud.nacos.config.namespace}

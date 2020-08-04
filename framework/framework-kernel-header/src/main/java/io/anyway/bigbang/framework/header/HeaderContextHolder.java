@@ -19,7 +19,7 @@ public abstract class HeaderContextHolder {
 
     public static Optional<String> getHeaderValue(String name){
         Map<String,String> headers= threadLocal.get();
-        if(headers!= null){
+        if(headers!= null && headers.containsKey(name)){
             return Optional.of(headers.get(name));
         }
         return Optional.empty();

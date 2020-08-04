@@ -6,7 +6,7 @@ import io.anyway.bigbang.framework.header.HeaderContextHolder;
 
 import java.util.Optional;
 
-import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_CLUSTER_NAME;
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_ROUTE_NAME;
 
 
 public interface GrayRouteContextHolder {
@@ -18,13 +18,17 @@ public interface GrayRouteContextHolder {
         if(grayRouteContext!= null){
             return Optional.of(grayRouteContext);
         }
-        Optional<String> text= HeaderContextHolder.getHeaderValue(GRAY_CLUSTER_NAME);
+        Optional<String> text= HeaderContextHolder.getHeaderValue(GRAY_ROUTE_NAME);
         if(text.isPresent()){
             grayRouteContext= JSONObject.parseObject(text.get(), GrayRouteContext.class);
             threadLocal.set(grayRouteContext);
             return Optional.of(grayRouteContext);
         }
         return Optional.empty();
+    }
+
+    static void setGrayRouteContext(GrayRouteContext ctx){
+        threadLocal.set(ctx);
     }
 
     static void removeGrayRouteContext(){

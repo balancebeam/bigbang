@@ -5,14 +5,12 @@ import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
-import io.anyway.bigbang.framework.kernel.gray.NacosMetadataMapConfig;
 import io.anyway.bigbang.gateway.gray.GrayLoadBalancerFilter;
 import io.anyway.bigbang.gateway.gray.GrayRouteListener;
 import io.anyway.bigbang.gateway.gray.GrayRouteStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
@@ -25,7 +23,6 @@ import javax.annotation.Resource;
 
 @Slf4j
 @Configuration
-@ImportAutoConfiguration(NacosMetadataMapConfig.class)
 @AutoConfigureAfter(GrayRouteConfig.GrayRouteConfig2.class)
 public class GrayRouteConfig {
 

@@ -21,34 +21,36 @@ include ':api'
 include ':provider'
 include ':consumer'
 
-include ':framework-microservice-autoconfigure'
-project(':framework-microservice-autoconfigure').projectDir = new File(settingsDir, '../framework/framework-microservice-autoconfigure')
-include ':framework-kernel-header'
-project(':framework-kernel-header').projectDir = new File(settingsDir, '../framework/framework-kernel-header')
-include ':framework-kernel-discovery'
-project(':framework-kernel-discovery').projectDir = new File(settingsDir, '../framework/framework-kernel-discovery')
-include ':framework-kernel-model'
-project(':framework-kernel-model').projectDir = new File(settingsDir, '../framework/framework-kernel-model')
-include ':framework-kernel-logging'
-project(':framework-kernel-logging').projectDir = new File(settingsDir, '../framework/framework-kernel-logging')
-include ':framework-kernel-security'
-project(':framework-kernel-security').projectDir = new File(settingsDir, '../framework/framework-kernel-security')
-include ':framework-kernel-useragent'
-project(':framework-kernel-useragent').projectDir = new File(settingsDir, '../framework/framework-kernel-useragent')
-include ':framework-kernel-util'
-project(':framework-kernel-util').projectDir = new File(settingsDir, '../framework/framework-kernel-util')
-include ':framework-microservice-exception'
-project(':framework-microservice-exception').projectDir = new File(settingsDir, '../framework/framework-microservice-exception')
-include ':framework-microservice-executor'
-project(':framework-microservice-executor').projectDir = new File(settingsDir, '../framework/framework-microservice-executor')
-include ':framework-microservice-feign'
-project(':framework-microservice-feign').projectDir = new File(settingsDir, '../framework/framework-microservice-feign')
-include ':framework-microservice-grayroute'
-project(':framework-microservice-grayroute').projectDir = new File(settingsDir, '../framework/framework-microservice-grayroute')
-include ':framework-microservice-metrics'
-project(':framework-microservice-metrics').projectDir = new File(settingsDir, '../framework/framework-microservice-metrics')
-include ':framework-microservice-swagger'
-project(':framework-microservice-swagger').projectDir = new File(settingsDir, '../framework/framework-microservice-swagger')
+include ':framework:framework-microservice-autoconfigure'
+project(':framework:framework-microservice-autoconfigure').projectDir = new File(settingsDir, '../framework/framework-microservice-autoconfigure')
+include ':framework:framework-kernel-header'
+project(':framework:framework-kernel-header').projectDir = new File(settingsDir, '../framework/framework-kernel-header')
+include ':framework:framework-kernel-discovery'
+project(':framework:framework-kernel-discovery').projectDir = new File(settingsDir, '../framework/framework-kernel-discovery')
+include ':framework:framework-kernel-model'
+project(':framework:framework-kernel-model').projectDir = new File(settingsDir, '../framework/framework-kernel-model')
+include ':framework:framework-kernel-logging'
+project(':framework:framework-kernel-logging').projectDir = new File(settingsDir, '../framework/framework-kernel-logging')
+include ':framework:framework-kernel-security'
+project(':framework:framework-kernel-security').projectDir = new File(settingsDir, '../framework/framework-kernel-security')
+include ':framework:framework-kernel-useragent'
+project(':framework:framework-kernel-useragent').projectDir = new File(settingsDir, '../framework/framework-kernel-useragent')
+include ':framework:framework-kernel-util'
+project(':framework:framework-kernel-util').projectDir = new File(settingsDir, '../framework/framework-kernel-util')
+include ':framework:framework-microservice-datasource'
+project(':framework:framework-microservice-datasource').projectDir = new File(settingsDir, '../framework/framework-microservice-datasource')
+include ':framework:framework-microservice-exception'
+project(':framework:framework-microservice-exception').projectDir = new File(settingsDir, '../framework/framework-microservice-exception')
+include ':framework:framework-microservice-executor'
+project(':framework:framework-microservice-executor').projectDir = new File(settingsDir, '../framework/framework-microservice-executor')
+include ':framework:framework-microservice-feign'
+project(':framework:framework-microservice-feign').projectDir = new File(settingsDir, '../framework/framework-microservice-feign')
+include ':framework:framework-microservice-grayroute'
+project(':framework:framework-microservice-grayroute').projectDir = new File(settingsDir, '../framework/framework-microservice-grayroute')
+include ':framework:framework-microservice-metrics'
+project(':framework:framework-microservice-metrics').projectDir = new File(settingsDir, '../framework/framework-microservice-metrics')
+include ':framework:framework-microservice-swagger'
+project(':framework:framework-microservice-swagger').projectDir = new File(settingsDir, '../framework/framework-microservice-swagger')
 
 
 

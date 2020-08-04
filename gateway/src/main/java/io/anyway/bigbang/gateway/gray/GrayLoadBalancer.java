@@ -1,5 +1,7 @@
 package io.anyway.bigbang.gateway.gray;
 
+import io.anyway.bigbang.framework.discovery.GrayRouteContext;
+import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
@@ -9,13 +11,15 @@ import org.springframework.cloud.client.loadbalancer.reactive.Request;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.loadbalancer.core.*;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_CLUSTER_NAME;
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_GROUP;
 
 @Slf4j
 public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
@@ -47,16 +51,13 @@ public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
         }
 
         int pos = Math.abs(this.position.incrementAndGet());
-        String unit= headers.getFirst(GRAY_UNIT_NAME);
-        if(!StringUtils.isEmpty(unit)){
-            String value= headers.getFirst(GRAY_INDICATOR_NAME);
-            String indicator= StringUtils.isEmpty(value)? GRAY_DEFAULT_INDICATOR: value;
+        Optional<GrayRouteContext> crayRouteContext= GrayRouteContextHolder.getGrayRouteContext();
+        if(crayRouteContext.isPresent()){
+            GrayRouteContext ctx= crayRouteContext.get();
             List<ServiceInstance> availableInstances= instances.stream().filter(each-> {
-                String v= each.getMetadata().get(indicator);
-                if(StringUtils.isEmpty(v)){
-                    v= GRAY_DEFAULT_UNIT;
-                }
-                return unit.equals(v);
+                String group= each.getMetadata().get(ATTRIBUTE_GROUP);
+                String clusterName= each.getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                return group.equals(ctx.getGroup()) && clusterName.equals(ctx.getClusterName());
             }).collect(Collectors.toList());
             if(!availableInstances.isEmpty()){
                 ServiceInstance instance= availableInstances.get(pos % availableInstances.size());

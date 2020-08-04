@@ -15,6 +15,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_CLUSTER_NAME;
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_GROUP;
+
 @Slf4j
 public class GrayRouteRibbonRule extends ZoneAvoidanceRule {
 
@@ -44,13 +47,11 @@ public class GrayRouteRibbonRule extends ZoneAvoidanceRule {
     private List<Server> getAvailableServers(List<Server> allServers){
         final java.util.Optional<GrayRouteContext> grayRouteContext= GrayRouteContextHolder.getGrayRouteContext();
         if(grayRouteContext.isPresent()) {
-            GrayRouteContext context= grayRouteContext.get();
+            GrayRouteContext ctx= grayRouteContext.get();
             List<Server> availableServers= allServers.stream().filter((Server server)->{
-                String indicatorValue= ((NacosServer)server).getMetadata().get(context.getIndicator());
-                if(StringUtils.isEmpty(indicatorValue)){
-                    indicatorValue= context.getDefaultValue();
-                }
-                return context.getValue().equals(indicatorValue);
+                String group= ((NacosServer)server).getMetadata().get(ATTRIBUTE_GROUP);
+                String clusterName= ((NacosServer)server).getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                return group.equals(ctx.getGroup()) && clusterName.equals(ctx.getClusterName());
             }).collect(Collectors.toList());
             if(CollectionUtils.isEmpty(availableServers)){
                 return allServers;

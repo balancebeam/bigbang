@@ -9,6 +9,10 @@ spring:
   cloud:
     nacos:
       discovery:
+        metadata:
+          abc: 123
+          efg: 456
+        cluster-name: green
         register-enabled: true
         server-addr: ${spring.cloud.nacos.config.server-addr}
       #        namespace: ${spring.cloud.nacos.config.namespace}

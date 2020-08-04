@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
             HttpServletResponse response,
             ApiException e) {
 
-        response.setStatus(e.getHttpStatus());
+        response.setStatus(e.getHttpStatus().value());
         response.setContentType(CONTENT_TYPE);
 
         String message = messageSource.getMessage(
