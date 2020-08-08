@@ -37,7 +37,6 @@ import java.util.List;
 @ConditionalOnClass({Redisson.class, RedisOperations.class})
 @AutoConfigureBefore(RedisAutoConfiguration.class)
 @EnableConfigurationProperties({RedissonProperties.class, RedisProperties.class})
-@ConditionalOnProperty(prefix = "spring", value = "redis")
 class RedissonAutoConfiguration {
 
     @Autowired

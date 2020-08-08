@@ -2,7 +2,7 @@ description = "bigbang mqclient module"
 archivesBaseName = 'io.anyway.bigbang.framework.mqclient'
 
 dependencies {
-//    compile(project(":framework:microservice-kernel"))
+    compile(project(":framework:framework-microservice-datasource"))
     compile("com.google.guava:guava")
     compile("joda-time:joda-time:2.10.6")
     compile("mysql:mysql-connector-java")

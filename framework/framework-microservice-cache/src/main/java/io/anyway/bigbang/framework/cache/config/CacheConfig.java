@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ImportAutoConfiguration({RedissonAutoConfiguration.class, LayeringCacheAutoConfig.class})
+@ImportAutoConfiguration({RedissonAutoConfiguration.class})
 public class CacheConfig {
 
 }
