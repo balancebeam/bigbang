@@ -1,0 +1,12 @@
+description = "bigbang cache module"
+archivesBaseName = 'io.anyway.bigbang.framework.cache'
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("io.micrometer:micrometer-registry-prometheus")
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+}

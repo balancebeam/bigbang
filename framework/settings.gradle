@@ -50,6 +50,10 @@ include ':framework:framework-microservice-metrics'
 project(':framework:framework-microservice-metrics').projectDir = new File(settingsDir, './framework-microservice-metrics')
 include ':framework:framework-microservice-swagger'
 project(':framework:framework-microservice-swagger').projectDir = new File(settingsDir, './framework-microservice-swagger')
+include ':framework:framework-microservice-cache'
+project(':framework:framework-microservice-cache').projectDir = new File(settingsDir, './framework-microservice-cache')
+include ':framework:framework-microservice-mqclient'
+project(':framework:framework-microservice-mqclient').projectDir = new File(settingsDir, './framework-microservice-mqclient')
 
 
 
