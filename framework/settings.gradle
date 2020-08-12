@@ -54,6 +54,8 @@ include ':framework:framework-microservice-cache'
 project(':framework:framework-microservice-cache').projectDir = new File(settingsDir, './framework-microservice-cache')
 include ':framework:framework-microservice-mqclient'
 project(':framework:framework-microservice-mqclient').projectDir = new File(settingsDir, './framework-microservice-mqclient')
+include ':framework:framework-microservice-scheduler'
+project(':framework:framework-microservice-scheduler').projectDir = new File(settingsDir, './framework-microservice-scheduler')
 
 
 

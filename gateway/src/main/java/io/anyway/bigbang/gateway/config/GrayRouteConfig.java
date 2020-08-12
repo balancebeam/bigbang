@@ -71,6 +71,7 @@ public class GrayRouteConfig {
         }
 
         private synchronized void setGrayRoutePolicy(String text) {
+            log.info("gateway gray route strategy: {}",text);
             GrayRouteStrategy strategy = StringUtils.isEmpty(text)?
                     new GrayRouteStrategy():
                     JSONObject.parseObject(text, GrayRouteStrategy.class);

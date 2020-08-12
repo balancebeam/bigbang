@@ -36,35 +36,43 @@ public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     @Override
     public Mono<Response<ServiceInstance>> choose(Request request) {
-        HttpHeaders headers = (HttpHeaders) request.getContext();
+        Optional<GrayRouteContext> grayRouteContext = (Optional<GrayRouteContext>) request.getContext();
         if (this.serviceInstanceListSupplierProvider != null) {
             ServiceInstanceListSupplier supplier = this.serviceInstanceListSupplierProvider.getIfAvailable(NoopServiceInstanceListSupplier::new);
-            return ((Flux)supplier.get()).next().map(list->getInstanceResponse((List<ServiceInstance>)list,headers));
+            return ((Flux)supplier.get()).next().map(list->getInstanceResponse((List<ServiceInstance>)list,grayRouteContext));
         }
         return null;
     }
 
-    private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances,HttpHeaders headers) {
+    private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances,Optional<GrayRouteContext> grayRouteContext) {
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + this.serviceId);
             return new EmptyResponse();
         }
 
         int pos = Math.abs(this.position.incrementAndGet());
-        Optional<GrayRouteContext> crayRouteContext= GrayRouteContextHolder.getGrayRouteContext();
-        if(crayRouteContext.isPresent()){
-            GrayRouteContext ctx= crayRouteContext.get();
+        if(grayRouteContext.isPresent()){
+            GrayRouteContext ctx= grayRouteContext.get();
             List<ServiceInstance> availableInstances= instances.stream().filter(each-> {
-                String group= each.getMetadata().get(ATTRIBUTE_GROUP);
-                String clusterName= each.getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
-                return group.equals(ctx.getGroup()) && clusterName.equals(ctx.getClusterName());
+                String cluster= each.getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                return cluster.equals(ctx.getCluster());
             }).collect(Collectors.toList());
+            //lookup the default group and cluster
+            if(availableInstances.isEmpty() &&
+                    ctx.getDefaultCluster()!= null &&
+                    !ctx.getCluster().equals(ctx.getDefaultCluster())){
+                availableInstances= instances.stream().filter(each-> {
+                    String cluster= each.getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                    return cluster.equals(ctx.getDefaultCluster());
+                }).collect(Collectors.toList());
+            }
             if(!availableInstances.isEmpty()){
                 ServiceInstance instance= availableInstances.get(pos % availableInstances.size());
                 return new DefaultResponse(instance);
             }
+            log.warn("cannot find appropriate match candidate server: {}",ctx.toString());
+            return new EmptyResponse();
         }
-
         ServiceInstance instance = instances.get(pos % instances.size());
         return new DefaultResponse(instance);
     }

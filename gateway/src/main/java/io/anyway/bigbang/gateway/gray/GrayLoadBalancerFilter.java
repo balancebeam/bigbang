@@ -112,17 +112,17 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
 
     private Mono<Response<ServiceInstance>> choose(ServerWebExchange exchange) {
         URI uri = (URI) exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
-        if(grayLoadBalancerMap.contains( uri.getHost())){
-            GrayLoadBalancer loadBalancer = grayLoadBalancerMap.get( uri.getHost());
-            return loadBalancer.choose(this.createRequest(exchange));
-        }
-        ObjectProvider<ServiceInstanceListSupplier> provider= clientFactory.getLazyProvider(uri.getHost(), ServiceInstanceListSupplier.class);
-        if(provider == null){
-            throw new NotFoundException("No loadbalancer available for " + uri.getHost());
-        }
-        grayLoadBalancerMap.putIfAbsent(uri.getHost(),new GrayLoadBalancer(provider,uri.getHost()));
-        GrayLoadBalancer loadBalancer = grayLoadBalancerMap.get( uri.getHost());
         try {
+            if(grayLoadBalancerMap.contains( uri.getHost())){
+                GrayLoadBalancer loadBalancer = grayLoadBalancerMap.get( uri.getHost());
+                return loadBalancer.choose(this.createRequest(exchange));
+            }
+            ObjectProvider<ServiceInstanceListSupplier> provider= clientFactory.getLazyProvider(uri.getHost(), ServiceInstanceListSupplier.class);
+            if(provider == null){
+                throw new NotFoundException("No loadbalancer available for " + uri.getHost());
+            }
+            grayLoadBalancerMap.putIfAbsent(uri.getHost(),new GrayLoadBalancer(provider,uri.getHost()));
+            GrayLoadBalancer loadBalancer = grayLoadBalancerMap.get( uri.getHost());
             return loadBalancer.choose(this.createRequest(exchange));
         }
         finally {
@@ -131,8 +131,8 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
     }
 
     private Request createRequest(ServerWebExchange exchange) {
-        HttpHeaders headers = exchange.getRequest().getHeaders();
-        Request<HttpHeaders> request = new DefaultRequest<>(headers);
+        Optional<GrayRouteContext> ctx= GrayRouteContextHolder.getGrayRouteContext();
+        Request<Optional<GrayRouteContext>> request = new DefaultRequest<>(ctx);
         return request;
     }
 
@@ -140,11 +140,10 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
         HttpHeaders headers= exchange.getRequest().getHeaders();
         String text= headers.getFirst(GRAY_ROUTE_NAME);
         if(!StringUtils.isEmpty(text)){
-            GrayRouteContext context= JSONObject.parseObject(text, GrayRouteContext.class);
-            return buildNewExchange(exchange,context);
+            return buildNewExchange(exchange,text);
         }
         //use uat tester
-        List<GrayRouteStrategy.TesterDefinition> uatList= strategy.getUatList();
+        List<GrayRouteStrategy.UserDefinition> uatList= strategy.getUatList();
         if(!uatList.isEmpty()){
             String detail= headers.getFirst(UserDetailContext.USER_HEADER_NAME);
             if(!StringUtils.isEmpty(detail)){
@@ -153,22 +152,22 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
                     userDetail.setUid(Long.parseLong(detail));
                 }
                 String candidate= "usr_"+userDetail.getType()+"_"+userDetail.getUid();
-                for(GrayRouteStrategy.TesterDefinition each: uatList){
-                    for(Pattern user: each.getTesters()){
+                for(GrayRouteStrategy.UserDefinition each: uatList){
+                    for(Pattern user: each.getUsers()){
                         if(user.matcher(candidate).find()){
-                            return buildNewExchange(exchange, each);
+                            return buildNewExchange(exchange, each.getCluster());
                         }
                     }
                 }
             }
             detail= headers.getFirst(UserAgentContext.USER_AGENT_NAME);
             if(!StringUtils.isEmpty(detail)){
-                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgentContext.class);
+                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgent.class);
                 String candidate= "cli_"+userAgent.getPlatform()+"_"+userAgent.getVersion();
-                for(GrayRouteStrategy.TesterDefinition each: uatList){
-                    for(Pattern user: each.getTesters()){
+                for(GrayRouteStrategy.UserDefinition each: uatList){
+                    for(Pattern user: each.getUsers()){
                         if(user.matcher(candidate).find()){
-                            return buildNewExchange(exchange, each);
+                            return buildNewExchange(exchange, each.getCluster());
                         }
                     }
                 }
@@ -186,28 +185,21 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
             for(GrayRouteStrategy.WeightDefinition each: wgtList){
                 sum+= each.getWeight();
                 if(sum>rdm){
-                    return buildNewExchange(exchange,each);
+                    return buildNewExchange(exchange,each.getCluster());
                 }
             }
         }
         //use the default route context
-        GrayRouteContext ctx= strategy.getDefaultContext();
-        if(ctx!= null){
-            if(StringUtils.isEmpty(ctx.getGroup())){
-                ctx.setGroup("DEFAULT_GROUP");
-            }
-            if(StringUtils.isEmpty(ctx.getClusterName())){
-                ctx.setGroup("DEFAULT");
-            }
-            return buildNewExchange(exchange, ctx);
-        }
-        return exchange;
+        return buildNewExchange(exchange,strategy.getDefaultCluster());
     }
 
-    private ServerWebExchange buildNewExchange(ServerWebExchange exchange,GrayRouteContext ctx){
-        if(StringUtils.isEmpty(ctx.getGroup()) || StringUtils.isEmpty(ctx.getClusterName())){
-            throw new IllegalArgumentException("group or clusterName was empty.");
+    private ServerWebExchange buildNewExchange(ServerWebExchange exchange, String cluster){
+        if(StringUtils.isEmpty(cluster)){
+            throw new IllegalArgumentException("clusterName was empty.");
         }
+        GrayRouteContext ctx= new GrayRouteContext();
+        ctx.setCluster(cluster);
+        ctx.setDefaultCluster(strategy.getDefaultCluster());
         GrayRouteContextHolder.setGrayRouteContext(ctx);
         ServerHttpRequest req = exchange.getRequest();
         ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());

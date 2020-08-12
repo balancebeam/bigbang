@@ -49,12 +49,23 @@ public class GrayRouteRibbonRule extends ZoneAvoidanceRule {
         if(grayRouteContext.isPresent()) {
             GrayRouteContext ctx= grayRouteContext.get();
             List<Server> availableServers= allServers.stream().filter((Server server)->{
-                String group= ((NacosServer)server).getMetadata().get(ATTRIBUTE_GROUP);
-                String clusterName= ((NacosServer)server).getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
-                return group.equals(ctx.getGroup()) && clusterName.equals(ctx.getClusterName());
+                String cluster= ((NacosServer)server).getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                return cluster.equals(ctx.getCluster());
             }).collect(Collectors.toList());
+
+            //lookup the default group and cluster
+            if(availableServers.isEmpty() &&
+                    ctx.getDefaultCluster()!= null &&
+                    !ctx.getCluster().equals(ctx.getDefaultCluster())){
+                availableServers= allServers.stream().filter(server-> {
+                    String cluster= ((NacosServer)server).getMetadata().get(ATTRIBUTE_CLUSTER_NAME);
+                    return cluster.equals(ctx.getDefaultCluster());
+                }).collect(Collectors.toList());
+            }
+
             if(CollectionUtils.isEmpty(availableServers)){
-                return allServers;
+                log.warn("cannot find appropriate match candidate server: {}",ctx);
+                return Collections.EMPTY_LIST;
             }
             return availableServers;
         }

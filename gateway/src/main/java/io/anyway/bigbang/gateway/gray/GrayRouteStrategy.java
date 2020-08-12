@@ -14,24 +14,25 @@ import java.util.regex.Pattern;
 @ToString
 public class GrayRouteStrategy {
 
-    private List<TesterDefinition> uatList = Collections.EMPTY_LIST;
+    private List<UserDefinition> uatList = Collections.EMPTY_LIST;
 
     private List<WeightDefinition> wgtList= Collections.EMPTY_LIST;
 
-    private GrayRouteContext defaultContext;
+    private String defaultCluster= "DEFAULT";
 
     @Getter
     @Setter
     @ToString
-    public static class TesterDefinition extends GrayRouteContext {
-        private List<Pattern> testers;
+    public static class UserDefinition {
+        private List<Pattern> users;
+        private String cluster;
     }
 
     @Getter
     @Setter
     @ToString
-    public static class WeightDefinition extends GrayRouteContext{
+    public static class WeightDefinition{
         private int weight;
+        private String cluster;
     }
-
 }
