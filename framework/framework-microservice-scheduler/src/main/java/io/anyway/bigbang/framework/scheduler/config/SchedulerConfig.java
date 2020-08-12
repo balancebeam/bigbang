@@ -1,11 +1,14 @@
 package io.anyway.bigbang.framework.scheduler.config;
 
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.util.NetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Resource;
 
 @Slf4j
 @Configuration(proxyBeanMethods = false)

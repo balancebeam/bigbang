@@ -9,14 +9,13 @@ import com.netflix.loadbalancer.ZoneAvoidanceRule;
 import io.anyway.bigbang.framework.discovery.GrayRouteContext;
 import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_CLUSTER_NAME;
-import static io.anyway.bigbang.framework.discovery.GrayRouteContext.ATTRIBUTE_GROUP;
 
 @Slf4j
 public class GrayRouteRibbonRule extends ZoneAvoidanceRule {

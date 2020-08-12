@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TtlRunnable;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
+import io.anyway.bigbang.framework.discovery.GrayRouteContext;
+import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
 import io.anyway.bigbang.framework.mqclient.core.AfterCommitTaskRegister;
 import io.anyway.bigbang.framework.mqclient.dao.MqClientMessageRepository;
 import io.anyway.bigbang.framework.mqclient.domain.*;
@@ -25,6 +27,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -207,8 +210,10 @@ public class MqClientImpl implements MqClient {
 
     private MessageHeader buildMessageHeader(MqSendOption mqSendOption) {
         MessageHeader messageHeader = new MessageHeader();
-        messageHeader.setClusterName(nacosDiscoveryProperties.getClusterName());
-        messageHeader.setGroup(nacosDiscoveryProperties.getGroup());
+        Optional<GrayRouteContext> optional= GrayRouteContextHolder.getGrayRouteContext();
+        if(optional.isPresent()) {
+            messageHeader.setGrayRouteContext(optional.get());
+        }
         messageHeader.setServiceId(nacosDiscoveryProperties.getService());
         messageHeader.setIp(nacosDiscoveryProperties.getIp());
         messageHeader.setPersistMode(mqSendOption.getPersistMode().getVal());

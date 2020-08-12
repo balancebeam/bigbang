@@ -1,14 +1,15 @@
 package io.anyway.bigbang.framework.mqclient.config;
 
+import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
-import io.anyway.bigbang.framework.kernel.gray.NacosMetadataMapConfig;
+import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
 import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
 import io.anyway.bigbang.framework.mqclient.domain.RestHeader;
 import io.anyway.bigbang.framework.mqclient.service.MqRequestRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,16 +19,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+
+import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_ROUTE_NAME;
+
 
 @Slf4j
 @Configuration
 public class RouterConfig {
 
-    @Value("${spring.application.name}")
-    private String serviceId;
-
-    @Value("${spring.cloud.nacos.discovery.cluster-name:DEFAULT}")
-    private String clusterName;
+    @Resource
+    private NacosDiscoveryProperties nacosDiscoveryProperties;
 
     @LoadBalanced
     @Bean("lbRestTemplate")
@@ -49,16 +51,17 @@ public class RouterConfig {
                     mqClientMessage.getMessageKey(),
                     mqClientMessage.getMessageId());
             if (messageHeader == null ||
-                    messageHeader.getClusterName() == null ||
-                    clusterName.equals(messageHeader.getClusterName())) {
+                    messageHeader.getGrayRouteContext() == null ||
+                    messageHeader.getGrayRouteContext().getCluster().equals(nacosDiscoveryProperties.getClusterName())){
                 return false;
             }
 
             try {
+                GrayRouteContextHolder.setGrayRouteContext(messageHeader.getGrayRouteContext());
                 HttpHeaders requestHeaders = new HttpHeaders();
-                requestHeaders.add(NacosMetadataMapConfig.GRAY_UNIT_NAME, messageHeader.getClusterName());
+                requestHeaders.add(GRAY_ROUTE_NAME, JSONObject.toJSONString(messageHeader.getGrayRouteContext()));
                 HttpEntity<MqClientMessage> httpEntity = new HttpEntity<>(mqClientMessage, requestHeaders);
-                String url = Joiner.on("").join("http://", serviceId, "/mq/routing");
+                String url = Joiner.on("").join("http://", nacosDiscoveryProperties.getService(), "/mq/routing");
                 log.info("redirect url: {}", url);
                 ResponseEntity<RestHeader> httpResult = restTemplate.postForEntity(url, httpEntity, RestHeader.class);
                 log.info("redirect response: {}", httpResult);
@@ -74,6 +77,9 @@ public class RouterConfig {
             } catch (Exception e) {
                 log.warn("Exception happen when routing messages, follow the default logic", e);
                 return false;
+            }
+            finally {
+                GrayRouteContextHolder.removeGrayRouteContext();
             }
         };
     }

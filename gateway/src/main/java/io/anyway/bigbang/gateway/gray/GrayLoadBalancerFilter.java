@@ -32,6 +32,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -162,7 +163,7 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayRouteL
             }
             detail= headers.getFirst(UserAgentContext.USER_AGENT_NAME);
             if(!StringUtils.isEmpty(detail)){
-                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgent.class);
+                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgentContext.class);
                 String candidate= "cli_"+userAgent.getPlatform()+"_"+userAgent.getVersion();
                 for(GrayRouteStrategy.UserDefinition each: uatList){
                     for(Pattern user: each.getUsers()){
