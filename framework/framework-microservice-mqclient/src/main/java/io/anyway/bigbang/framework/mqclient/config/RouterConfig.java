@@ -3,7 +3,6 @@ package io.anyway.bigbang.framework.mqclient.config;
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
-import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
 import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
 import io.anyway.bigbang.framework.mqclient.domain.RestHeader;
@@ -57,7 +56,6 @@ public class RouterConfig {
             }
 
             try {
-                GrayRouteContextHolder.setGrayRouteContext(messageHeader.getGrayRouteContext());
                 HttpHeaders requestHeaders = new HttpHeaders();
                 requestHeaders.add(GRAY_ROUTE_NAME, JSONObject.toJSONString(messageHeader.getGrayRouteContext()));
                 HttpEntity<MqClientMessage> httpEntity = new HttpEntity<>(mqClientMessage, requestHeaders);
@@ -77,9 +75,6 @@ public class RouterConfig {
             } catch (Exception e) {
                 log.warn("Exception happen when routing messages, follow the default logic", e);
                 return false;
-            }
-            finally {
-                GrayRouteContextHolder.removeGrayRouteContext();
             }
         };
     }
