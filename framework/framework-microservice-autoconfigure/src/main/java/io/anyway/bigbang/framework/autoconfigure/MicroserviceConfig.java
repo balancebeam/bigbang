@@ -7,6 +7,7 @@ import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
 import io.anyway.bigbang.framework.grayroute.GrayRouteConfig;
 import io.anyway.bigbang.framework.header.HeaderContext;
 import io.anyway.bigbang.framework.header.HeaderContextHolder;
+import io.anyway.bigbang.framework.interceptor.InterceptorConfig;
 import io.anyway.bigbang.framework.logging.marker.LoggingMarkerAspect;
 import io.anyway.bigbang.framework.metrics.FrameworkMetricsConfig;
 import io.anyway.bigbang.framework.swagger.Swagger2Config;
@@ -38,6 +39,7 @@ import java.util.Map;
 @Configuration
 @AutoConfigureBefore(TaskExecutionAutoConfiguration.class)
 @ImportAutoConfiguration({
+        InterceptorConfig.class,
         LoggingMarkerAspect.class,
         FeignClientErrorDecoder.class,
         TransmittableTaskExecutionConfig.class,
