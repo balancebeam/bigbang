@@ -29,6 +29,10 @@ dependencies {
     api 'io.micrometer:micrometer-registry-prometheus:1.5.2'
     api 'io.springfox:springfox-swagger-ui:2.9.2'
     api 'io.springfox:springfox-swagger2:2.9.2'
+    // swagger 默认使用的 models 为 1.5.20, 会抛出 NumberFormat 异常. 该问题需要使用 1.5.21 修复.
+    // 详见: https://github.com/springfox/springfox/issues/2265
+    api "io.swagger:swagger-annotations:1.5.21"
+    api "io.swagger:swagger-models:1.5.21"
     api 'javax.validation:validation-api:2.0.1.Final'
     api 'mysql:mysql-connector-java:8.0.20'
     api 'net.logstash.logback:logstash-logback-encoder:6.4'
