@@ -11,9 +11,4 @@ public class FrameworkMetricsConfig {
         return new TomcatMetricCollector();
     }
 
-    @Bean
-    public HttpEndpointMetricCollector createHttpEndpointMetric(){
-        return new HttpEndpointMetricCollector();
-    }
-
 }

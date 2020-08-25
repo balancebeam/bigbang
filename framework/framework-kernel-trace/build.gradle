@@ -2,7 +2,8 @@ description = "bigbang trace module"
 archivesBaseName = 'io.anyway.bigbang.framework.trace'
 
 dependencies {
-    compile(project(":framework:framework-kernel-logging"))
+    compile("org.springframework.cloud:spring-cloud-starter-sleuth")
+    compile("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
