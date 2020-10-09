@@ -1,0 +1,10 @@
+description = "bigbang discovery module"
+archivesBaseName = 'io.anyway.bigbang.framework.discovery'
+
+dependencies {
+    compile(project(':framework-microservice-header'))
+    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
+    compile("com.alibaba:fastjson")
+    compile("com.sun.jersey:jersey-core:1.19.4")
+    compile("javax.ws.rs:jsr311-api:1.1")
+}

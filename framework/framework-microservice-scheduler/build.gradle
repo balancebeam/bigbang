@@ -2,10 +2,5 @@ description = "bigbang scheduler module"
 archivesBaseName = 'io.anyway.bigbang.framework.scheduler'
 
 dependencies {
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
-    compile("com.xuxueli:xxl-job-core:2.2.0")
-    annotationProcessor("org.projectlombok:lombok")
-    compileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
+    compile("com.xuxueli:xxl-job-core:2.1.2")
 }

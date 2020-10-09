@@ -1,0 +1,6 @@
+description = "bigbang model module"
+archivesBaseName = 'io.anyway.bigbang.framework.model'
+
+dependencies {
+
+}

@@ -1,0 +1,8 @@
+description = "bigbang trace module"
+archivesBaseName = 'io.anyway.bigbang.framework.trace'
+
+dependencies {
+    compile(project(":framework-microservice-logging"))
+    compile("org.springframework.cloud:spring-cloud-starter-sleuth")
+    compile("org.springframework.cloud:spring-cloud-sleuth-zipkin")
+}

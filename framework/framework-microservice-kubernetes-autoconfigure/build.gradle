@@ -1,0 +1,16 @@
+description = "bigbang autoconfigure module"
+archivesBaseName = 'io.anyway.bigbang.framework.autoconfigure'
+
+dependencies {
+    compile(project(":framework-kernel-logging"))
+    compile(project(":framework-kernel-security"))
+    compile(project(":framework-kernel-useragent"))
+    compile(project(":framework-kernel-util"))
+    compile(project(":framework-microservice-datasource"))
+    compile(project(":framework-microservice-exception"))
+    compile(project(":framework-microservice-executor"))
+    compile(project(":framework-microservice-feign"))
+    compile(project(":framework-microservice-grayroute"))
+    compile(project(":framework-microservice-metrics"))
+    compile(project(":framework-microservice-swagger"))
+}

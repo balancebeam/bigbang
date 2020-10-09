@@ -1,0 +1,6 @@
+description = "bigbang util module"
+archivesBaseName = 'io.anyway.bigbang.framework.util'
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+}

@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.interceptor;
 
-import io.anyway.bigbang.framework.model.APIResponse;
+import io.anyway.bigbang.framework.model.api.APIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -29,7 +29,7 @@ public class ApiReturnValueProcessor extends RequestResponseBodyMethodProcessor 
     @Override
     public boolean supportsReturnType(MethodParameter returnType) {
         Method method = returnType.getMethod();
-        if (method != null && method.getReturnType().isAssignableFrom(ApiResponse.class)) {
+        if (method != null && method.getReturnType().isAssignableFrom(APIResponse.class)) {
             return true;
         }
         return super.supportsParameter(returnType);

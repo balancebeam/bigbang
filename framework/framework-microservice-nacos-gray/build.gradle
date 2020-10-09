@@ -1,0 +1,8 @@
+description = "bigbang grayroute module"
+archivesBaseName = 'io.anyway.bigbang.framework.grayroute'
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile(project(':framework-microservice-nacos-discovery'))
+    compile("javax.ws.rs:jsr311-api:1.1")
+}
