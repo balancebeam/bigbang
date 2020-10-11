@@ -1,12 +1,12 @@
 package io.anyway.bigbang.framework.mqclient.service.impl;
 
-import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TtlRunnable;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import io.anyway.bigbang.framework.discovery.GrayRouteContext;
-import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
+import io.anyway.bigbang.framework.gray.DiscoveryMetadataService;
+import io.anyway.bigbang.framework.gray.GrayContext;
+import io.anyway.bigbang.framework.gray.GrayContextHolder;
 import io.anyway.bigbang.framework.mqclient.core.AfterCommitTaskRegister;
 import io.anyway.bigbang.framework.mqclient.dao.MqClientMessageRepository;
 import io.anyway.bigbang.framework.mqclient.domain.*;
@@ -47,7 +47,7 @@ public class MqClientImpl implements MqClient {
     private MqClientMessageRepository mqClientMessageRepository;
 
     @Resource
-    private NacosDiscoveryProperties nacosDiscoveryProperties;
+    private DiscoveryMetadataService discoveryMetadataService;
 
     private volatile ExecutorService workQueueExecutor;
 
@@ -210,14 +210,14 @@ public class MqClientImpl implements MqClient {
 
     private MessageHeader buildMessageHeader(MqSendOption mqSendOption) {
         MessageHeader messageHeader = new MessageHeader();
-        Optional<GrayRouteContext> optional= GrayRouteContextHolder.getGrayRouteContext();
+        Optional<GrayContext> optional= GrayContextHolder.getGrayContext();
         if(optional.isPresent()) {
-            messageHeader.setGrayRouteContext(optional.get());
+            messageHeader.setGrayContext(optional.get());
         }
-        messageHeader.setServiceId(nacosDiscoveryProperties.getService());
-        messageHeader.setIp(nacosDiscoveryProperties.getIp());
+        messageHeader.setServiceId(discoveryMetadataService.getServiceId());
+        messageHeader.setIp(discoveryMetadataService.getIp());
         messageHeader.setPersistMode(mqSendOption.getPersistMode().getVal());
-        String version = nacosDiscoveryProperties.getMetadata().get("version");
+        String version = discoveryMetadataService.getVersion();
         if (!StringUtils.isEmpty(version)) {
             messageHeader.setVersion(version);
         }

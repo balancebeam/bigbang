@@ -1,6 +1,5 @@
 package io.anyway.bigbang.framework.scheduler.config;
 
-import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import com.xxl.job.core.util.NetUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +12,6 @@ import javax.annotation.Resource;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 public class SchedulerConfig {
-
-    @Resource
-    private NacosDiscoveryProperties nacosDiscoveryProperties;
 
     @Value("${spring.application.name}")
     private String appName;
@@ -46,7 +42,7 @@ public class SchedulerConfig {
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
         xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
         xxlJobSpringExecutor.setAppname(appName);
-        xxlJobSpringExecutor.setIp(nacosDiscoveryProperties.getIp());
+//        xxlJobSpringExecutor.setIp(nacosDiscoveryProperties.getIp());
         xxlJobSpringExecutor.setPort(getAppPort());
         xxlJobSpringExecutor.setAccessToken(accessToken);
         xxlJobSpringExecutor.setLogPath(logPath);

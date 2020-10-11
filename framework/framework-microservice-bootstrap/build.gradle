@@ -1,0 +1,7 @@
+description = "bigbang header module"
+archivesBaseName = 'io.anyway.bigbang.framework.bootstrap'
+
+dependencies {
+    compile(project(':framework-microservice-discovery'))
+    compile("org.springframework.boot:spring-boot")
+}

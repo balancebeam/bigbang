@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.useragent;
 
-import io.anyway.bigbang.framework.header.HeaderContext;
+import io.anyway.bigbang.framework.bootstrap.HeaderContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

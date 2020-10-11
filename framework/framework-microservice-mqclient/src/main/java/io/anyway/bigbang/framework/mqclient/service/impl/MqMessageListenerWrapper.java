@@ -1,7 +1,7 @@
 package io.anyway.bigbang.framework.mqclient.service.impl;
 
 import com.google.common.collect.Maps;
-import io.anyway.bigbang.framework.discovery.GrayRouteContextHolder;
+import io.anyway.bigbang.framework.gray.GrayContextHolder;
 import io.anyway.bigbang.framework.mqclient.dao.MqClientIdempotentRepository;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientConfig;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
@@ -119,7 +119,7 @@ public class MqMessageListenerWrapper {
                 mqClientConfig);
 
         if(mqClientMessage.getMessageHeader()!=null) {
-            GrayRouteContextHolder.setGrayRouteContext(mqClientMessage.getMessageHeader().getGrayRouteContext());
+            GrayContextHolder.setGrayContext(mqClientMessage.getMessageHeader().getGrayContext());
         }
         try {
             // For canary deployment: determine whether we should route the message to other consumer parties
@@ -128,7 +128,7 @@ public class MqMessageListenerWrapper {
             }
             localProcess(mqClientConfig, mqClientMessage);
         }finally {
-            GrayRouteContextHolder.removeGrayRouteContext();
+            GrayContextHolder.removeGrayContext();
         }
 
     }

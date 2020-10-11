@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSONObject;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -17,16 +16,13 @@ import java.nio.charset.StandardCharsets;
 @ConditionalOnClass(ErrorDecoder.class)
 public class FeignClientErrorDecoder implements ErrorDecoder {
 
-    @Resource
-    private ObjectMapper mapper;
-
     @Override
     public Exception decode(String methodKey, Response response) {
         if (response.status() != HttpStatus.OK.value()) {
             String errorContent;
             try {
                 errorContent = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
-                InternalException internalApiException =mapper.readValue(errorContent, InternalException.class);
+                InternalException internalApiException = JSONObject.parseObject(errorContent, InternalException.class);
                 internalApiException.setHttpStatus(response.status());
                 return internalApiException;
             } catch (Exception e) {

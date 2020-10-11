@@ -17,7 +17,7 @@ import java.util.concurrent.Executor;
 public class TransmittableExecutorMetricCollector implements MeterBinder {
 
     @Autowired(required = false)
-    private Map<String,Executor> executorMap = Collections.EMPTY_MAP;
+    private Map<String,Executor> executorMap = Collections.emptyMap();
 
     @Override
     public void bindTo(MeterRegistry registry) {

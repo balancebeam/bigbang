@@ -5,9 +5,6 @@ buildscript {
         maven {
             url repositoryMavenCentral
         }
-        maven {
-            url 'https://repo1.maven.org/maven2/'
-        }
 	}
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.1.RELEASE")
@@ -29,9 +26,6 @@ repositories {
     maven {
         url repositoryMavenCentral
     }
-    maven {
-        url 'https://repo1.maven.org/maven2/'
-    }
 }
 
 dependencyManagement {
@@ -47,19 +41,21 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
     exclude group: "org.springframework.cloud",module: "spring-cloud-starter-netflix-ribbon"
+    exclude group: "org.springframework.boot", module: "spring-boot-starter-web"
 }
 
 dependencies {
-    compile(project(":framework:framework-kernel-security"))
-    compile(project(":framework:framework-kernel-useragent"))
-    compile(project(":framework:framework-kernel-discovery"))
+    compile("io.anyway.bigbang:framework-microservice-bootstrap:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang:framework-microservice-header:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang:framework-microservice-metrics:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang:framework-microservice-security:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang:framework-microservice-useragent:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang:framework-microservice-gray:1.0.0-SNAPSHOT")
     compile("org.springframework.cloud:spring-cloud-starter-gateway")
     compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("io.micrometer:micrometer-registry-prometheus")
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
-    compile("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway")
-    compile("org.springframework.cloud:spring-cloud-loadbalancer")
+//    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
+//    compile("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway")
+//    compile("org.springframework.cloud:spring-cloud-loadbalancer")
     annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")

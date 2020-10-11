@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: nacos-dev
   cloud:
     loadbalancer:
       retry:
@@ -30,5 +30,10 @@ management:
       exposure:
         include: "*"
 
+#sentinel:
+#  transport:
+#    port: 9001
+#    dashboard: sentinel-dashboard.bigbang.internal:9999
+#    eager: true
 
 

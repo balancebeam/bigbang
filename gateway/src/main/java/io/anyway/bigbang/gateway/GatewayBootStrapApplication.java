@@ -1,6 +1,6 @@
 package io.anyway.bigbang.gateway;
 
-import org.springframework.boot.SpringApplication;
+import io.anyway.bigbang.framework.bootstrap.SpringApplicationBootStrap;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
@@ -9,6 +9,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class GatewayBootStrapApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GatewayBootStrapApplication.class, args);
+        SpringApplicationBootStrap.run(GatewayBootStrapApplication.class, args);
     }
 }

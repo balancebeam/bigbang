@@ -2,7 +2,7 @@ description = "bigbang metrics module"
 archivesBaseName = 'io.anyway.bigbang.framework.metrics'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    provided("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("io.micrometer:micrometer-registry-prometheus")
+    compile("io.micrometer:micrometer-registry-prometheus:1.5.2")
 }

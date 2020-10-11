@@ -1,7 +1,7 @@
 package io.anyway.bigbang.framework.feign;
 
 import feign.RequestInterceptor;
-import io.anyway.bigbang.framework.header.HeaderContextHolder;
+import io.anyway.bigbang.framework.bootstrap.HeaderContextHolder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

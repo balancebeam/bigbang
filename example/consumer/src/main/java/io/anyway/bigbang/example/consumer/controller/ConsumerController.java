@@ -2,7 +2,7 @@ package io.anyway.bigbang.example.consumer.controller;
 
 import io.anyway.bigbang.example.api.UserClient;
 import io.anyway.bigbang.example.model.User;
-import io.anyway.bigbang.framework.model.api.ApiResponse;
+import io.anyway.bigbang.framework.model.api.APIResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +20,15 @@ public class ConsumerController {
 
     @ResponseBody
     @GetMapping("/user")
-    public ApiResponse<User> getMicroServiceUser(@RequestParam String name){
+    public APIResponse<User> getMicroServiceUser(@RequestParam String name){
         User user= userClient.getInternalUser(name);
-        return ApiResponse.ok(user);
+        return APIResponse.ok(user);
     }
 
     @ResponseBody
     @GetMapping("/exception")
-    public ApiResponse<User> getMicroServiceException(){
+    public APIResponse<User> getMicroServiceException(){
         User user= userClient.getInternalExceptionExample();
-        return ApiResponse.ok(user);
+        return APIResponse.ok(user);
     }
 }

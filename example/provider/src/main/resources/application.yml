@@ -4,14 +4,17 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: nacos-dev
   jackson:
     default-property-inclusion: non_null
   messages:
     basename: i18n/messages,i18n/errors
-  executor:
-    thread-pool:
-      core-pool-size: 20
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 20
+        queue-capacity: 100
   cloud:
     loadbalancer:
       retry:
@@ -26,6 +29,16 @@ ribbon:
   OkToRetryOnAllOperations: true
   MaxAutoRetries: 1
   MaxAutoRetriesNextServer: 1
+
+management:
+#  server:
+#    port: 9090
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: "*"
 
 
 

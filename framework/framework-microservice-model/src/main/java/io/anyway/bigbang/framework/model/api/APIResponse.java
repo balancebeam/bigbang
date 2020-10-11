@@ -15,7 +15,7 @@ public class APIResponse<T> {
     private T body;
 
     public static <E> APIResponse<E> ok(E body){
-        APIResponse<E> response= new APIResponse<>();
+        APIResponse<E> response= new APIResponse<E>();
         response.setCode(0);
         response.setMessage("OK");
         response.setBody(body);

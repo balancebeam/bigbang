@@ -1,16 +1,17 @@
 package io.anyway.bigbang.gateway.config;
 
+import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
-import io.anyway.bigbang.gateway.gray.GrayLoadBalancerFilter;
-import io.anyway.bigbang.gateway.gray.GrayRouteListener;
-import io.anyway.bigbang.gateway.gray.GrayRouteStrategy;
+import io.anyway.bigbang.framework.gray.ConditionalOnKubernetesDiscoveryEnabled;
+import io.anyway.bigbang.gateway.gray.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
@@ -25,6 +26,22 @@ import javax.annotation.Resource;
 @Configuration
 @AutoConfigureAfter(GrayRouteConfig.GrayRouteConfig2.class)
 public class GrayRouteConfig {
+
+    @Bean
+    @ConditionalOnNacosDiscoveryEnabled
+    public GrayRibbonRule nacosGrayRibbonRule() {
+        NacosGrayRibbonRuleImpl rule = new NacosGrayRibbonRuleImpl();
+        return rule;
+    }
+
+
+    @Bean
+    @ConditionalOnKubernetesDiscoveryEnabled
+    public GrayRibbonRule k8sGrayRibbonRule() {
+        KubernetesGrayRibbonRuleImpl rule = new KubernetesGrayRibbonRuleImpl();
+        return rule;
+    }
+
 
     @Bean
     @ConditionalOnMissingBean({GrayLoadBalancerFilter.class})
@@ -47,7 +64,7 @@ public class GrayRouteConfig {
         private String serverAddr;
 
         @Resource
-        private GrayRouteListener grayRouteListener;
+        private GrayListener grayRouteListener;
 
         @PostConstruct
         public void grayRouteByNacosListener() {
@@ -72,10 +89,10 @@ public class GrayRouteConfig {
 
         private synchronized void setGrayRoutePolicy(String text) {
             log.info("gateway gray route strategy: {}",text);
-            GrayRouteStrategy strategy = StringUtils.isEmpty(text)?
-                    new GrayRouteStrategy():
-                    JSONObject.parseObject(text, GrayRouteStrategy.class);
-            grayRouteListener.onRouteChange(strategy);
+            GrayStrategy strategy = StringUtils.isEmpty(text)?
+                    new GrayStrategy():
+                    JSONObject.parseObject(text, GrayStrategy.class);
+            grayRouteListener.onChange(strategy);
         }
     }
 

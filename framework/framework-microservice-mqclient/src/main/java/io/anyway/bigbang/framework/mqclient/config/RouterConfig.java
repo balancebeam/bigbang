@@ -1,17 +1,20 @@
 package io.anyway.bigbang.framework.mqclient.config;
 
-import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import io.anyway.bigbang.framework.gray.DiscoveryMetadataService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+
+
+
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
 import io.anyway.bigbang.framework.mqclient.domain.RestHeader;
 import io.anyway.bigbang.framework.mqclient.service.MqRequestRouter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
-import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_ROUTE_NAME;
+import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
 
 
 @Slf4j
@@ -28,7 +31,7 @@ import static io.anyway.bigbang.framework.discovery.GrayRouteContext.GRAY_ROUTE_
 public class RouterConfig {
 
     @Resource
-    private NacosDiscoveryProperties nacosDiscoveryProperties;
+    private DiscoveryMetadataService discoveryMetadataService;
 
     @LoadBalanced
     @Bean("lbRestTemplate")
@@ -50,16 +53,16 @@ public class RouterConfig {
                     mqClientMessage.getMessageKey(),
                     mqClientMessage.getMessageId());
             if (messageHeader == null ||
-                    messageHeader.getGrayRouteContext() == null ||
-                    messageHeader.getGrayRouteContext().getCluster().equals(nacosDiscoveryProperties.getClusterName())){
+                    messageHeader.getGrayContext() == null ||
+                    messageHeader.getGrayContext().equals(discoveryMetadataService.getGroup())){
                 return false;
             }
 
             try {
                 HttpHeaders requestHeaders = new HttpHeaders();
-                requestHeaders.add(GRAY_ROUTE_NAME, JSONObject.toJSONString(messageHeader.getGrayRouteContext()));
+                requestHeaders.add(GRAY_NAME, JSONObject.toJSONString(messageHeader.getGrayContext()));
                 HttpEntity<MqClientMessage> httpEntity = new HttpEntity<>(mqClientMessage, requestHeaders);
-                String url = Joiner.on("").join("http://", nacosDiscoveryProperties.getService(), "/mq/routing");
+                String url = Joiner.on("").join("http://", discoveryMetadataService.getServiceId(), "/mq/routing");
                 log.info("redirect url: {}", url);
                 ResponseEntity<RestHeader> httpResult = restTemplate.postForEntity(url, httpEntity, RestHeader.class);
                 log.info("redirect response: {}", httpResult);

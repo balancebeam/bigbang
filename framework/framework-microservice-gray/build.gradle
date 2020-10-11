@@ -1,0 +1,9 @@
+description = "bigbang discovery module"
+archivesBaseName = 'io.anyway.bigbang.framework.gray'
+
+dependencies {
+    compile(project(':framework-microservice-header'))
+    compile(project(':framework-microservice-discovery'))
+    provided("org.springframework.boot:spring-boot-starter-web")
+    compile("com.alibaba:fastjson")
+}

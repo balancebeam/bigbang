@@ -5,9 +5,6 @@ buildscript {
         maven {
             url repositoryMavenCentral
         }
-        maven {
-            url 'https://repo1.maven.org/maven2/'
-        }
 	}
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.1.RELEASE")
@@ -41,9 +38,6 @@ subprojects{
         maven {
             url repositoryMavenCentral
         }
-        maven {
-            url 'https://repo1.maven.org/maven2/'
-        }
     }
 
     dependencyManagement {
@@ -56,12 +50,17 @@ subprojects{
     }
 
     dependencies {
+        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok")
+        testAnnotationProcessor("org.projectlombok:lombok")
+        testCompileOnly("org.projectlombok:lombok")
 
-        testCompile("org.testcontainers:testcontainers")
-        testCompile("org.awaitility:awaitility")
-        testCompile("com.github.tomakehurst:wiremock-standalone")
-        testCompile("org.apache.httpcomponents:fluent-hc")
-        testCompile("org.springframework.boot:spring-boot-starter-test")
+
+//        testCompile("org.testcontainers:testcontainers")
+//        testCompile("org.awaitility:awaitility")
+//        testCompile("com.github.tomakehurst:wiremock-standalone")
+//        testCompile("org.apache.httpcomponents:fluent-hc")
+//        testCompile("org.springframework.boot:spring-boot-starter-test")
     }
 
 }

@@ -1,9 +1,9 @@
 server:
-  port: 8082
+  port: 8085
 
 spring:
   profiles:
-    active: dev
+    active: nacos-dev
   jackson:
     default-property-inclusion: non_null
   cloud:
