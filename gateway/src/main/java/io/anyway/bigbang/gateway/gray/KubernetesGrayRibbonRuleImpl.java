@@ -30,7 +30,7 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule{
             availableInstances= discoveryClient.getInstances(getK8sServiceName(serviceId,ctx.getDefGroup()));
         }
         if(!CollectionUtils.isEmpty(availableInstances)){
-            ServiceInstance instance= availableInstances.get(pos.getAndIncrement() % availableInstances.size());
+            ServiceInstance instance= availableInstances.get(Math.abs(pos.incrementAndGet()) % availableInstances.size());
             return new DefaultResponse(instance);
         }
         log.warn("cannot find appropriate match candidate server: {}",ctx.toString());

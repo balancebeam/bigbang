@@ -37,7 +37,7 @@ public class NacosGrayRibbonRuleImpl implements GrayRibbonRule{
         }
         if(!availableInstances.isEmpty()){
 
-            ServiceInstance instance= availableInstances.get(pos.getAndIncrement() % availableInstances.size());
+            ServiceInstance instance= availableInstances.get(Math.abs(pos.incrementAndGet()) % availableInstances.size());
             return new DefaultResponse(instance);
         }
         log.warn("cannot find appropriate match candidate server: {}",ctx.toString());

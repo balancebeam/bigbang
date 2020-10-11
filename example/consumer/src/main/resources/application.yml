@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: nacos-dev
+    active: k8s-dev
   jackson:
     default-property-inclusion: non_null
   cloud:

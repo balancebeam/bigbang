@@ -4,7 +4,6 @@ import io.anyway.bigbang.framework.gray.GrayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Request;
