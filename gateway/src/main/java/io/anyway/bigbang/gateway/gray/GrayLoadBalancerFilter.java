@@ -205,7 +205,7 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListen
         }
         GrayContext ctx= new GrayContext();
         ctx.setGroup(group);
-        ctx.setDefGroup(strategy.getDefGroup());
+        ctx.setDefGroup(strategy.getDefGroup()!= null? strategy.getDefGroup(): "");
         GrayContextHolder.setGrayContext(ctx);
         ServerHttpRequest req = exchange.getRequest();
         ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());

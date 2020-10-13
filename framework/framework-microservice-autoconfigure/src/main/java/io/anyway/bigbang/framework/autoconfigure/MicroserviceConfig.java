@@ -1,5 +1,6 @@
 package io.anyway.bigbang.framework.autoconfigure;
 
+import io.anyway.bigbang.framework.bootstrap.HeaderConfig;
 import io.anyway.bigbang.framework.exception.FeignClientErrorDecoder;
 import io.anyway.bigbang.framework.exception.GlobalExceptionHandler;
 import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @ImportAutoConfiguration({
         InterceptorConfig.class,
         DiscoveryConfig.class,
+        HeaderConfig.class,
         LoggingMarkerAspect.class,
         FeignClientErrorDecoder.class,
         TransmittableTaskExecutionConfig.class,

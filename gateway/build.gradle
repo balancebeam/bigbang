@@ -14,12 +14,13 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: "org.springframework.boot"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+//    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 repositories {
