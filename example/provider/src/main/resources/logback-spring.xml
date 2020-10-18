@@ -2,16 +2,16 @@
 <configuration scan="false" scanPeriod="60 seconds" debug="false">
     <include resource="logging/logback.xml" />
 
-    <springProfile name="k8s-dev,nacos-dev">
-        <root level="INFO">
-            <appender-ref ref="ASYNC_TEXT_CONSOLE" />
-        </root>
-    </springProfile>
+<!--    <springProfile name="k8s-dev,nacos-dev">-->
+<!--        <root level="INFO">-->
+<!--            <appender-ref ref="ASYNC_TEXT_CONSOLE" />-->
+<!--        </root>-->
+<!--    </springProfile>-->
 
-    <springProfile name="prod,staging">
+<!--    <springProfile name="prod,staging">-->
         <root level="INFO">
             <appender-ref ref="ASYNC_JSON_CONSOLE" />
         </root>
-    </springProfile>
+<!--    </springProfile>-->
 
 </configuration>

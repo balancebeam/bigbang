@@ -56,7 +56,7 @@ subprojects{
         testCompileOnly("org.projectlombok:lombok")
 
 
-//        testCompile("org.testcontainers:testcontainers")
+//        testCompile("org.testcontainers:testcontainers:1.15.0-rc2")
 //        testCompile("org.awaitility:awaitility")
 //        testCompile("com.github.tomakehurst:wiremock-standalone")
 //        testCompile("org.apache.httpcomponents:fluent-hc")

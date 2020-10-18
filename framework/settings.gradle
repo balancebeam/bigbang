@@ -23,7 +23,7 @@ include 'framework-microservice-header'
 include 'framework-microservice-logging'
 include 'framework-microservice-model'
 include 'framework-microservice-security'
-include 'framework-microservice-trace'
+include 'framework-microservice-apm'
 include 'framework-microservice-useragent'
 include 'framework-microservice-util'
 //

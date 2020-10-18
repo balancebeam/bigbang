@@ -16,5 +16,6 @@ dependencies {
     compile(project(":framework-microservice-interceptor"))
     compile(project(":framework-microservice-discovery"))
     compile(project(":framework-microservice-model"))
+    compile(project(":framework-microservice-apm"))
     compile(project(":framework-microservice-bootstrap"))
 }

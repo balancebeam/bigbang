@@ -4,7 +4,13 @@ server:
 
 spring:
   profiles:
-    active: k8s-dev
+    active: nacos-dev
+  sleuth:
+    enabled: false
+    sampler:
+      percentage: 1
+  zipkin:
+    base-url: http://192.168.73.102:9411
   jackson:
     default-property-inclusion: non_null
   messages:

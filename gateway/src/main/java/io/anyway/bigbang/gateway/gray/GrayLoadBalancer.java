@@ -46,15 +46,16 @@ public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
     }
 
     private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances,Optional<GrayContext> grayContext) {
+        if(grayContext.isPresent()){
+            return grayRibbonRule.choose(serviceId,instances,grayContext.get());
+        }
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + this.serviceId);
             return new EmptyResponse();
         }
-        if(grayContext.isPresent()){
-            return grayRibbonRule.choose(serviceId,instances,grayContext.get());
-        }
         int pos = Math.abs(this.position.incrementAndGet());
         ServiceInstance instance = instances.get(pos % instances.size());
+        log.debug("gateway chose service instance: {}",instance.getInstanceId());
         return new DefaultResponse(instance);
     }
 

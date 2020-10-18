@@ -4,8 +4,10 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 import io.anyway.bigbang.example.service.UserService;
 import io.anyway.bigbang.example.model.User;
 import io.anyway.bigbang.framework.logging.marker.LoggingMarker;
+import io.anyway.bigbang.framework.utils.NetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
         user.setName(name);
         user.setAge(20);
         user.setGender("M");
+        user.setLocation("ip: "+ NetUtil.getInet4Address().getHostAddress());
         log.info("User: {}",user);
         threadLocal.set("main thread variable parameter");
         executor.execute(()->{
