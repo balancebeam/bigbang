@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: k8s-dev
+    active: k8s-dev,async-text-console-appender
   sleuth:
     enabled: false
     sampler:

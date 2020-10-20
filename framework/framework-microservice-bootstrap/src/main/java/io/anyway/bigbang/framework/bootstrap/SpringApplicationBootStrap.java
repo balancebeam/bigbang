@@ -1,6 +1,5 @@
 package io.anyway.bigbang.framework.bootstrap;
 
-import io.anyway.bigbang.framework.gray.ApplicationEnvironmentPreparedEventListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 

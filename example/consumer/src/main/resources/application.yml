@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: nacos-dev
+    active: nacos-dev,async-text-console-appender
   sleuth:
     enabled: false
     sampler:
