@@ -22,7 +22,6 @@ public class ApplicationEnvironmentPreparedEventListener implements ApplicationL
         map.put("spring.cloud.kubernetes.discovery.enabled","false");
         map.put("spring.cloud.kubernetes.loadbalancer.enabled","false");
         map.put("spring.cloud.nacos.discovery.enabled","false");
-        map.put("spring.log.home","/var/log/app/");
         //TODO find default properties at each component classpath*:META-INF/default.properties
         source.addLast(new MapPropertySource("module-default-properties",map));
     }
