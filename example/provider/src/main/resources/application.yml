@@ -4,48 +4,49 @@ server:
 
 spring:
   profiles:
-    active: nacos-dev,async-text-console-appender
+    active: nacos-dev
   sleuth:
-    enabled: false
+    enabled: true
     sampler:
       percentage: 1
   zipkin:
     base-url: http://192.168.73.102:9411
-  jackson:
-    default-property-inclusion: non_null
-  messages:
-    basename: i18n/messages,i18n/errors
+#  jackson:
+#    default-property-inclusion: non_null
+#  messages:
+#    basename: i18n/messages,i18n/errors
   task:
     execution:
       pool:
         core-size: 5
         max-size: 20
         queue-capacity: 100
-  cloud:
-    loadbalancer:
-      retry:
-        enabled: true
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: true
 
-ribbon:
-  eager-load:
-    enabled: false
-  ConnectTimeout: 1000
-  ReadTimeout: 5000
-#  retry
-  OkToRetryOnAllOperations: true
-  MaxAutoRetries: 1
-  MaxAutoRetriesNextServer: 1
-
-management:
-#  server:
-#    port: 9090
-  endpoints:
-    health:
-      show-details: always
-    web:
-      exposure:
-        include: "*"
-
+#ribbon:
+#  eager-load:
+#    enabled: false
+#  ConnectTimeout: 1000
+#  ReadTimeout: 5000
+##  retry
+#  OkToRetryOnAllOperations: true
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 1
+#
+#management:
+##  server:
+##    port: 9090
+#  endpoints:
+#    health:
+#      show-details: always
+#    web:
+#      exposure:
+#        include: "*"
+#
+#logging.config: classpath:logging/logback-json-console.xml
 
 
 

@@ -3,36 +3,16 @@ server:
 
 spring:
   profiles:
-    active: nacos-dev,async-text-console-appender
+    active: nacos-dev
   sleuth:
     enabled: false
     sampler:
       percentage: 1
   zipkin:
     base-url: http://192.168.73.102:9411
-  jackson:
-    default-property-inclusion: non_null
-  cloud:
-    loadbalancer:
-      retry:
-        enabled: true
 
-ribbon:
-  eager-load:
-    enabled: false
-#  ConnectionTimeout: 1000
-#  ReadTimeout: 1000
-#  OkToRetryOnAllOperations: true
-#  MaxAutoRetries: 1
-#  MaxAutoRetriesNextServer: 1
 
-management:
-  endpoints:
-    health:
-      show-details: always
-    web:
-      exposure:
-        include: "*"
+
 
 
 
