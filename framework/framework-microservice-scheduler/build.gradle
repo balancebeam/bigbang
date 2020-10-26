@@ -2,6 +2,6 @@ description = "bigbang scheduler module"
 archivesBaseName = 'io.anyway.bigbang.framework.scheduler'
 
 dependencies {
-    compile("com.xuxueli:xxl-job-core:2.2.0")
+    compile("com.xuxueli:xxl-job-core")
     compile("org.springframework.boot:spring-boot-starter-web")
 }

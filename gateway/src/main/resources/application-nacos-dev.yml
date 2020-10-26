@@ -7,9 +7,5 @@ spring:
         server-addr: ${spring.cloud.nacos.config.server-addr}
         metadata:
           tag: reg_20200529_02
-#        namespace: ${spring.cloud.nacos.config.namespace}
-#        group: ${spring.cloud.nacos.config.group}
-
-
 
 

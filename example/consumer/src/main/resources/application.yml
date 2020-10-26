@@ -5,7 +5,6 @@ spring:
   profiles:
     active: nacos-dev
   sleuth:
-    enabled: false
     sampler:
       percentage: 1
   zipkin:

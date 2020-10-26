@@ -4,16 +4,14 @@ archivesBaseName = 'io.anyway.bigbang.framework.mqclient'
 dependencies {
     compile(project(":framework-microservice-datasource"))
     compile(project(":framework-microservice-gray"))
-    compile("commons-validator:commons-validator:1.7")
-    compile group: 'io.netty', name: 'netty-tcnative-boringssl-static', version: '2.0.34.Final'
     compile("com.google.guava:guava")
-    compile("joda-time:joda-time:2.10.6")
+    compile("joda-time:joda-time")
     compile("mysql:mysql-connector-java")
     compile("org.apache.commons:commons-lang3")
     compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile('org.apache.rocketmq:rocketmq-client:4.7.1')
-    compile('org.apache.rocketmq:rocketmq-common:4.7.1') {
+    compile('org.apache.rocketmq:rocketmq-client')
+    compile('org.apache.rocketmq:rocketmq-common') {
         exclude group: 'io.netty', module: 'netty-tcnative'
     }
 }

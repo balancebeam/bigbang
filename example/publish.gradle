@@ -17,6 +17,14 @@ publishing {
             artifact sourceJar {
                 classifier "sources"
             }
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
         }
     }
     repositories {

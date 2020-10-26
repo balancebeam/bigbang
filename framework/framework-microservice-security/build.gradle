@@ -4,9 +4,5 @@ archivesBaseName = 'io.anyway.bigbang.framework.security'
 dependencies {
     compile(project(":framework-microservice-header"))
     compile(project(":framework-microservice-logging"))
-    compile("com.alibaba:fastjson:1.2.73")
-    annotationProcessor("org.projectlombok:lombok")
-    compileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
+    compile("com.alibaba:fastjson")
 }

@@ -2,5 +2,5 @@ description = "bigbang util module"
 archivesBaseName = 'io.anyway.bigbang.framework.util'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot:2.3.1.RELEASE")
+    compile("org.springframework.boot:spring-boot")
 }

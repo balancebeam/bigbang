@@ -45,7 +45,7 @@ subprojects{
             cacheChangingModulesFor 0, 'seconds'
         }
         imports {
-            mavenBom "io.anyway.bigbang:framework-dependency-management:1.0.0-SNAPSHOT"
+            mavenBom "io.anyway.bigbang.framework:framework-dependency-management:1.0.0-SNAPSHOT"
         }
     }
 
