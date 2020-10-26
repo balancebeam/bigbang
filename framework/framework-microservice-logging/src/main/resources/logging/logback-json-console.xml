@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <springProperty scope="context" name="logHome" source="spring.log.home" defaultValue="/var/log/app/"/>
+
+    <appender name="JSON_CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="io.anyway.bigbang.framework.logging.XLoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>appTimestamp</fieldName>
+                    <timeZone>Asia/Shanghai</timeZone>
+                </timestamp>
+                <pattern >
+                    <omitEmptyFields>true</omitEmptyFields>
+                    <pattern>
+                        {
+                        "appName": "${appName}",
+                        "level": "%level",
+                        "thread": "%thread",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "caller": "%logger{40}.%method:%line",
+                        "message": "%.-5000message",
+                        "marker": "#tryJson{%marker}",
+                        "stack_trace": "%exception{full}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_JSON_CONSOLE_APPENDER" class="io.anyway.bigbang.framework.logging.InheritableThreadAsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>2048</queueSize>
+        <appender-ref ref="JSON_CONSOLE_APPENDER"/>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_JSON_CONSOLE_APPENDER" />
+    </root>
+
+</configuration>
