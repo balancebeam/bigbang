@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        metadata:
+          version: 1.0.0-SNAPSHOT
+        server-addr: ${spring.cloud.nacos.config.server-addr}
+
+

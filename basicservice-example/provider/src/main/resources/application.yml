@@ -1,0 +1,53 @@
+server:
+  port: 8083
+  context-path: /
+
+spring:
+  profiles:
+    active: nacos-dev
+  sleuth:
+    enabled: true
+    sampler:
+      percentage: 1
+  zipkin:
+    base-url: http://zipkin.bigbang.local:9411
+#  jackson:
+#    default-property-inclusion: non_null
+#  messages:
+#    basename: i18n/messages,i18n/errors
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 20
+        queue-capacity: 100
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: true
+
+#ribbon:
+#  eager-load:
+#    enabled: false
+#  ConnectTimeout: 1000
+#  ReadTimeout: 5000
+##  retry
+#  OkToRetryOnAllOperations: true
+#  MaxAutoRetries: 1
+#  MaxAutoRetriesNextServer: 1
+#
+#management:
+##  server:
+##    port: 9090
+#  endpoints:
+#    health:
+#      show-details: always
+#    web:
+#      exposure:
+#        include: "*"
+#
+#logging.config: classpath:logging/logback-json-console.xml
+
+
+
+

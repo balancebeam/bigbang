@@ -1,0 +1,18 @@
+apply plugin: "org.springframework.boot"
+
+description = "bigbang oauth2 service"
+archivesBaseName = 'io.anyway.bigbang.oauth2'
+
+dependencies {
+    compile(project(":oauth2-api"))
+    compile("io.anyway.bigbang:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
+    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
+    compile("mysql:mysql-connector-java")
+    compile("com.baomidou:mybatis-plus-boot-starter")
+    compile("com.baomidou:mybatis-plus")
+    compile('org.apache.httpcomponents:httpclient:4.5.12')
+    compile('io.jsonwebtoken:jjwt:0.9.1')
+}

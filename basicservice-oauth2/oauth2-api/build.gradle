@@ -1,0 +1,7 @@
+
+
+description = "bigbang oauth2 api"
+archivesBaseName = 'io.anyway.bigbang.oauth2-api'
+
+dependencies {
+}

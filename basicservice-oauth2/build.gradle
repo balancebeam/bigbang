@@ -1,0 +1,57 @@
+buildscript {
+	repositories{
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url repositoryMavenCentral
+        }
+	}
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.1.RELEASE")
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+//    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    repositories {
+        maven {
+            url repositoryMavenCentral
+        }
+    }
+
+    dependencyManagement {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
+        imports {
+            mavenBom "io.anyway.bigbang.framework:framework-dependency-management:1.0.0-SNAPSHOT"
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+    }
+
+    dependencies {
+
+        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok")
+        testAnnotationProcessor("org.projectlombok:lombok")
+        testCompileOnly("org.projectlombok:lombok")
+    }
+
+}
+
+

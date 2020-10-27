@@ -1,0 +1,17 @@
+server:
+  port: 8085
+
+spring:
+  profiles:
+    active: nacos-dev
+  sleuth:
+    sampler:
+      percentage: 1
+  zipkin:
+    base-url: http://zipkin.bigbang.local:9411
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: nacos-dev
+  sleuth:
+    sampler:
+      percentage: 1
+  zipkin:
+    base-url: http://zipkin.bigbang.local:9411
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    gateway:
+      discovery:
+        locator:
+          lower-case-sehttpclientrvice-id: true
+
+ribbon:
+  eager-load:
+    enabled: false
+
+
+
+#sentinel:
+#  transport:
+#    port: 9001
+#    dashboard: sentinel-dashboard.bigbang.internal:9999
+#    eager: true
+
+
