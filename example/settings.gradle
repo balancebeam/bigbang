@@ -15,7 +15,7 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'basicservice-example'
+rootProject.name = 'example'
 
 include ':api'
 include ':provider'

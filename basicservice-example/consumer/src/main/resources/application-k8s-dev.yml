@@ -1,9 +1,0 @@
-spring:
-  cloud:
-    kubernetes:
-      enabled: true
-      discovery:
-        enabled: true
-      loadbalancer:
-        enabled: true
-

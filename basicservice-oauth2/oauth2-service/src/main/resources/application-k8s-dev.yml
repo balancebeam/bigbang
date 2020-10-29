@@ -1,7 +1,1 @@
-spring:
-  cloud:
-    kubernetes:
-      enabled: true
-      discovery:
-        enabled: true
 

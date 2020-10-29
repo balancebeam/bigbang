@@ -2,7 +2,6 @@ spring:
   cloud:
     nacos:
       discovery:
-        enabled: true
         server-addr: ${spring.cloud.nacos.config.server-addr}
 
 
