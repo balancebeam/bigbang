@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class K8SGrayRibbonRule extends ZoneAvoidanceRule {
+public class KubernetesGrayRibbonRule extends ZoneAvoidanceRule {
 
     private AtomicInteger pos= new AtomicInteger(new Random().nextInt(1000));
 

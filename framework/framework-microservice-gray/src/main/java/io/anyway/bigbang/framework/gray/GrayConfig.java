@@ -56,8 +56,8 @@ public class GrayConfig {
 
         @Bean
         @ConditionalOnKubernetesDiscoveryEnabled
-        public IRule k8sRibbonRule() {
-            K8SGrayRibbonRule rule = new K8SGrayRibbonRule();
+        public IRule kubernetesRibbonRule() {
+            KubernetesGrayRibbonRule rule = new KubernetesGrayRibbonRule();
             rule.initWithNiwsConfig(config);
             return rule;
         }
