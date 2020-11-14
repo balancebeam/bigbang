@@ -1,1 +1,21 @@
-
+spring:
+#  sleuth:
+#    sampler:
+#      percentage: 1
+#    enabled: false
+#  zipkin:
+#    base-url: http://zipkin.bigbang.local:9411
+  cloud:
+    kubernetes:
+#      enabled: true
+#      discovery:
+#        enabled: true
+#      loadbalancer:
+#        enabled: true
+      client:
+        namespace: default
+#    sentinel:
+#      transport:
+#        port: 9001
+#        dashboard: sentinel.bigbang.local:9003
+#        eager: true
