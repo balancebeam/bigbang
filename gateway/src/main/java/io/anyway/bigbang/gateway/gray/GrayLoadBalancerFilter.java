@@ -55,7 +55,7 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListen
     private ConcurrentHashMap<String, GrayLoadBalancer> grayLoadBalancerMap= new ConcurrentHashMap<>();
 
     @Autowired(required = false)
-    private GrayRibbonRule grayRibbonRule= (serviceId, instances, ctx) -> new EmptyResponse();
+    private GrayRibbonRule grayRibbonRule;
 
     public GrayLoadBalancerFilter(LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
         this.clientFactory = clientFactory;

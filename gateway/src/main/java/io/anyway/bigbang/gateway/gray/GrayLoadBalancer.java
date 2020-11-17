@@ -4,6 +4,7 @@ import io.anyway.bigbang.framework.gray.GrayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Request;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.loadbalancer.core.NoopServiceInstanceListSupplier;
@@ -33,9 +34,13 @@ public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
     public Mono<Response<ServiceInstance>> choose(Request request) {
         if (this.serviceInstanceListSupplierProvider != null) {
             ServiceInstanceListSupplier supplier = this.serviceInstanceListSupplierProvider.getIfAvailable(NoopServiceInstanceListSupplier::new);
-            return ((Flux)supplier.get()).next().map(list->grayRibbonRule.choose(serviceId,(List<ServiceInstance>)list,(Optional<GrayContext>) request.getContext()));
+            return ((Flux)supplier.get()).next().map(list->getInstanceResponse((List<ServiceInstance>)list,(Optional<GrayContext>) request.getContext()));
         }
         return null;
+    }
+
+    private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances,Optional<GrayContext> optional) {
+        return grayRibbonRule!=null? grayRibbonRule.choose(serviceId,instances,optional): new EmptyResponse();
     }
 
 }
