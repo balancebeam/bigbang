@@ -6,6 +6,7 @@ import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
+import io.anyway.bigbang.framework.gray.ConditionalOnIstioDiscoveryEnabled;
 import io.anyway.bigbang.framework.gray.ConditionalOnKubernetesDiscoveryEnabled;
 import io.anyway.bigbang.gateway.gray.*;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,13 @@ public class GrayRouteConfig {
     @ConditionalOnKubernetesDiscoveryEnabled
     public GrayRibbonRule k8sGrayRibbonRule() {
         KubernetesGrayRibbonRuleImpl rule = new KubernetesGrayRibbonRuleImpl();
+        return rule;
+    }
+
+    @Bean
+    @ConditionalOnIstioDiscoveryEnabled
+    public GrayRibbonRule istioGrayRibbonRule() {
+        IstioGrayRibbonRuleImpl rule = new IstioGrayRibbonRuleImpl();
         return rule;
     }
 

@@ -23,6 +23,7 @@ public class ApplicationEnvironmentPreparedEventListener implements ApplicationL
      {
         environments.add(new String[]{"kubernetes","k8s"});
         environments.add(new String[]{"nacos"});
+        environments.add(new String[]{"istio"});
     }
 
     @Override

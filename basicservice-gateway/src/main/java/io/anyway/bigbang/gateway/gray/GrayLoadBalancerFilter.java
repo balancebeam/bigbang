@@ -13,6 +13,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultRequest;
+import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Request;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
@@ -31,6 +32,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +55,7 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListen
     private ConcurrentHashMap<String, GrayLoadBalancer> grayLoadBalancerMap= new ConcurrentHashMap<>();
 
     @Autowired(required = false)
-    private GrayRibbonRule grayRibbonRule;
+    private GrayRibbonRule grayRibbonRule= (serviceId, instances, ctx) -> new EmptyResponse();
 
     public GrayLoadBalancerFilter(LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
         this.clientFactory = clientFactory;
@@ -137,8 +139,8 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListen
     }
 
     private Request createRequest(ServerWebExchange exchange) {
-        Optional<GrayContext> ctx= GrayContextHolder.getGrayContext();
-        Request<Optional<GrayContext>> request = new DefaultRequest<>(ctx);
+        Optional<GrayContext> optional= GrayContextHolder.getGrayContext();
+        Request<Optional<GrayContext>> request = new DefaultRequest<>(optional);
         return request;
     }
 

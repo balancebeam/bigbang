@@ -61,6 +61,14 @@ public class GrayConfig {
             rule.initWithNiwsConfig(config);
             return rule;
         }
+
+        @Bean
+        @ConditionalOnIstioDiscoveryEnabled
+        public IRule istioRibbonRule() {
+            IstioGrayRibbonRule rule = new IstioGrayRibbonRule();
+            rule.initWithNiwsConfig(config);
+            return rule;
+        }
     }
 
 }

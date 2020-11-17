@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule{
 
-    private AtomicInteger pos= new AtomicInteger(new Random().nextInt(1000));
+    private AtomicInteger position= new AtomicInteger(new Random().nextInt(1000));
 
     final private Field f;
 
@@ -33,8 +34,20 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule{
     }
 
     @Override
-    public Response<ServiceInstance> choose(String serviceId, List<ServiceInstance> instances, GrayContext ctx){
+    public Response<ServiceInstance> choose(String serviceId, List<ServiceInstance> instances, Optional<GrayContext> optional){
         log.debug("kubernetes service {} instances: {}",serviceId,instances);
+        if (instances.isEmpty()) {
+            log.warn("No servers available for service: " + serviceId);
+            return new EmptyResponse();
+        }
+        if(!optional.isPresent()) {
+            int pos = Math.abs(position.incrementAndGet());
+            ServiceInstance instance = instances.get(pos % instances.size());
+            log.debug("gateway chose service instance: {}", instance.getInstanceId());
+            return new DefaultResponse(instance);
+        }
+
+        GrayContext ctx= optional.get();
         final String serviceName= serviceId+"-"+ctx.getGroup();
         List<ServiceInstance> availableInstances= instances.stream().filter(each-> {
             EndpointAddress endpointAddress= (EndpointAddress)ReflectionUtils.getField(f,each);
@@ -51,7 +64,7 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule{
             }).collect(Collectors.toList());
         }
         if(!availableInstances.isEmpty()){
-            ServiceInstance instance= availableInstances.get(Math.abs(pos.incrementAndGet()) % availableInstances.size());
+            ServiceInstance instance= availableInstances.get(Math.abs(position.incrementAndGet()) % availableInstances.size());
             return new DefaultResponse(instance);
         }
         log.warn("cannot find appropriate match candidate server: {}",ctx.toString());

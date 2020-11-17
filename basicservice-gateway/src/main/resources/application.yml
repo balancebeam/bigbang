@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: nacos-dev
+    active: istio-dev
   sleuth:
     sampler:
       percentage: 1
