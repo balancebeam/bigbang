@@ -7,7 +7,7 @@ public class SpringApplicationBootStrap {
 
     public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
         SpringApplication springApplication = new SpringApplication(primarySource);
-        springApplication.addListeners(new ApplicationEnvironmentPreparedEventListener());
+        springApplication.addListeners(new ApplicationDefaultPropertiesEventListener());
         return springApplication.run(args);
     }
 }

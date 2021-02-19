@@ -6,7 +6,7 @@ spring:
   profiles:
     active: nacos-dev
   sleuth:
-    enabled: true
+    enabled: false
     sampler:
       percentage: 1
   zipkin:
@@ -47,6 +47,8 @@ spring:
 #        include: "*"
 #
 #logging.config: classpath:logging/logback-json-console.xml
+
+logging.config: classpath:logging/logback-text-console.xml
 
 
 

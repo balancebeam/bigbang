@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.exception;
 
-import io.anyway.bigbang.framework.model.api.APIResponse;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.MessageSource;
@@ -28,14 +28,14 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public APIResponse processRequestParameterException(
+    public ApiResponseEntity processRequestParameterException(
             HttpServletRequest request,
             HttpServletResponse response,
             MissingServletRequestParameterException e){
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(CONTENT_TYPE);
 
-        return APIResponse.fail(
+        return ApiResponseEntity.fail(
                 HttpStatus.FORBIDDEN.value(),
                 messageSource.getMessage("BAD_REQUEST_PARAMETER",
                         null,
@@ -45,14 +45,14 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public APIResponse processDefaultException(
+    public ApiResponseEntity processDefaultException(
             HttpServletRequest request,
             HttpServletResponse response,
             Exception e) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setContentType(CONTENT_TYPE);
 
-        return APIResponse.fail(
+        return ApiResponseEntity.fail(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 messageSource.getMessage("INTERNAL_SERVER_ERROR",
                     null,
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(ApiException.class)
-    public APIResponse processApiException(
+    public ApiResponseEntity processApiException(
             HttpServletRequest request,
             HttpServletResponse response,
             ApiException e) {
@@ -76,12 +76,12 @@ public class GlobalExceptionHandler {
                 e.getMessageResourceArgs(),
                 e.getApiResultStatus()+ (!StringUtils.isEmpty(e.getMessage())?"_"+e.getMessage() :""),
                 LocaleContextHolder.getLocale());
-        return APIResponse.fail(e.getApiResultStatus(),message);
+        return ApiResponseEntity.fail(e.getApiResultStatus(),message);
     }
 
     @ResponseBody
     @ExceptionHandler(InternalException.class)
-    public APIResponse processMicroServiceException(
+    public ApiResponseEntity processDeliveryException(
             HttpServletRequest request,
             HttpServletResponse response,
             InternalException e) {
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
         response.setStatus(e.getHttpStatus());
         response.setContentType(CONTENT_TYPE);
 
-        return APIResponse.fail(e.getCode(),e.getMessage());
+        return ApiResponseEntity.fail(e.getCode(),e.getMessage());
     }
 
 

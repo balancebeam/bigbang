@@ -30,7 +30,7 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                 internalApiException.setHttpStatus(response.status());
                 return internalApiException;
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error("(de)serialize error failure",e);
             }
         }
         return new InternalException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"unknown error");

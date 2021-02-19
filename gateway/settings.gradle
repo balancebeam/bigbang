@@ -15,7 +15,7 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'basicservice-gateway'
+rootProject.name = 'gateway'
 
 
 

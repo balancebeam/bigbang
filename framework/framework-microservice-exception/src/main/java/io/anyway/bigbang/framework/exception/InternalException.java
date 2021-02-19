@@ -21,8 +21,4 @@ class InternalException extends RuntimeException {
         this.code= code;
         this.message= message;
     }
-
-
-
-
 }

@@ -14,7 +14,7 @@ public class XPatternLayoutEncoder extends PatternLayoutEncoder {
         Random random= new Random();
         StringBuilder builder= new StringBuilder();
         for(String each: properties.stringPropertyNames()){
-            builder.append("%clr([").append(each).append(":%").append(each).append("]){");
+            builder.append("%clr([").append(each).append(":").append(properties.getProperty(each)).append("]){");
             builder.append(colors[random.nextInt(colors.length)]);
             builder.append("} ");
         }

@@ -14,13 +14,6 @@ public class DiscoveryConfig {
         return new NacosDiscoveryMetadataServiceImpl();
     }
 
-
-    @Bean
-    @ConditionalOnKubernetesDiscoveryEnabled
-    public DiscoveryMetadataService createK8SDiscoveryMetadataService(){
-        return new KubernetesDiscoveryMetadataServiceImpl();
-    }
-
     @Bean
     @ConditionalOnMissingBean
     public DiscoveryMetadataService createNoneDiscoveryMetadataService(){

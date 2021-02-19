@@ -8,11 +8,6 @@ configurations.all {
 }
 dependencies {
     compile(project(":api"))
-    compile("io.anyway.bigbang:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
-//    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
-//    testCompile("com.github.seanyinx:unit-scaffolding")
-//    testCompile("org.redisson:redisson-spring-boot-starter")
-//    testCompile("org.springframework.boot:spring-boot-starter-data-redis")
-//    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
-//    compile("mysql:mysql-connector-java:8.0.20")
+    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
+
 }

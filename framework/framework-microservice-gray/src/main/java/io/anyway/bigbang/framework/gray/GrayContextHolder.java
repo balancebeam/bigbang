@@ -6,8 +6,6 @@ import io.anyway.bigbang.framework.bootstrap.HeaderContextHolder;
 
 import java.util.Optional;
 
-import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
-
 
 public interface GrayContextHolder {
 
@@ -18,7 +16,7 @@ public interface GrayContextHolder {
         if(grayContext!= null){
             return Optional.of(grayContext);
         }
-        Optional<String> text= HeaderContextHolder.getHeaderValue(GRAY_NAME);
+        Optional<String> text= HeaderContextHolder.getHeaderValue(GrayContext.GRAY_NAME);
         if(text.isPresent()){
             grayContext= JSONObject.parseObject(text.get(), GrayContext.class);
             threadLocal.set(grayContext);

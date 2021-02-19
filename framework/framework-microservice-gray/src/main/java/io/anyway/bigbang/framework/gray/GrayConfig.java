@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.GenericFilterBean;
 
-import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
-
 
 @Configuration
 @ImportAutoConfiguration({GrayConfig.RibbonConfig.class})
@@ -26,7 +24,7 @@ public class GrayConfig {
         return new HeaderContext() {
             @Override
             public String getName() {
-                return GRAY_NAME;
+                return GrayContext.GRAY_NAME;
             }
 
             @Override

@@ -33,11 +33,12 @@ include 'framework-microservice-exception'
 include 'framework-microservice-executor'
 include 'framework-microservice-feign'
 include 'framework-microservice-metrics'
+include 'framework-microservice-limiter'
 include 'framework-microservice-swagger'
 include 'framework-microservice-cache'
 include 'framework-microservice-mqclient'
 include 'framework-microservice-scheduler'
-include 'framework-microservice-interceptor'
+include 'framework-microservice-mvcinterceptor'
 include 'framework-microservice-gray'
 
 

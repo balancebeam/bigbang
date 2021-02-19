@@ -3,7 +3,7 @@ package io.anyway.bigbang.example.controller;
 import io.anyway.bigbang.example.model.User;
 import io.anyway.bigbang.example.service.UserService;
 import io.anyway.bigbang.framework.exception.ApiException;
-import io.anyway.bigbang.framework.model.api.APIResponse;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,11 +28,11 @@ public class ProviderExternalController {
     @ApiOperation("query user by name")
     @ApiImplicitParam(name = "name", value = "user name", defaultValue = "jerry", required = true)
     @ApiResponse(code=0,message="user information")
-    public APIResponse<User> getUser(@PathVariable String name){
+    public ApiResponseEntity<User> getUser(@PathVariable String name){
         log.info("get user method");
         Optional<User> user= userService.getUser(name);
         User u= user.orElseThrow(() -> new NoSuchElementException("No such User with name " + name));
-        return APIResponse.ok(u);
+        return ApiResponseEntity.ok(u);
     }
 
     @ResponseBody
@@ -41,13 +41,13 @@ public class ProviderExternalController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "user", value = "user object"),
     })
-    public APIResponse<String> createUser(@RequestBody User person){
-        return APIResponse.ok("add successfully");
+    public ApiResponseEntity<String> createUser(@RequestBody User person){
+        return ApiResponseEntity.ok("add successfully");
     }
 
     @ResponseBody
     @GetMapping("/exception")
-    public APIResponse<String> exception(){
+    public ApiResponseEntity<String> exception(){
         throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,4001,new Object[]{"1","2"});
     }
 

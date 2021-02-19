@@ -3,17 +3,12 @@ package io.anyway.bigbang.gateway.gray;
 import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.framework.gray.GrayContextHolder;
-import io.anyway.bigbang.framework.security.UserDetailContext;
-import io.anyway.bigbang.framework.useragent.UserAgentContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerUriTools;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultRequest;
-import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Request;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
@@ -34,28 +29,26 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.net.URI;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.*;
 
-public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListener {
+public class GrayLoadBalancerFilter implements GlobalFilter, Ordered {
 
     private static final Log log = LogFactory.getLog(ReactiveLoadBalancerClientFilter.class);
     private static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150;
     private final LoadBalancerClientFactory clientFactory;
     private LoadBalancerProperties properties;
-    private Random random= new Random();
-    private volatile GrayStrategy strategy= new GrayStrategy();
+
     private ConcurrentHashMap<String, GrayLoadBalancer> grayLoadBalancerMap= new ConcurrentHashMap<>();
 
-    @Autowired(required = false)
+    @Resource
     private GrayRibbonRule grayRibbonRule;
+
+    @Resource
+    private GrayStrategyProcessor grayStrategyProcessor;
 
     public GrayLoadBalancerFilter(LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
         this.clientFactory = clientFactory;
@@ -145,79 +138,15 @@ public class GrayLoadBalancerFilter implements GlobalFilter, Ordered, GrayListen
     }
 
     private ServerWebExchange makeupGrayWebExchange(ServerWebExchange exchange){
-        HttpHeaders headers= exchange.getRequest().getHeaders();
-        String text= headers.getFirst(GRAY_NAME);
-        if(!StringUtils.isEmpty(text)){
-            return buildNewExchange(exchange,text);
+        GrayContext ctx= grayStrategyProcessor.invoke(exchange);
+        if(ctx!= null){
+            GrayContextHolder.setGrayContext(ctx);
+            ServerHttpRequest req = exchange.getRequest();
+            ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());
+            builder.header(GRAY_NAME,JSONObject.toJSONString(ctx));
+            return exchange.mutate().request(builder.build()).build();
         }
-        //use uat tester
-        List<GrayStrategy.UserDefinition> uatList= strategy.getUatList();
-        if(!uatList.isEmpty()){
-            String detail= headers.getFirst(UserDetailContext.USER_HEADER_NAME);
-            if(!StringUtils.isEmpty(detail)){
-                UserDetailContext userDetail= JSONObject.parseObject(detail, UserDetailContext.class);
-                if(Objects.isNull(userDetail.getUid())){
-                    userDetail.setUid(detail);
-                }
-                String candidate= "usr_"+userDetail.getType()+"_"+userDetail.getUid();
-                for(GrayStrategy.UserDefinition each: uatList){
-                    for(Pattern user: each.getUsers()){
-                        if(user.matcher(candidate).find()){
-                            return buildNewExchange(exchange, each.getCluster());
-                        }
-                    }
-                }
-            }
-            detail= headers.getFirst(UserAgentContext.USER_AGENT_NAME);
-            if(!StringUtils.isEmpty(detail)){
-                UserAgentContext userAgent= JSONObject.parseObject(detail, UserAgentContext.class);
-                String candidate= "cli_"+userAgent.getPlatform()+"_"+userAgent.getVersion();
-                for(GrayStrategy.UserDefinition each: uatList){
-                    for(Pattern user: each.getUsers()){
-                        if(user.matcher(candidate).find()){
-                            return buildNewExchange(exchange, each.getCluster());
-                        }
-                    }
-                }
-            }
-        }
-        //use random weight
-        List<GrayStrategy.WeightDefinition> wgtList= strategy.getWgtList();
-        if(!wgtList.isEmpty()){
-            int total= 0;
-            for(GrayStrategy.WeightDefinition each: wgtList){
-                total+=each.getWeight();
-            }
-            int rdm= random.nextInt(total);
-            int sum= 0;
-            for(GrayStrategy.WeightDefinition each: wgtList){
-                sum+= each.getWeight();
-                if(sum>rdm){
-                    return buildNewExchange(exchange,each.getCluster());
-                }
-            }
-        }
-        //use the default context
-        return buildNewExchange(exchange,strategy.getDefGroup());
-    }
-
-    private ServerWebExchange buildNewExchange(ServerWebExchange exchange, String group){
-        if(StringUtils.isEmpty(group)){
-            return exchange;
-        }
-        GrayContext ctx= new GrayContext();
-        ctx.setGroup(group);
-        ctx.setDefGroup(strategy.getDefGroup()!= null? strategy.getDefGroup(): "");
-        GrayContextHolder.setGrayContext(ctx);
-        ServerHttpRequest req = exchange.getRequest();
-        ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());
-        builder.header(GRAY_NAME,JSONObject.toJSONString(ctx));
-        return exchange.mutate().request(builder.build()).build();
-    }
-
-    @Override
-    public void onChange(GrayStrategy strategy) {
-        this.strategy= strategy;
+        return exchange;
     }
 
 }

@@ -6,7 +6,7 @@ import io.anyway.bigbang.framework.exception.GlobalExceptionHandler;
 import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
 import io.anyway.bigbang.framework.gray.DiscoveryConfig;
 import io.anyway.bigbang.framework.gray.GrayConfig;
-import io.anyway.bigbang.framework.interceptor.InterceptorConfig;
+import io.anyway.bigbang.framework.mvcinterceptor.MvcInterceptorConfig;
 import io.anyway.bigbang.framework.logging.marker.LoggingMarkerAspect;
 import io.anyway.bigbang.framework.metrics.FrameworkMetricsConfig;
 import io.anyway.bigbang.framework.swagger.Swagger2Config;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureBefore(TaskExecutionAutoConfiguration.class)
 @ImportAutoConfiguration({
-        InterceptorConfig.class,
+        MvcInterceptorConfig.class,
         DiscoveryConfig.class,
         HeaderConfig.class,
         LoggingMarkerAspect.class,

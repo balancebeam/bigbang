@@ -6,9 +6,12 @@ import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
-import io.anyway.bigbang.framework.gray.ConditionalOnIstioDiscoveryEnabled;
-import io.anyway.bigbang.framework.gray.ConditionalOnKubernetesDiscoveryEnabled;
+import io.anyway.bigbang.framework.discovery.ConditionalOnIstioDiscoveryEnabled;
+import io.anyway.bigbang.framework.discovery.ConditionalOnKubernetesDiscoveryEnabled;
 import io.anyway.bigbang.gateway.gray.*;
+import io.anyway.bigbang.gateway.gray.impl.IstioGrayRibbonRuleImpl;
+import io.anyway.bigbang.gateway.gray.impl.KubernetesGrayRibbonRuleImpl;
+import io.anyway.bigbang.gateway.gray.impl.NacosGrayRibbonRuleImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -49,6 +52,11 @@ public class GrayRouteConfig {
         return rule;
     }
 
+    @Bean
+    public GrayStrategyProcessor createGrayStrategyProcessor(){
+        return new GrayStrategyProcessor();
+    }
+
 
     @Bean
     @ConditionalOnMissingBean({GrayLoadBalancerFilter.class})
@@ -61,45 +69,42 @@ public class GrayRouteConfig {
     @Configuration
     public static class GrayRouteConfig2 {
 
-        @Value("${spring.gateway.gray-route.dataId:gateway-gray-route}")
+        @Value("${spring.gateway.gray.dataId:gateway-gray-strategy}")
         private String dataId;
 
-        @Value("${spring.gateway.gray-route.group:DEFAULT_GROUP}")
+        @Value("${spring.gateway.gray.group:DEFAULT_GROUP}")
         private String group;
 
         @Value("${spring.cloud.nacos.config.server-addr}")
         private String serverAddr;
 
         @Resource
-        private GrayListener grayRouteListener;
+        private GrayStrategyListener grayStrategyListener;
 
         @PostConstruct
-        public void grayRouteByNacosListener() {
+        public void grayStrategyByNacosListener() {
             try {
                 ConfigService configService = NacosFactory.createConfigService(serverAddr);
 
                 // When the app startups, fetch gateway gray router information firstly.
                 String configInfo = configService.getConfig(dataId, group, 5000);
-                setGrayRoutePolicy(configInfo);
+                setGrayStrategy(configInfo);
 
                 // Add gateway router listener
                 configService.addListener(dataId, group, new AbstractListener() {
                     @Override
                     public void receiveConfigInfo(String configInfo) {
-                        setGrayRoutePolicy(configInfo);
+                        setGrayStrategy(configInfo);
                     }
                 });
             } catch (NacosException e) {
-                log.error("init route definition error", e);
+                log.error("init gray strategy definition error", e);
             }
         }
 
-        private synchronized void setGrayRoutePolicy(String text) {
-            log.info("gateway gray route strategy: {}",text);
-            GrayStrategy strategy = StringUtils.isEmpty(text)?
-                    new GrayStrategy():
-                    JSONObject.parseObject(text, GrayStrategy.class);
-            grayRouteListener.onChange(strategy);
+        private synchronized void setGrayStrategy(String text) {
+            log.info("gateway gray strategy: {}",text);
+            grayStrategyListener.onChangeEvent(text);
         }
     }
 

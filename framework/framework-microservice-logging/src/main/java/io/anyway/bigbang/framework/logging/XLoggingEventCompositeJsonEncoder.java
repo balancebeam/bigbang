@@ -22,7 +22,7 @@ public class XLoggingEventCompositeJsonEncoder extends LoggingEventCompositeJson
                 JSONObject patternJson= JSONObject.parseObject(pattern);
                 for(String each: properties.stringPropertyNames()){
                     if(!patternJson.containsKey(each)) {
-                        patternJson.put(each, "%".concat(each));
+                        patternJson.put(each, properties.getProperty(each));
                     }
                 }
                 ((LoggingEventPatternJsonProvider)provider).setPattern(patternJson.toJSONString());

@@ -4,13 +4,9 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ExecutorConfigurationSupport;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 

@@ -43,24 +43,26 @@ public class NacosGrayRibbonRule extends ZoneAvoidanceRule {
         final java.util.Optional<GrayContext> grayContext= GrayContextHolder.getGrayContext();
         if(grayContext.isPresent()) {
             GrayContext ctx= grayContext.get();
-            List<Server> availableServers= allServers.stream().filter((Server server)->{
-                String cluster= ((NacosServer)server).getInstance().getClusterName();
-                return cluster.equals(ctx.getGroup());
-            }).collect(Collectors.toList());
-
-            //lookup the default group and cluster
-            if(availableServers.isEmpty() &&
-                    ctx.getDefGroup()!= null &&
-                    !ctx.getGroup().equals(ctx.getDefGroup())){
-                availableServers= allServers.stream().filter(server-> {
-                    String cluster= ((NacosServer)server).getInstance().getClusterName();
-                    return cluster.equals(ctx.getDefGroup());
+            List<Server> availableServers= Collections.emptyList();
+            if(!CollectionUtils.isEmpty(ctx.getInVers())){
+                availableServers= allServers.stream().filter((Server server)->{
+                    String version= ((NacosServer)server).getMetadata().get("version");
+                    return ctx.getInVers().contains(version);
                 }).collect(Collectors.toList());
             }
-
+            if(CollectionUtils.isEmpty(availableServers)){
+                if(CollectionUtils.isEmpty(ctx.getExVers())) {
+                    availableServers = allServers.stream().filter((Server server) -> {
+                        String version = ((NacosServer) server).getMetadata().get("version");
+                        return !ctx.getExVers().contains(version);
+                    }).collect(Collectors.toList());
+                }
+                else{
+                    availableServers= allServers;
+                }
+            }
             if(CollectionUtils.isEmpty(availableServers)){
                 log.warn("cannot find appropriate match candidate server: {}",ctx);
-                return Collections.emptyList();
             }
             return availableServers;
         }

@@ -1,0 +1,7 @@
+description = "bigbang mvc interceptor module"
+archivesBaseName = 'io.anyway.bigbang.framework.mvcinterceptor'
+
+dependencies {
+    compile(project(":framework-microservice-model"))
+    compile("org.springframework.boot:spring-boot-starter-web")
+}

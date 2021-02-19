@@ -13,18 +13,26 @@ import java.util.regex.Pattern;
 @ToString
 public class GrayStrategy {
 
-    private List<UserDefinition> uatList = Collections.emptyList();
+    private List<UserDefinition> userList = Collections.emptyList();
+
+    private List<HeaderDefinition> headerList = Collections.emptyList();
 
     private List<WeightDefinition> wgtList= Collections.emptyList();
-
-    private String defGroup;
 
     @Getter
     @Setter
     @ToString
     public static class UserDefinition {
         private List<Pattern> users;
-        private String cluster;
+        private String version;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public static class HeaderDefinition {
+        private Map<String,String> headers;
+        private String name;
     }
 
     @Getter
@@ -32,6 +40,6 @@ public class GrayStrategy {
     @ToString
     public static class WeightDefinition{
         private int weight;
-        private String cluster;
+        private String version;
     }
 }
