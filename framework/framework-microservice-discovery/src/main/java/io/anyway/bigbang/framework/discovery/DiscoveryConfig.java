@@ -1,4 +1,4 @@
-package io.anyway.bigbang.framework.gray;
+package io.anyway.bigbang.framework.discovery;
 
 import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

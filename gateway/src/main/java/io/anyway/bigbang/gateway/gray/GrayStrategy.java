@@ -3,9 +3,12 @@ package io.anyway.bigbang.gateway.gray;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import sun.management.counter.StringCounter;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Getter
@@ -19,6 +22,8 @@ public class GrayStrategy {
 
     private List<WeightDefinition> wgtList= Collections.emptyList();
 
+    Map<String,Map<String, String>> headerMapping= new HashMap<>();
+
     @Getter
     @Setter
     @ToString
@@ -31,8 +36,8 @@ public class GrayStrategy {
     @Setter
     @ToString
     public static class HeaderDefinition {
-        private Map<String,String> headers;
-        private String name;
+        private Map<String,String> mapping;
+        private String version;
     }
 
     @Getter

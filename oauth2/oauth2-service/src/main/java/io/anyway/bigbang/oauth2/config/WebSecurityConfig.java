@@ -43,8 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean("xUserDetailsService")
-    public UserDetailsService createXUserDetailService() {
+    @Bean
+    public XUserDetailsServiceImpl createXUserDetailService() {
         return new XUserDetailsServiceImpl();
     }
 
@@ -56,12 +56,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 final Map<String, Object> additionalInfo = new HashMap<>();
                 additionalInfo.put("user_id", userDetails.getUsername());
                 if (userDetails.getLoginName() != null) {
-                    additionalInfo.put("username", userDetails.getLoginName());
+                    additionalInfo.put("user_name", userDetails.getLoginName());
                 }
-                if (userDetails.getTenantId() != null) {
-                    additionalInfo.put("client_id", userDetails.getTenantId());
+                if (userDetails.getUserType() != null) {
+                    additionalInfo.put("user_type", userDetails.getUserType());
                 }
-                //TODO增加启动属性
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
             }
             return accessToken;

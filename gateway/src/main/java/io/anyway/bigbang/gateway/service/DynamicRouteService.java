@@ -1,6 +1,5 @@
 package io.anyway.bigbang.gateway.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.route.*;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,15 +19,15 @@ import java.util.Map;
 @Service
 public class DynamicRouteService implements ApplicationEventPublisherAware {
 
-    @Autowired
+    @Resource
     private RouteDefinitionWriter routeDefinitionWriter;
 
     private ApplicationEventPublisher publisher;
 
-    @Autowired
+    @Resource
     private RouteDefinitionLocator routeDefinitionLocator;
 
-    @Autowired
+    @Resource
     private RouteLocator routeLocator;
 
     @Override
@@ -58,7 +58,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
             .onErrorResume(t -> t instanceof NotFoundException, t -> Mono.just(ResponseEntity.notFound().build()));
     }
 
-    public Mono<List<Map<String, Object>>> getRoutesList() {
+    public List<Map<String, Object>> getRoutesList() throws Exception{
         Mono<Map<String, RouteDefinition>> routeDefs = routeDefinitionLocator.getRouteDefinitions()
                 .collectMap(RouteDefinition::getId);
         Mono<List<Route>> routes = this.routeLocator.getRoutes().collectList();
@@ -92,7 +92,7 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
             });
 
             return allRoutes;
-        });
+        }).toFuture().get();
     }
 
     public Mono<ResponseEntity<RouteDefinition>> getRouteById(String id) {

@@ -1,13 +1,13 @@
 package io.anyway.bigbang.gateway.config;
 
 import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
 import io.anyway.bigbang.framework.discovery.ConditionalOnIstioDiscoveryEnabled;
 import io.anyway.bigbang.framework.discovery.ConditionalOnKubernetesDiscoveryEnabled;
+import io.anyway.bigbang.gateway.filter.GrayLoadBalancerFilter;
 import io.anyway.bigbang.gateway.gray.*;
 import io.anyway.bigbang.gateway.gray.impl.IstioGrayRibbonRuleImpl;
 import io.anyway.bigbang.gateway.gray.impl.KubernetesGrayRibbonRuleImpl;
@@ -20,7 +20,6 @@ import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -103,7 +102,7 @@ public class GrayRouteConfig {
         }
 
         private synchronized void setGrayStrategy(String text) {
-            log.info("gateway gray strategy: {}",text);
+//            log.info("gateway gray strategy: {}",text);
             grayStrategyListener.onChangeEvent(text);
         }
     }

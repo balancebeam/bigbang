@@ -24,6 +24,10 @@ public interface SecurityContextHolder {
         return Optional.empty();
     }
 
+    static void setUserDetailContext(UserDetailContext ctx){
+        threadLocal.set(ctx);
+    }
+
     static void removeUserDetailContext(){
         threadLocal.remove();
     }

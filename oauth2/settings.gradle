@@ -15,7 +15,7 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'basicservice-oauth2'
+rootProject.name = 'oauth2'
 
 include 'oauth2-api'
 include 'oauth2-service'

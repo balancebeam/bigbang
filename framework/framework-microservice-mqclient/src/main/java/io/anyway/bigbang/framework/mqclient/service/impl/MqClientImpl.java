@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TtlRunnable;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import io.anyway.bigbang.framework.gray.DiscoveryMetadataService;
+import io.anyway.bigbang.framework.discovery.DiscoveryMetadataService;
 import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.framework.gray.GrayContextHolder;
 import io.anyway.bigbang.framework.mqclient.core.AfterCommitTaskRegister;

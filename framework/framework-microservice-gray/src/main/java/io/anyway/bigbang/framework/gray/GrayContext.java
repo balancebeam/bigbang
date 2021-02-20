@@ -14,6 +14,6 @@ import java.util.Set;
 @ToString
 public class GrayContext {
     final public static String GRAY_NAME = "x-gray";
-    private Set<String> inVers= Collections.EMPTY_SET;
-    private Set<String> exVers= Collections.EMPTY_SET;
+    private List<String> inVers= Collections.EMPTY_LIST;
+    private List<String> exVers= Collections.EMPTY_LIST;
 }

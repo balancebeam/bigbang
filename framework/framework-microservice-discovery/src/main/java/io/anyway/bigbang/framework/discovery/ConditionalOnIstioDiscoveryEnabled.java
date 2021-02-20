@@ -1,4 +1,4 @@
-package io.anyway.bigbang.framework.gray;
+package io.anyway.bigbang.framework.discovery;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@ConditionalOnProperty(value = "spring.cloud.kubernetes.discovery.enabled",matchIfMissing = true)
-public @interface ConditionalOnKubernetesDiscoveryEnabled {
+@ConditionalOnProperty(value = "spring.cloud.istio.discovery.enabled",matchIfMissing = true)
+public @interface ConditionalOnIstioDiscoveryEnabled {
 
 }

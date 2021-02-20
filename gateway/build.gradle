@@ -48,6 +48,7 @@ configurations.all {
 dependencies {
     compile("io.anyway.bigbang.framework:framework-microservice-bootstrap:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-header:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang.framework:framework-microservice-model:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-metrics:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-security:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-useragent:1.0.0-SNAPSHOT")
@@ -56,6 +57,7 @@ dependencies {
     compile("io.anyway.bigbang.framework:framework-microservice-gray:1.0.0-SNAPSHOT")
     compile("org.springframework.cloud:spring-cloud-starter-gateway")
     compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
+    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.5'
 //    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
 //    compile("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway")
 //    compile("org.springframework.cloud:spring-cloud-loadbalancer")

@@ -29,7 +29,15 @@ public class ApplicationDefaultPropertiesEventListener implements ApplicationLis
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
         MutablePropertySources source = event.getEnvironment().getPropertySources();
-        source.addLast(new MapPropertySource("defaultProperties", collectProperties("default")));
+        String version= event.getEnvironment().getProperty("spring.application.version");
+        if(StringUtils.isEmpty(version)){
+            log.error("spring.application.version must be not empty");
+            throw new RuntimeException("spring.application.version must be not empty");
+        }
+        Map<String, Object> defaultProperties= collectProperties("default");
+        //added version to nacos register center when the application was running the nacos profile environment
+        defaultProperties.put("spring.cloud.nacos.discovery.metadata.version",version);
+        source.addLast(new MapPropertySource("defaultProperties", defaultProperties));
 
         String active = event.getEnvironment().getProperty("spring.profiles.active");
         if (StringUtils.isEmpty(active)) {

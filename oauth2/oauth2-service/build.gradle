@@ -5,9 +5,9 @@ archivesBaseName = 'io.anyway.bigbang.oauth2'
 
 dependencies {
     compile(project(":oauth2-api"))
-    compile("io.anyway.bigbang:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.cloud:spring-cloud-starter-oauth2")
+    compile("org.springframework.cloud:spring-cloud-starter-oauth2:2.2.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
     compile("mysql:mysql-connector-java")

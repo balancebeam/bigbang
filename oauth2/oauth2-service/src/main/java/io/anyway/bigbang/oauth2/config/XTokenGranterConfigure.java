@@ -1,7 +1,6 @@
 package io.anyway.bigbang.oauth2.config;
 
 import org.springframework.beans.factory.SmartInitializingSingleton;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,13 +32,13 @@ public class XTokenGranterConfigure implements SmartInitializingSingleton {
     @Resource
     private TokenEndpoint tokenEndpoint;
 
-    @Autowired(required = false)
+    @Resource
     private AuthorizationServerEndpointsConfiguration cfg;
 
-    @Autowired(required = false)
+    @Resource
     private List<TokenGranter> extensionTokenGranters = Collections.emptyList();
 
-    @Autowired(required = false)
+    @Resource
     private AuthenticationManager authenticationManager;
 
     @Override

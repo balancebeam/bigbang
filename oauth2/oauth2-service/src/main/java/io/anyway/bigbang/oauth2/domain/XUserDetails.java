@@ -24,6 +24,8 @@ public class XUserDetails implements UserDetails {
      */
     private String password;
 
+    private String usertype;
+
     /**
      * 租户 id, 用于标示不同的系统, 即 app_id 字段
      */
@@ -75,5 +77,9 @@ public class XUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public String getUserType(){
+        return "b";
     }
 }

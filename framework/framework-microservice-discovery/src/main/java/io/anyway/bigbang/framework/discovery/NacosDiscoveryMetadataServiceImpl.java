@@ -1,4 +1,4 @@
-package io.anyway.bigbang.framework.gray;
+package io.anyway.bigbang.framework.discovery;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 
@@ -12,11 +12,6 @@ public class NacosDiscoveryMetadataServiceImpl extends DiscoveryMetadataService 
     @Override
     public String getIp() {
         return props.getIp();
-    }
-
-    @Override
-    public int getPort() {
-        return props.getPort();
     }
 
 }

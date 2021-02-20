@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.mqclient.config;
 
-import io.anyway.bigbang.framework.gray.DiscoveryMetadataService;
+import io.anyway.bigbang.framework.discovery.DiscoveryMetadataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 

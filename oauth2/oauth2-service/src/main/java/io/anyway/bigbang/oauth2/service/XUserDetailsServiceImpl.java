@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -19,12 +20,12 @@ public class XUserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     public void setServletRequest(HttpServletRequest servletRequest) {
         this.servletRequest = servletRequest;
     }
 
-    @Autowired
+    @Resource
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

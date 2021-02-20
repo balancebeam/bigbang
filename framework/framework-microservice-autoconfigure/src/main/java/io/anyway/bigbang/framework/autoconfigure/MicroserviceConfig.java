@@ -4,7 +4,7 @@ import io.anyway.bigbang.framework.bootstrap.HeaderConfig;
 import io.anyway.bigbang.framework.exception.FeignClientErrorDecoder;
 import io.anyway.bigbang.framework.exception.GlobalExceptionHandler;
 import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
-import io.anyway.bigbang.framework.gray.DiscoveryConfig;
+import io.anyway.bigbang.framework.discovery.DiscoveryConfig;
 import io.anyway.bigbang.framework.gray.GrayConfig;
 import io.anyway.bigbang.framework.mvcinterceptor.MvcInterceptorConfig;
 import io.anyway.bigbang.framework.logging.marker.LoggingMarkerAspect;

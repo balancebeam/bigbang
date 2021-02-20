@@ -26,22 +26,22 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class XAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
+    @Resource
     private DataSource dataSource;
 
-    @Autowired
+    @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
+    @Resource
     private TokenEnhancer tokenEnhancer;
 
-    @Resource(name = "xUserDetailsService")
+    @Resource
     private XUserDetailsServiceImpl userDetailsService;
 
     @Override

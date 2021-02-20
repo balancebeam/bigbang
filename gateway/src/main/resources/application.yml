@@ -2,9 +2,12 @@ server:
   port: 8080
 
 spring:
+  application:
+    version: 1.0.0
   profiles:
-    active: istio-dev
+    active: nacos-dev
   sleuth:
+    enabled: false
     sampler:
       percentage: 1
   zipkin:
@@ -14,6 +17,15 @@ spring:
       retry:
         enabled: true
     gateway:
+      token-validator:
+        mode: jwt
+        jwt:
+#          jws-algorithm: RSA
+          public-key: 5c5f1b818a1363ef49f0fbc7b35a22c63cdb8a3b
+      white-list:
+        - aaa
+        - bbb
+        - ccc
       discovery:
         locator:
           lower-case-sehttpclientrvice-id: true

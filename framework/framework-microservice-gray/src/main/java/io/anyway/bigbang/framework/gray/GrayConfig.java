@@ -4,6 +4,8 @@ import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.IRule;
 import io.anyway.bigbang.framework.bootstrap.HeaderContext;
+import io.anyway.bigbang.framework.discovery.ConditionalOnIstioDiscoveryEnabled;
+import io.anyway.bigbang.framework.discovery.ConditionalOnKubernetesDiscoveryEnabled;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
