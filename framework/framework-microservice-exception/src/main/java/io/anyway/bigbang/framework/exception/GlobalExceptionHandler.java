@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         response.setContentType(CONTENT_TYPE);
 
         return ApiResponseEntity.fail(
-                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.value()+"",
                 messageSource.getMessage("BAD_REQUEST_PARAMETER",
                         null,
                         e.getMessage(),
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         response.setContentType(CONTENT_TYPE);
 
         return ApiResponseEntity.fail(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value()+"",
                 messageSource.getMessage("INTERNAL_SERVER_ERROR",
                     null,
                     e.getMessage(),
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         response.setContentType(CONTENT_TYPE);
 
         String message = messageSource.getMessage(
-                String.valueOf(e.getApiResultStatus()),
+                e.getApiResultStatus(),
                 e.getMessageResourceArgs(),
                 e.getApiResultStatus()+ (!StringUtils.isEmpty(e.getMessage())?"_"+e.getMessage() :""),
                 LocaleContextHolder.getLocale());

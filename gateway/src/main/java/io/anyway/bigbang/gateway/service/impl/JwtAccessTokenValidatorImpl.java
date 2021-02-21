@@ -55,10 +55,11 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
                     long extTime = Long.parseLong(value);
                     long curTime = System.currentTimeMillis();
                     if (extTime > curTime) {
+                        String appId = (String)jsonOBj.get("appId");
                         String userId = (String)jsonOBj.get("user_id");
                         String username = (String)jsonOBj.get("user_name");
                         String userType = (String)jsonOBj.get("user_type");
-                        UserDetailContext userDetail = new UserDetailContext(userId, username, userType);
+                        UserDetailContext userDetail = new UserDetailContext(appId,userId, username, userType);
                         log.debug("jwt UserDetail: {}", userDetail);
                         return Optional.of(userDetail);
                     }

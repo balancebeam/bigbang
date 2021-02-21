@@ -29,7 +29,7 @@ public class GrayStrategyProcessor implements GrayStrategyListener {
                 if(Objects.isNull(userDetail.getUid())){
                     userDetail.setUid(detail);
                 }
-                String candidate= userDetail.getType()+"_"+userDetail.getUid();
+                String candidate= userDetail.getAppId()+"_"+userDetail.getUid();
                 GrayContext grayContext= new GrayContext();
                 List<String> exVers= new ArrayList<>();
                 for(GrayStrategy.UserDefinition each: userList){

@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 @ToString
 class InternalException extends RuntimeException {
 
-    private int code;
+    private String code;
     private String message;
     private int httpStatus= HttpStatus.SERVICE_UNAVAILABLE.value();
 
     public InternalException(){}
 
-    public InternalException(int code, String message){
+    public InternalException(String code, String message){
         this.code= code;
         this.message= message;
     }

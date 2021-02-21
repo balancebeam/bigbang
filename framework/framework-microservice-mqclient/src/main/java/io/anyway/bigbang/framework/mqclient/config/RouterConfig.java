@@ -54,7 +54,7 @@ public class RouterConfig {
                     mqClientMessage.getMessageId());
             if (messageHeader == null ||
                     messageHeader.getGrayContext() == null ||
-                    messageHeader.getGrayContext().equals(discoveryMetadataService.getGroup())){
+                    messageHeader.getGrayContext().equals(discoveryMetadataService.getVersion())){
                 return false;
             }
 

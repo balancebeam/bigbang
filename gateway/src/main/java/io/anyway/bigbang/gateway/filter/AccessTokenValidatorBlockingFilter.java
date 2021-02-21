@@ -3,8 +3,8 @@ package io.anyway.bigbang.gateway.filter;
 import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.security.SecurityContextHolder;
 import io.anyway.bigbang.framework.security.UserDetailContext;
-import io.anyway.bigbang.gateway.service.BlackListService;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
+import io.anyway.bigbang.gateway.service.BlackListService;
 import io.anyway.bigbang.gateway.service.WhiteListService;
 import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +19,14 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.Optional;
 
-import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
 import static io.anyway.bigbang.framework.security.UserDetailContext.USER_HEADER_NAME;
 
 @Slf4j
 @Component
-public class AccessTokenValidatorFilter implements GlobalFilter, Ordered {
+public class AccessTokenValidatorBlockingFilter implements BlockingFilter, Ordered {
 
     @Resource
     private WhiteListService whiteListService;
@@ -38,12 +38,19 @@ public class AccessTokenValidatorFilter implements GlobalFilter, Ordered {
     private AccessTokenValidator tokenValidator;
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    public int getOrder() {
+        return 0;
+    }
+
+    @Override
+    public void invoke(ServerWebExchange exchange,
+                       Map<String, String> header,
+                       BlockingFilterInvoker invoker) {
         String path= exchange.getRequest().getPath().toString();
         log.info("request uri: {}",path);
         if(blackListService.match(path)){
             log.info("the request path {} was forbidden.",path);
-            return WebExchangeResponseUtil.handleError(exchange, HttpStatus.FORBIDDEN,"FORBIDDEN.");
+            throw new BlockingFilterException(HttpStatus.FORBIDDEN,"FORBIDDEN.");
         }
         if(!whiteListService.match(path)) {
             String accessToken = exchange.getRequest().getHeaders().getFirst("access-token");
@@ -52,24 +59,16 @@ public class AccessTokenValidatorFilter implements GlobalFilter, Ordered {
             }
             Optional<UserDetailContext> optional= tokenValidator.check(accessToken);
             if(!optional.isPresent()){
-                return WebExchangeResponseUtil.handleError(exchange, HttpStatus.UNAUTHORIZED,"UNAUTHORIZED.");
+                throw new BlockingFilterException(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED.");
             }
             UserDetailContext ctx= optional.get();
-            ServerHttpRequest req = exchange.getRequest();
-            ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());
-            builder.header(USER_HEADER_NAME, JSONObject.toJSONString(ctx));
-            try {
-                SecurityContextHolder.setUserDetailContext(ctx);
-                return chain.filter(exchange.mutate().request(builder.build()).build());
-            }finally {
-                SecurityContextHolder.removeUserDetailContext();
-            }
+            header.put(USER_HEADER_NAME, JSONObject.toJSONString(ctx));
+            SecurityContextHolder.setUserDetailContext(ctx);
         }
-        return chain.filter(exchange);
-    }
-
-    @Override
-    public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE+1;
+        try {
+            invoker.invoke(exchange,header);
+        }finally {
+            SecurityContextHolder.removeUserDetailContext();
+        }
     }
 }

@@ -11,47 +11,47 @@ import org.springframework.http.HttpStatus;
 public class ApiException extends RuntimeException{
 
     private HttpStatus httpStatus= HttpStatus.INTERNAL_SERVER_ERROR;
-    private int apiResultStatus;
+    private String apiResultStatus;
     private Object[] messageResourceArgs;
 
-    public ApiException(int apiResultStatus){
+    public ApiException(String apiResultStatus){
         this.apiResultStatus= apiResultStatus;
     }
 
-    public ApiException(HttpStatus httpStatus, int apiResultStatus){
+    public ApiException(HttpStatus httpStatus, String apiResultStatus){
         this.httpStatus= httpStatus;
         this.apiResultStatus= apiResultStatus;
     }
 
-    public ApiException(int apiResultStatus, Throwable e){
+    public ApiException(String apiResultStatus, Throwable e){
         super(e);
         this.apiResultStatus= apiResultStatus;
     }
 
-    public ApiException(HttpStatus httpStatus, int apiResultStatus, Throwable e){
+    public ApiException(HttpStatus httpStatus, String apiResultStatus, Throwable e){
         super(e);
         this.httpStatus= httpStatus;
         this.apiResultStatus= apiResultStatus;
     }
 
-    public ApiException(int apiResultStatus, Object[] messageResourceArgs){
+    public ApiException(String apiResultStatus, Object[] messageResourceArgs){
         this.apiResultStatus= apiResultStatus;
         this.messageResourceArgs= messageResourceArgs;
     }
 
-    public ApiException(HttpStatus httpStatus, int apiResultStatus, Object[] messageResourceArgs){
+    public ApiException(HttpStatus httpStatus, String apiResultStatus, Object[] messageResourceArgs){
         this.httpStatus= httpStatus;
         this.apiResultStatus= apiResultStatus;
         this.messageResourceArgs= messageResourceArgs;
     }
 
-    public ApiException(int apiResultStatus, Object[] messageResourceArgs, Throwable e){
+    public ApiException(String apiResultStatus, Object[] messageResourceArgs, Throwable e){
         super(e);
         this.apiResultStatus= apiResultStatus;
         this.messageResourceArgs= messageResourceArgs;
     }
 
-    public ApiException(HttpStatus httpStatus, int apiResultStatus, Object[] messageResourceArgs, Throwable e){
+    public ApiException(HttpStatus httpStatus, String apiResultStatus, Object[] messageResourceArgs, Throwable e){
         super(e);
         this.httpStatus= httpStatus;
         this.apiResultStatus= apiResultStatus;

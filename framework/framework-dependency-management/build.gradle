@@ -10,6 +10,9 @@ version = '1.0.0-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
+        url = "https://repo1.maven.org/maven2/"
+    }
+    maven {
         url = "http://nexus.bigbang.local:8081/repository/maven-public/"
     }
 }
