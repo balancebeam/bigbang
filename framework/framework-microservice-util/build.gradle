@@ -3,4 +3,6 @@ archivesBaseName = 'io.anyway.bigbang.framework.util'
 
 dependencies {
     compile("org.springframework.boot:spring-boot")
+    compile("org.bouncycastle:bcprov-jdk15on:1.64")
+    compile("org.slf4j:slf4j-api")
 }

@@ -88,4 +88,5 @@ public class XAuthorizationServerConfigurer extends AuthorizationServerConfigure
     public TokenStore defaultTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
     }
+
 }

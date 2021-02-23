@@ -24,20 +24,28 @@ public class XUserDetails implements UserDetails {
      */
     private String password;
 
-    private String usertype;
-
     /**
      * 租户 id, 用于标示不同的系统, 即 app_id 字段
      */
+    @Getter
+    @Setter
     private String tenantId;
     /**
      * 对应了 username 字段. 因为 username 为固定变量, 因此换个名字.
      */
+    @Getter
+    @Setter
     private String loginName;
     /**
      * 用户类型
      */
+    @Getter
+    @Setter
     private String userType;
+
+    @Getter
+    @Setter
+    private String appId;
 
     private boolean enabled = true;
     private boolean accountNonExpired = true;
@@ -79,7 +87,5 @@ public class XUserDetails implements UserDetails {
         return enabled;
     }
 
-    public String getUserType(){
-        return "b";
-    }
+
 }

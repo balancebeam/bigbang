@@ -27,7 +27,7 @@ public class ProviderInternalController {
     @ResponseBody
     @GetMapping("/exception")
     public User getInternalException(){
-        throw new ApiException(4002);
+        throw new ApiException("4002");
     }
 
 }

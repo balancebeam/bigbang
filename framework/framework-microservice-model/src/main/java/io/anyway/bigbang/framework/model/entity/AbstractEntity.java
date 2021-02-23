@@ -12,6 +12,6 @@ import java.util.Date;
 public class AbstractEntity {
     private Long id;
     private int deleted;
-    private Date createTime;
-    private Date updateTime;
+    private Date createdTime;
+    private Date updatedTime;
 }

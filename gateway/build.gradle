@@ -55,6 +55,7 @@ dependencies {
     compile("io.anyway.bigbang.framework:framework-microservice-apm:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-discovery:1.0.0-SNAPSHOT")
     compile("io.anyway.bigbang.framework:framework-microservice-gray:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang.framework:framework-microservice-util:1.0.0-SNAPSHOT")
     compile("org.springframework.cloud:spring-cloud-starter-gateway")
     compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.5'

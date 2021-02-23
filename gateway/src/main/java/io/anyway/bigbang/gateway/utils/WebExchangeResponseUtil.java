@@ -20,7 +20,7 @@ public interface WebExchangeResponseUtil {
         response.setStatusCode(status);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         response.getHeaders().setAcceptCharset(Arrays.asList(Charset.forName("UTF-8")));
-        String text= JSONObject.toJSONString(ApiResponseEntity.fail(status.value(),errMessage));
+        String text= JSONObject.toJSONString(ApiResponseEntity.fail(status.value()+"",errMessage));
         return exchange.getResponse().writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap(text.getBytes())));
     }
 }

@@ -33,6 +33,6 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                 log.error("(de)serialize error failure",e);
             }
         }
-        return new InternalException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"unknown error");
+        return new InternalException(HttpStatus.INTERNAL_SERVER_ERROR.value()+"","unknown error");
     }
 }

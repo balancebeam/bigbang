@@ -48,7 +48,7 @@ public class ProviderExternalController {
     @ResponseBody
     @GetMapping("/exception")
     public ApiResponseEntity<String> exception(){
-        throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,4001,new Object[]{"1","2"});
+        throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,"4001",new Object[]{"1","2"});
     }
 
 }

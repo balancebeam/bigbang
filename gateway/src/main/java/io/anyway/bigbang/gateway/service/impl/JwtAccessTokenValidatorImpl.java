@@ -1,30 +1,20 @@
 package io.anyway.bigbang.gateway.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.nimbusds.jose.crypto.MACVerifier;
-import io.anyway.bigbang.framework.security.UserDetailContext;
-import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
+import io.anyway.bigbang.framework.security.UserDetailContext;
+import io.anyway.bigbang.framework.utils.RSAUtil;
+import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
-import org.springframework.security.rsa.crypto.RsaSecretEncryptor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.Security;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPublicKeySpec;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,7 +29,7 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
     private String algorithm;
 
     @Value("${spring.cloud.gateway.token-validator.jwt.public-key}")
-    private String secret;
+    private String encoded;
 
     @Override
     public Optional<UserDetailContext> check(String accessToken) {
@@ -73,36 +63,32 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        verifier= "RSA".equalsIgnoreCase(algorithm)? createRSAJWSVerifier(secret): createMACVerifier(secret);
+        verifier= "RSA".equalsIgnoreCase(algorithm)? createRSAVerifier(encoded): createMACVerifier(encoded);
         log.info("verifier: {}",verifier);
-
-//        String keystorePwd= "keystorepass";
-//        String keypairAlias= "jwt";
-//        String keypairPwd= "keypairpass";
-//
-//        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt-cert.jks"), keystorePwd.toCharArray());
-//        KeyPair keyPair= keyStoreKeyFactory.getKeyPair(keypairAlias, keypairPwd.toCharArray());
-//        RSAPublicKey publicKey2 = (RSAPublicKey) keyPair.getPublic();
-//        RSAKey key = new RSAKey.Builder(publicKey2).build();
-//        Map<String, Object>  map= new JWKSet(key).toJSONObject();
-//        String s= JSONObject.toJSONString(map);
-//        System.out.println(s);
-
     }
 
-    private JWSVerifier createMACVerifier(String secret)throws Exception{
-        return new MACVerifier(secret);
+    private JWSVerifier createMACVerifier(String encoded)throws Exception{
+        return new MACVerifier(encoded);
     }
 
-    private JWSVerifier createRSAJWSVerifier(String secret)throws Exception{
-        Security.addProvider(new BouncyCastleProvider());
-        JWKSet jwkSet=  JWKSet.parse(secret);
-        RSAKey rsaKey= (RSAKey)jwkSet.getKeys().get(0);
-        BigInteger publicExponent= rsaKey.getPublicExponent().decodeToBigInteger();
-        BigInteger modulus= rsaKey.getModulus().decodeToBigInteger();
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA",new BouncyCastleProvider());
-        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulus,publicExponent);
-        RSAPublicKey publicKey= (RSAPublicKey) keyFactory.generatePublic(keySpec);
-        return new RSASSAVerifier(publicKey);
+    private JWSVerifier createRSAVerifier(String encoded)throws Exception{
+        PublicKey publicKey= RSAUtil.decodeToPublicKey(encoded);
+        if(publicKey== null){
+            throw new RuntimeException("encoded was invalid.");
+        }
+        return new RSASSAVerifier((RSAPublicKey) publicKey);
     }
+
+//    private JWSVerifier createRSAJWSVerifier(String secret)throws Exception{
+//        Security.addProvider(new BouncyCastleProvider());
+//        JWKSet jwkSet=  JWKSet.parse(secret);
+//        RSAKey rsaKey= (RSAKey)jwkSet.getKeys().get(0);
+//        BigInteger publicExponent= rsaKey.getPublicExponent().decodeToBigInteger();
+//        BigInteger modulus= rsaKey.getModulus().decodeToBigInteger();
+//        KeyFactory keyFactory = KeyFactory.getInstance("RSA",new BouncyCastleProvider());
+//        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulus,publicExponent);
+//        RSAPublicKey publicKey= (RSAPublicKey) keyFactory.generatePublic(keySpec);
+//        publicKey.getEncoded();
+//        return new RSASSAVerifier(publicKey);
+//    }
 }

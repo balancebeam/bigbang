@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
@@ -52,14 +51,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public TokenEnhancer createTokenEnhancer() {
         return (accessToken, authentication) -> {
             if (authentication.getPrincipal() instanceof XUserDetails) {
-                XUserDetails userDetails = (XUserDetails) authentication.getPrincipal();
+                XUserDetails userDetail = (XUserDetails) authentication.getPrincipal();
                 final Map<String, Object> additionalInfo = new HashMap<>();
-                additionalInfo.put("user_id", userDetails.getUsername());
-                if (userDetails.getLoginName() != null) {
-                    additionalInfo.put("user_name", userDetails.getLoginName());
+                additionalInfo.put("user_id", userDetail.getUsername());
+                additionalInfo.put("appId", userDetail.getAppId());
+                if (userDetail.getLoginName() != null) {
+                    additionalInfo.put("user_name", userDetail.getLoginName());
                 }
-                if (userDetails.getUserType() != null) {
-                    additionalInfo.put("user_type", userDetails.getUserType());
+                if (userDetail.getUserType() != null) {
+                    additionalInfo.put("user_type", userDetail.getUserType());
                 }
                 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
             }
