@@ -1,11 +1,15 @@
 server:
-  port: 8080
+  port: 8888
 
 spring:
   application:
     version: 1.0.0
   profiles:
     active: nacos-dev
+  redis:
+    host: redis.bigbang.local
+    port: 6379
+    database: 2
   sleuth:
     enabled: false
     sampler:
@@ -19,9 +23,7 @@ spring:
     gateway:
       token-validator:
         mode: jwt
-        jwt:
-#          jws-algorithm: RSA
-          public-key: 5c5f1b818a1363ef49f0fbc7b35a22c63cdb8a3b
+        jwt-public-key-location: key/rsa_id.pub
       white-list:
         - aaa
         - bbb

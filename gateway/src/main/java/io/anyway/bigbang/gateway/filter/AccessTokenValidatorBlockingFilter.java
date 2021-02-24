@@ -55,7 +55,7 @@ public class AccessTokenValidatorBlockingFilter implements BlockingFilter, Order
         if(!whiteListService.match(path)) {
             String accessToken = exchange.getRequest().getHeaders().getFirst("access-token");
             if (StringUtils.isEmpty(accessToken)) {
-                accessToken = exchange.getRequest().getQueryParams().getFirst("access-token");
+                accessToken = exchange.getRequest().getQueryParams().getFirst("accessToken");
             }
             Optional<UserDetailContext> optional= tokenValidator.check(accessToken);
             if(!optional.isPresent()){

@@ -35,7 +35,13 @@ spring:
       connection-test-query: SELECT 1    #连接测试查询
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          jws-algorithm:
-          public-key-location:
+      jwt:
+        enabled: true
+        keystore-path: keystore/jwt-cert.jks
+        keystore-password: keystorepass
+        keypair-alias: jwt
+        keypair-password: keypairpass
+
+
+
+

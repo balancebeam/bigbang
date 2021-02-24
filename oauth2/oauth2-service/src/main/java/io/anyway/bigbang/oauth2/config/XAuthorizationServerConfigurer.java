@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -44,6 +45,9 @@ public class XAuthorizationServerConfigurer extends AuthorizationServerConfigure
     @Resource
     private XUserDetailsServiceImpl userDetailsService;
 
+    @Autowired(required = false)
+    private AccessTokenConverter accessTokenConverter;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.allowFormAuthenticationForClients()
@@ -63,17 +67,24 @@ public class XAuthorizationServerConfigurer extends AuthorizationServerConfigure
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenServices(defaultTokenServices())
-                .tokenStore(defaultTokenStore())
-                .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .tokenEnhancer(tokenEnhancer)
-        ;
+        if(accessTokenConverter!= null) {
+            endpoints
+                    .tokenStore(defaultTokenStore())
+                    .authenticationManager(authenticationManager)
+                    .userDetailsService(userDetailsService)
+                    .accessTokenConverter(accessTokenConverter);
+        }
+        else{
+            endpoints.tokenServices(defaultTokenServices())
+                    .tokenStore(defaultTokenStore())
+                    .authenticationManager(authenticationManager)
+                    .userDetailsService(userDetailsService)
+                    .tokenEnhancer(tokenEnhancer);
+        }
     }
 
-    @Primary
-    @Bean
-    public DefaultTokenServices defaultTokenServices() {
+
+    private DefaultTokenServices defaultTokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setTokenStore(defaultTokenStore());
         tokenServices.setSupportRefreshToken(true);
@@ -83,9 +94,7 @@ public class XAuthorizationServerConfigurer extends AuthorizationServerConfigure
         return tokenServices;
     }
 
-    @Primary
-    @Bean
-    public TokenStore defaultTokenStore() {
+    private TokenStore defaultTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
     }
 
