@@ -14,7 +14,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
@@ -64,9 +66,16 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
     @Override
     public void afterPropertiesSet() throws Exception {
         try(InputStream in= ClassLoader.getSystemResourceAsStream(location);){
-            byte[] b= new byte[in.available()];
-            in.read(b);
-            PublicKey publicKey= RSAUtil.decodeToPublicKey(new String(b));
+            BufferedReader reader= new BufferedReader(new InputStreamReader(in));
+            StringBuilder builder= new StringBuilder();
+            String line= null;
+            while((line=reader.readLine())!=null){
+                if(line.contains("-----BEGIN") || line.contains("-----END")){
+                    continue;
+                }
+                builder.append(line);
+            }
+            PublicKey publicKey= RSAUtil.decodeToPublicKey(builder.toString());
             if(publicKey== null){
                 throw new RuntimeException("public key was invalid.");
             }
@@ -75,11 +84,10 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
         }
     }
 
-//    public static void main(String[] args){
+//    public static void main(String[] args)throws Exception{
 //        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt-cert.jks"), "keystorepass".toCharArray());
 //        KeyPair keyPair= keyStoreKeyFactory.getKeyPair("jwt", "keypairpass".toCharArray());
 //        String s= RSAUtil.encodeToString(keyPair.getPublic());
 //        System.out.println(s);
-//
 //    }
 }
