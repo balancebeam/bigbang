@@ -36,7 +36,6 @@ spring:
   security:
     oauth2:
       jwt:
-        enabled: true
         keystore-path: keystore/jwt-cert.jks
         keystore-password: keystorepass
         keypair-alias: jwt
