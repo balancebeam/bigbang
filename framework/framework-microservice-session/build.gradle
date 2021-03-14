@@ -1,0 +1,8 @@
+description = "session module"
+archivesBaseName = 'io.anyway.bigbang.framework.security'
+
+dependencies {
+    compile(project(":framework-microservice-header"))
+    compile(project(":framework-microservice-logging"))
+    compile("com.alibaba:fastjson")
+}

@@ -1,6 +1,0 @@
-description = "bigbang limiter module"
-archivesBaseName = 'io.anyway.bigbang.framework.limiter'
-
-dependencies {
-    provided("org.springframework.boot:spring-boot")
-}

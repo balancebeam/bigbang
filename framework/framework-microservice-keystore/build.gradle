@@ -1,0 +1,7 @@
+description = "keystore module"
+archivesBaseName = 'io.anyway.bigbang.framework.keystore'
+
+dependencies {
+    compile(project(':framework-microservice-bootstrap'))
+    compile("org.springframework.cloud:spring-cloud-starter-vault-config")
+}

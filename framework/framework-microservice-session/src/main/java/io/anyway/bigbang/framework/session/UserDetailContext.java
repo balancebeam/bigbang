@@ -1,0 +1,19 @@
+package io.anyway.bigbang.framework.session;
+
+import lombok.*;
+
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDetailContext {
+
+    final public static String USER_HEADER_NAME="x-user-detail";
+
+    private String appId;
+    private String uid;
+    private String username;
+    private String type= "c";
+
+}

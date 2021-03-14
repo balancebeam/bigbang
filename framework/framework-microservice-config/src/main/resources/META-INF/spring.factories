@@ -1,0 +1,3 @@
+# Auto Configure
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+io.anyway.bigbang.framework.config.NacosBootstrapConfig

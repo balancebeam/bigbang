@@ -22,7 +22,7 @@ include 'framework-microservice-discovery'
 include 'framework-microservice-header'
 include 'framework-microservice-logging'
 include 'framework-microservice-model'
-include 'framework-microservice-security'
+include 'framework-microservice-session'
 include 'framework-microservice-apm'
 include 'framework-microservice-useragent'
 include 'framework-microservice-util'
@@ -33,17 +33,12 @@ include 'framework-microservice-exception'
 include 'framework-microservice-executor'
 include 'framework-microservice-feign'
 include 'framework-microservice-metrics'
-include 'framework-microservice-limiter'
+include 'framework-microservice-protection'
+include 'framework-microservice-keystore'
 include 'framework-microservice-swagger'
 include 'framework-microservice-cache'
 include 'framework-microservice-mqclient'
 include 'framework-microservice-scheduler'
 include 'framework-microservice-mvcinterceptor'
 include 'framework-microservice-gray'
-
-
-
-
-
-
-
+include 'framework-microservice-config'
