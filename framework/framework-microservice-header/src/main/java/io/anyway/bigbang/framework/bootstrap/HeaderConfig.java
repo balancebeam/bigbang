@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-@ConditionalOnClass(GenericFilterBean.class)
+@ConditionalOnClass(Filter.class)
 public class HeaderConfig {
 
     @Autowired(required = false)

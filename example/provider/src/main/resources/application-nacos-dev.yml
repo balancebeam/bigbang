@@ -1,9 +1,8 @@
-spring:
-  cloud:
-    nacos:
-      discovery:
-        metadata:
-          version: 1.0.0-SNAPSHOT
-        server-addr: ${spring.cloud.nacos.config.server-addr}
-
-
+#spring:
+#  cloud:
+#    nacos:
+#      discovery:
+#        metadata:
+#          version: 1.0.0
+#        ip: 192.168.206.129
+##        server-addr: ${spring.cloud.nacos.config.server-addr}

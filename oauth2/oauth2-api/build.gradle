@@ -1,7 +1,7 @@
-
-
+apply from: "../publish.gradle"
 description = "bigbang oauth2 api"
 archivesBaseName = 'io.anyway.bigbang.oauth2-api'
 
 dependencies {
+    compile("org.springframework.security:spring-security-core")
 }

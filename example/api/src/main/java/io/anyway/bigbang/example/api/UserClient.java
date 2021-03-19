@@ -4,7 +4,7 @@ import io.anyway.bigbang.example.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient("bg-example-provider")
+@FeignClient("example-provider")
 public interface UserClient {
 
     @GetMapping("/internal/user")

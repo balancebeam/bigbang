@@ -21,7 +21,12 @@ spring:
       retry:
         enabled: true
     gateway:
+      signature-validator:
+        enabled: false
+      authentication-validator:
+        enabled: false
       token-validator:
+        enabled: false
         mode: jwt
         jwt-public-key-location: key/rsa_id.pub
       white-list:

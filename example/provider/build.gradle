@@ -8,6 +8,6 @@ configurations.all {
 }
 dependencies {
     compile(project(":api"))
-    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
 
 }

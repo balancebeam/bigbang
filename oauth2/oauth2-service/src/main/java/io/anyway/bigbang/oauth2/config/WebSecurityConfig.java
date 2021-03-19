@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         XUserDetails userDetail = (XUserDetails) authentication.getPrincipal();
         final Map<String, Object> additionalInfo = new HashMap<>();
         additionalInfo.put("user_id", userDetail.getUsername());
-        additionalInfo.put("appId", userDetail.getAppId());
+        additionalInfo.put("app_id", userDetail.getAppId());
         if (userDetail.getLoginName() != null) {
             additionalInfo.put("user_name", userDetail.getLoginName());
         }

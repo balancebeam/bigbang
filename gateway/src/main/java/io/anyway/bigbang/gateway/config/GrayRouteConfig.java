@@ -7,7 +7,7 @@ import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
 import io.anyway.bigbang.framework.discovery.ConditionalOnIstioDiscoveryEnabled;
 import io.anyway.bigbang.framework.discovery.ConditionalOnKubernetesDiscoveryEnabled;
-import io.anyway.bigbang.gateway.filter.GrayLoadBalancerFilter;
+import io.anyway.bigbang.gateway.filter.GrayLoadBalancerGlobalFilter;
 import io.anyway.bigbang.gateway.gray.*;
 import io.anyway.bigbang.gateway.gray.impl.IstioGrayRibbonRuleImpl;
 import io.anyway.bigbang.gateway.gray.impl.KubernetesGrayRibbonRuleImpl;
@@ -58,11 +58,11 @@ public class GrayRouteConfig {
 
 
     @Bean
-    @ConditionalOnMissingBean({GrayLoadBalancerFilter.class})
-    public GrayLoadBalancerFilter grayReactiveLoadBalancerClientFilter(
+    @ConditionalOnMissingBean({GrayLoadBalancerGlobalFilter.class})
+    public GrayLoadBalancerGlobalFilter grayReactiveLoadBalancerClientFilter(
             LoadBalancerClientFactory clientFactory,
             LoadBalancerProperties properties) {
-        return new GrayLoadBalancerFilter(clientFactory, properties);
+        return new GrayLoadBalancerGlobalFilter(clientFactory, properties);
     }
 
     @Configuration

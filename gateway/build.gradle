@@ -34,7 +34,7 @@ dependencyManagement {
         cacheChangingModulesFor 0, 'seconds'
     }
     imports {
-        mavenBom "io.anyway.bigbang.framework:framework-dependency-management:1.0.0-SNAPSHOT"
+        mavenBom "io.anyway.bigbang:bg-dependencies:1.0.0-SNAPSHOT"
     }
 }
 
@@ -43,28 +43,20 @@ configurations.all {
     resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
     exclude group: "org.springframework.cloud",module: "spring-cloud-starter-netflix-ribbon"
     exclude group: "org.springframework.boot", module: "spring-boot-starter-web"
+    exclude group: "org.springframework.security", module: "spring-security-config"
+    exclude group: "org.springframework.security", module: "spring-security-web"
+    exclude group: "org.springframework.cloud", module: "spring-cloud-starter-openfeign"
 }
 
 dependencies {
-    compile("io.anyway.bigbang.framework:framework-microservice-bootstrap:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-header:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-model:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-metrics:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-security:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-useragent:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-apm:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-discovery:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-gray:1.0.0-SNAPSHOT")
-    compile("io.anyway.bigbang.framework:framework-microservice-util:1.0.0-SNAPSHOT")
+    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
+    compile("io.anyway.bigbang:oauth2-api")
     compile("org.springframework.cloud:spring-cloud-starter-gateway")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
     compile("org.springframework.security.oauth:spring-security-oauth2"){
         exclude group: "org.springframework"
-        exclude group: "org.springframework.security", module: "spring-security-config"
-        exclude group: "org.springframework.security", module: "spring-security-web"
     }
-    implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.5'
+    compile("com.nimbusds:nimbus-jose-jwt")
 //    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
 //    compile("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway")
 //    compile("org.springframework.cloud:spring-cloud-loadbalancer")

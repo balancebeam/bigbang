@@ -15,7 +15,7 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
-
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -35,7 +35,7 @@ subprojects {
             cacheChangingModulesFor 0, 'seconds'
         }
         imports {
-            mavenBom "io.anyway.bigbang.framework:framework-dependency-management:1.0.0-SNAPSHOT"
+            mavenBom "io.anyway.bigbang:bg-dependencies:1.0.0-SNAPSHOT"
         }
     }
 

@@ -6,7 +6,7 @@ import io.anyway.bigbang.framework.exception.GlobalExceptionHandler;
 import io.anyway.bigbang.framework.executor.TransmittableTaskExecutionConfig;
 import io.anyway.bigbang.framework.discovery.DiscoveryConfig;
 import io.anyway.bigbang.framework.gray.GrayConfig;
-import io.anyway.bigbang.framework.mvcinterceptor.MvcInterceptorConfig;
+import io.anyway.bigbang.framework.interceptor.mvc.MvcInterceptorConfig;
 import io.anyway.bigbang.framework.logging.marker.LoggingMarkerAspect;
 import io.anyway.bigbang.framework.metrics.FrameworkMetricsConfig;
 import io.anyway.bigbang.framework.swagger.Swagger2Config;
@@ -16,11 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.security.SecurityConfig;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
+import javax.servlet.Filter;
 
 @Slf4j
 @Configuration
+@ConditionalOnClass(Filter.class)
 @AutoConfigureBefore(TaskExecutionAutoConfiguration.class)
 @ImportAutoConfiguration({
         MvcInterceptorConfig.class,

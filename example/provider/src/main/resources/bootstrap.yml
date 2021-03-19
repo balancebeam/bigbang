@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: example-provider
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        server-addr: nacos.bigbang.local:8848
+        prefix: myconfig #support multi version,such as myconfig.properties,myconfig-dev.properties,myconfig-dev-1.0.0.properties,
+        file-extension: properties
+        group: DEFAULT_GROUP
+        extension-configs:
+          - dataId: myextension #didn't support multiple version, it was used to share config,
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: myextension2
+            group: DEFAULT_GROUP
+            refresh: true
+#        namespace: public
+    vault:
+      enabled: false
+      host: vault.bigbang.local
+      port: 8200
+      scheme: http
+      authentication: TOKEN
+      token: s.5w1GWeUh47ly7jSTFICgUsDj
+      connection-timeout: 5000
+      read-timeout: 15000
+      config:
+        order: -10
+  #    ssl:
+  #      trust-store: classpath:mykeystore.jks
+  #      trust-store-password: 111111
+      kv:
+        enabled: true
+        backend: example
+        profile-separator: /
+        default-context: application
+        application-name: secret1,secret2

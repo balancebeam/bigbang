@@ -27,7 +27,8 @@ public class NacosGrayRibbonRuleImpl implements GrayRibbonRule {
         log.debug("nacos service {} instances: {}",serviceId,instances);
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + serviceId);
-            return new EmptyResponse();
+//            return new EmptyResponse();
+            throw new RuntimeException("123");
         }
         if(!optional.isPresent()) {
             int pos = Math.abs(position.incrementAndGet());

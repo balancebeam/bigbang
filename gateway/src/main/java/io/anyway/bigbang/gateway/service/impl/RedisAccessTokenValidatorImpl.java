@@ -1,13 +1,12 @@
 package io.anyway.bigbang.gateway.service.impl;
 
-import io.anyway.bigbang.framework.security.UserDetailContext;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import io.anyway.bigbang.oauth2.domain.XUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.stereotype.Service;
 

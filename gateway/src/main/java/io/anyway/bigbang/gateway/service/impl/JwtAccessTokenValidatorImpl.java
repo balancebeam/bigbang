@@ -3,21 +3,18 @@ package io.anyway.bigbang.gateway.service.impl;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import io.anyway.bigbang.framework.security.UserDetailContext;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.framework.utils.RSAUtil;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.KeyPair;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
@@ -47,7 +44,7 @@ public class JwtAccessTokenValidatorImpl implements AccessTokenValidator, Initia
                     long extTime = Long.parseLong(value);
                     long curTime = System.currentTimeMillis();
                     if (extTime > curTime) {
-                        String appId = (String)jsonOBj.get("appId");
+                        String appId = (String)jsonOBj.get("app_id");
                         String userId = (String)jsonOBj.get("user_id");
                         String username = (String)jsonOBj.get("user_name");
                         String userType = (String)jsonOBj.get("user_type");

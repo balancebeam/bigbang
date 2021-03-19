@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos.bigbang.local:8848
+    vault:
+      enabled: false

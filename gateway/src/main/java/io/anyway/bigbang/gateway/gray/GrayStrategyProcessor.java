@@ -2,7 +2,7 @@ package io.anyway.bigbang.gateway.gray;
 
 import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.gray.GrayContext;
-import io.anyway.bigbang.framework.security.UserDetailContext;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
