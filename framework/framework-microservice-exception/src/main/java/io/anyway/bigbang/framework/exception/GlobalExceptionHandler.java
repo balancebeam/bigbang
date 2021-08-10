@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.exception;
 
-import io.aanyway.bigbang.framework.model.api.ApiResponseEntity;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.MessageSource;

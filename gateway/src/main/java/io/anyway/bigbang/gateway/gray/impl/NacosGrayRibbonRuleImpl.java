@@ -1,7 +1,7 @@
 package io.anyway.bigbang.gateway.gray.impl;
 
-import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
+import io.anyway.bigbang.framework.gray.GrayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse;
@@ -23,12 +23,13 @@ public class NacosGrayRibbonRuleImpl implements GrayRibbonRule {
     private AtomicInteger position= new AtomicInteger(new Random().nextInt(1000));
 
     @Override
-    public Response<ServiceInstance> choose(String serviceId, List<ServiceInstance> instances, Optional<GrayContext> optional){
+    public Response<ServiceInstance> choose(String serviceId,
+                                            List<ServiceInstance> instances,
+                                            Optional<GrayContext> optional){
         log.debug("nacos service {} instances: {}",serviceId,instances);
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + serviceId);
-//            return new EmptyResponse();
-            throw new RuntimeException("123");
+            return new EmptyResponse();
         }
         if(!optional.isPresent()) {
             int pos = Math.abs(position.incrementAndGet());

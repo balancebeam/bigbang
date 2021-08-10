@@ -3,9 +3,9 @@ package io.anyway.bigbang.gateway.filter;
 import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.framework.gray.GrayContextHolder;
-import io.anyway.bigbang.gateway.gray.GrayLoadBalancer;
 import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.anyway.bigbang.gateway.gray.GrayStrategyProcessor;
+import io.anyway.bigbang.gateway.gray.GrayLoadBalancer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -24,9 +24,7 @@ import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -35,7 +33,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.anyway.bigbang.framework.gray.GrayContext.GRAY_NAME;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.*;
 
 public class GrayLoadBalancerGlobalFilter implements GlobalFilter, Ordered {
@@ -146,7 +143,7 @@ public class GrayLoadBalancerGlobalFilter implements GlobalFilter, Ordered {
             GrayContextHolder.setGrayContext(ctx);
             ServerHttpRequest req = exchange.getRequest();
             ServerHttpRequest.Builder builder= req.mutate().path(req.getURI().getRawPath());
-            builder.header(GRAY_NAME,JSONObject.toJSONString(ctx));
+            builder.header(GrayContext.GRAY_NAME,JSONObject.toJSONString(ctx));
             return exchange.mutate().request(builder.build()).build();
         }
         return exchange;

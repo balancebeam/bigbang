@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "spring.cloud.gateway.signature-validator",name="enabled",havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.cloud.gateway.validator.signature",name="enabled",havingValue = "true")
 public class CacheRequestBodyGlobalFilter implements GlobalFilter, Ordered {
 
     final public static String CACHED_BODY_ATTR = "cachedBody";
@@ -56,11 +56,6 @@ public class CacheRequestBodyGlobalFilter implements GlobalFilter, Ordered {
                 ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
                 mutatedExchange.getAttributes().put(CACHED_BODY_ATTR, bytes);
                 return chain.filter(mutatedExchange);
-//                    return ServerRequest.create(mutatedExchange, HandlerStrategies.withDefaults().messageReaders()).
-//                        .bodyToMono(byte[].class)
-//                        .doOnNext(objectValue -> {
-//                            mutatedExchange.getAttributes().put(CACHED_BODY_ATTR, objectValue);
-//                        }).then(chain.filter(mutatedExchange));
             });
     }
 

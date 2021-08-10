@@ -1,6 +1,6 @@
 package io.anyway.bigbang.gateway.service;
 
-import io.anyway.bigbang.framework.session.UserDetailContext;
+import com.djtgroup.framework.session.UserDetailContext;
 
 import java.util.Optional;
 

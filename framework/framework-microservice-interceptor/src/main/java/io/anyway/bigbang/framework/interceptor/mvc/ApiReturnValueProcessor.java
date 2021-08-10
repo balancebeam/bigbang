@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.interceptor.mvc;
 
-import io.aanyway.bigbang.framework.model.api.ApiResponseEntity;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import io.anyway.bigbang.framework.security.mask.MaskSensitiveDataContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;

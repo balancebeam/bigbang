@@ -1,7 +1,7 @@
 package io.anyway.bigbang.gateway.gray.impl;
 
-import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
+import io.anyway.bigbang.framework.gray.GrayContext;
 import io.fabric8.kubernetes.api.model.EndpointAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
@@ -33,7 +33,9 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
     }
 
     @Override
-    public Response<ServiceInstance> choose(String serviceId, List<ServiceInstance> instances, Optional<GrayContext> optional){
+    public Response<ServiceInstance> choose(String serviceId,
+                                            List<ServiceInstance> instances,
+                                            Optional<GrayContext> optional){
         log.debug("kubernetes service {} instances: {}",serviceId,instances);
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + serviceId);
@@ -47,7 +49,6 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         }
 
         GrayContext ctx= optional.get();
-
 
         List<ServiceInstance> availableInstances= Collections.emptyList();
         if(!CollectionUtils.isEmpty(ctx.getInVers())){

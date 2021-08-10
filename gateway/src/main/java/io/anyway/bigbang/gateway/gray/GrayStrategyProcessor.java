@@ -2,8 +2,9 @@ package io.anyway.bigbang.gateway.gray;
 
 import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.gray.GrayContext;
-import io.anyway.bigbang.framework.session.UserDetailContext;
+import com.djtgroup.framework.session.UserDetailContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationListener;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -13,15 +14,15 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 @Slf4j
-public class GrayStrategyProcessor implements GrayStrategyListener {
+public class GrayStrategyProcessor implements ApplicationListener<GrayStrategyEvent> {
 
     private Random random= new Random();
 
-    private volatile GrayStrategy strategy= new GrayStrategy();
+    private volatile GrayStrategyDefintion strategy= new GrayStrategyDefintion();
 
     public GrayContext invoke(ServerWebExchange exchange){
         HttpHeaders headers= exchange.getRequest().getHeaders();
-        List<GrayStrategy.UserDefinition> userList= strategy.getUserList();
+        List<GrayStrategyDefintion.UserDefinition> userList= strategy.getUserList();
         if(!CollectionUtils.isEmpty(userList)){
             String detail= headers.getFirst(UserDetailContext.USER_HEADER_NAME);
             if(!StringUtils.isEmpty(detail)){
@@ -32,10 +33,10 @@ public class GrayStrategyProcessor implements GrayStrategyListener {
                 String candidate= userDetail.getAppId()+"_"+userDetail.getUid();
                 GrayContext grayContext= new GrayContext();
                 List<String> exVers= new ArrayList<>();
-                for(GrayStrategy.UserDefinition each: userList){
+                for(GrayStrategyDefintion.UserDefinition each: userList){
                     exVers.add(each.getVersion());
                 }
-                for(GrayStrategy.UserDefinition each: userList){
+                for(GrayStrategyDefintion.UserDefinition each: userList){
                     for(Pattern user: each.getUsers()){
                         if(user.matcher(candidate).find()){
                             grayContext.setInVers(Collections.singletonList(each.getVersion()));
@@ -50,9 +51,9 @@ public class GrayStrategyProcessor implements GrayStrategyListener {
             }
         }
         if(!CollectionUtils.isEmpty(strategy.headerMapping)) {
-            List<GrayStrategy.HeaderDefinition> headerList = strategy.getHeaderList();
+            List<GrayStrategyDefintion.HeaderDefinition> headerList = strategy.getHeaderList();
             List<String> exVers = new ArrayList<>();
-            for (GrayStrategy.HeaderDefinition each : headerList) {
+            for (GrayStrategyDefintion.HeaderDefinition each : headerList) {
                 exVers.add(each.getVersion());
             }
             GrayContext grayContext = new GrayContext();
@@ -72,15 +73,15 @@ public class GrayStrategyProcessor implements GrayStrategyListener {
             return grayContext;
         }
         //use random weight
-        List<GrayStrategy.WeightDefinition> wgtList= strategy.getWgtList();
+        List<GrayStrategyDefintion.WeightDefinition> wgtList= strategy.getWgtList();
         if(!CollectionUtils.isEmpty(wgtList)){
             int total= 0;
-            for(GrayStrategy.WeightDefinition each: wgtList){
+            for(GrayStrategyDefintion.WeightDefinition each: wgtList){
                 total+=each.getWeight();
             }
             int rdm= random.nextInt(total);
             int sum= 0;
-            for(GrayStrategy.WeightDefinition each: wgtList){
+            for(GrayStrategyDefintion.WeightDefinition each: wgtList){
                 sum+= each.getWeight();
                 if(sum>rdm){
                     GrayContext grayContext = new GrayContext();
@@ -93,13 +94,14 @@ public class GrayStrategyProcessor implements GrayStrategyListener {
     }
 
     @Override
-    public void onChangeEvent(String text) {
+    public void onApplicationEvent(GrayStrategyEvent event) {
+        String text= (String)event.getSource();
         if(StringUtils.isEmpty(text)){
             text= "{}";
         }
-        strategy= JSONObject.parseObject(text,GrayStrategy.class);
+        strategy= JSONObject.parseObject(text, GrayStrategyDefintion.class);
         if(!CollectionUtils.isEmpty(strategy.getHeaderList())){
-            for(GrayStrategy.HeaderDefinition each: strategy.getHeaderList()){
+            for(GrayStrategyDefintion.HeaderDefinition each: strategy.getHeaderList()){
                 for(Map.Entry<String,String> item: each.getMapping().entrySet()){
                     if(!strategy.headerMapping.containsKey(item.getKey())){
                         strategy.headerMapping.put(item.getKey(),new HashMap<>());

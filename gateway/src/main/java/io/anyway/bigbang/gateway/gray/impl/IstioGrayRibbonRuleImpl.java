@@ -1,7 +1,7 @@
 package io.anyway.bigbang.gateway.gray.impl;
 
-import io.anyway.bigbang.framework.gray.GrayContext;
 import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
+import io.anyway.bigbang.framework.gray.GrayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
@@ -14,7 +14,9 @@ import java.util.*;
 public class IstioGrayRibbonRuleImpl implements GrayRibbonRule {
 
     @Override
-    public Response<ServiceInstance> choose(String serviceId, List<ServiceInstance> instances, Optional<GrayContext> optional){
+    public Response<ServiceInstance> choose(String serviceId,
+                                            List<ServiceInstance> instances,
+                                            Optional<GrayContext> optional){
         return new DefaultResponse(new DefaultServiceInstance(serviceId,serviceId,serviceId,80,false));
     }
 

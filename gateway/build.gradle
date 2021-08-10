@@ -51,6 +51,7 @@ configurations.all {
 dependencies {
     compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
     compile("io.anyway.bigbang:oauth2-api")
+    compile("com.github.ben-manes.caffeine:caffeine:2.8.4")
     compile("org.springframework.cloud:spring-cloud-starter-gateway")
     compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("org.springframework.security.oauth:spring-security-oauth2"){

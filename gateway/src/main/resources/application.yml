@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8080
 
 spring:
   application:
@@ -9,7 +9,8 @@ spring:
   redis:
     host: redis.bigbang.local
     port: 6379
-    database: 2
+    database: 5
+    password: 123qwe
   sleuth:
     enabled: false
     sampler:
@@ -21,18 +22,26 @@ spring:
       retry:
         enabled: true
     gateway:
-      signature-validator:
-        enabled: false
-      authentication-validator:
-        enabled: false
       token-validator:
+        enabled: true
+        mode: redis
+#        mode: api
+#        mode: jwt
+#        public-key-location: keystore/rsa_id.pub
+      client-validator:
         enabled: false
-        mode: jwt
-        jwt-public-key-location: key/rsa_id.pub
-      white-list:
-        - aaa
-        - bbb
-        - ccc
+        signature:
+          enabled: true
+          verifierKeyMapping: "{\
+            'key1': 'IayHU5eTYw9QMsThW7UZiu6p',\
+            'key2': 'ki7DfjbKtuGf6f4HvWS0ukl9'\
+          }"
+      merchant-validator:
+        enabled: false
+        signature:
+          enabled: true
+        authentication:
+          enabled: true
       discovery:
         locator:
           lower-case-sehttpclientrvice-id: true
@@ -40,8 +49,6 @@ spring:
 ribbon:
   eager-load:
     enabled: false
-
-
 
 #sentinel:
 #  transport:

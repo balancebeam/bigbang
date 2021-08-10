@@ -1,21 +1,18 @@
 package io.anyway.bigbang.gateway.filter;
 
-
 import com.alibaba.ttl.TransmittableThreadLocal;
-import io.anyway.bigbang.gateway.filter.blocking.BlockingFilter;
-import io.anyway.bigbang.gateway.filter.blocking.BlockingFilterException;
-import io.anyway.bigbang.gateway.filter.blocking.BlockingFilterInvoker;
+import io.anyway.bigbang.gateway.filter.blockchain.BlockingFilter;
+import io.anyway.bigbang.gateway.filter.blockchain.BlockingFilterException;
+import io.anyway.bigbang.gateway.filter.blockchain.BlockingFilterInvoker;
 import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -30,9 +27,9 @@ import java.util.Map;
 @Component
 public class BlockingFilterChainGlobalFilter implements GlobalFilter, Ordered, InitializingBean {
 
-    static ThreadLocal<Integer> FILTER_CURSOR = new TransmittableThreadLocal<>();
+    final public static ThreadLocal<Integer> FILTER_CURSOR = new TransmittableThreadLocal<>();
 
-    @Autowired(required = false)
+    @Resource
     private List<BlockingFilter> blockingFilters= Collections.EMPTY_LIST;
 
     private BlockingFilterInvoker invoker;
@@ -42,7 +39,6 @@ public class BlockingFilterChainGlobalFilter implements GlobalFilter, Ordered, I
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         try {
-            log.info("request uri: {}",exchange.getRequest().getPath().value());
             FILTER_CURSOR.set(0);
             Map<String,String> header= new HashMap<>();
             invoker.invoke(exchange,header);
@@ -67,7 +63,7 @@ public class BlockingFilterChainGlobalFilter implements GlobalFilter, Ordered, I
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE+1;
+        return Ordered.HIGHEST_PRECEDENCE+1001;
     }
 
     @Override

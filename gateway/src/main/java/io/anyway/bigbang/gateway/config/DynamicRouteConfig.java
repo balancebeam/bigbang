@@ -27,10 +27,10 @@ public class DynamicRouteConfig {
 
     private Map<String, RouteDefinition> ROUTE_MAPPING= new HashMap<>();
 
-    @Value("${spring.gateway.dynamic-route.dataId:gateway-dynamic-route}")
+    @Value("${spring.cloud.gateway.dynamic-route.dataId:gateway-dynamic-route}")
     private String dataId;
 
-    @Value("${spring.gateway.dynamic-route.group:DEFAULT_GROUP}")
+    @Value("${spring.cloud.gateway.dynamic-route.group:DEFAULT_GROUP}")
     private String group;
 
     @Value("${spring.cloud.nacos.config.server-addr}")
@@ -46,13 +46,19 @@ public class DynamicRouteConfig {
 
             // When the app startups, fetch gateway dynamic router information firstly.
             String configInfo = configService.getConfig(dataId, group, 5000);
+            if(StringUtils.isEmpty(configInfo)){
+                configInfo= "";
+            }
             addAndPublishBatchRoute(configInfo);
 
             // Add gateway router listener
             configService.addListener(dataId, group, new AbstractListener() {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
-                    addAndPublishBatchRoute(configInfo);
+                if(StringUtils.isEmpty(configInfo)){
+                    configInfo= "";
+                }
+                addAndPublishBatchRoute(configInfo);
                 }
             });
         } catch (NacosException e) {
@@ -62,7 +68,7 @@ public class DynamicRouteConfig {
 
     private synchronized void addAndPublishBatchRoute(String text){
         if(StringUtils.isEmpty(text)){
-            return;
+            text= "[]";
         }
         List<RouteDefinition> gatewayRouteDefinitions = JSONObject.parseArray(text,RouteDefinition.class);
         RouteDefinition routeDefinition;
