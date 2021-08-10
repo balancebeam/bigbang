@@ -1,8 +1,8 @@
-package io.anyway.bigbang.framework.mqclient.metrics;//package io.anyway.bigbang.framework.mqclient.metrics;
+package io.anyway.bigbang.framework.mqclient.metrics;
 //
 //import com.google.common.base.Joiner;
-//import io.anyway.bigbang.framework.mqclient.builder.RMQMessageConsumerBuilder;
-//import io.anyway.bigbang.framework.mqclient.service.MqClient;
+//import RMQMessageConsumerBuilder;
+//import MqClient;
 //import io.micrometer.core.instrument.Gauge;
 //import io.micrometer.core.instrument.MeterRegistry;
 //import io.micrometer.core.instrument.binder.MeterBinder;

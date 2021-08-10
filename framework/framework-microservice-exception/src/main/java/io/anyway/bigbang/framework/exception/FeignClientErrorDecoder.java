@@ -5,16 +5,12 @@ import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-@Configuration
-@ConditionalOnClass(ErrorDecoder.class)
 public class FeignClientErrorDecoder implements ErrorDecoder {
 
     @Resource

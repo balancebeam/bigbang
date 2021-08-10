@@ -1,5 +1,5 @@
-description = "bigbang mqclient module"
-archivesBaseName = 'io.anyway.bigbang.framework.mqclient'
+description = "mqclient module"
+archivesBaseName = 'io.awynay.bigbang.framework.mqclient'
 
 dependencies {
     compile(project(":framework-microservice-datasource"))

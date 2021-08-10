@@ -1,4 +1,4 @@
-description = "bigbang executor module"
+description = "executor module"
 archivesBaseName = 'io.anyway.bigbang.framework.executor'
 
 dependencies {

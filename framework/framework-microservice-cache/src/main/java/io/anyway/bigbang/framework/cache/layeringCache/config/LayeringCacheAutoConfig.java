@@ -1,11 +1,11 @@
 package io.anyway.bigbang.framework.cache.layeringCache.config;
 
+import io.anyway.bigbang.framework.cache.layeringCache.keyGenerator.LayeringKeyGenerator;
+import io.anyway.bigbang.framework.cache.layeringCache.serializer.FastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.anyway.bigbang.framework.cache.layeringCache.keyGenerator.LayeringKeyGenerator;
 import io.anyway.bigbang.framework.cache.layeringCache.manager.LayeringCacheManager;
-import io.anyway.bigbang.framework.cache.layeringCache.serializer.FastJsonRedisSerializer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

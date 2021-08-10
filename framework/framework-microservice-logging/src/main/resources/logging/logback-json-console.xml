@@ -2,7 +2,7 @@
 <configuration scan="false" scanPeriod="60 seconds" debug="false">
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <springProperty scope="context" name="logHome" source="spring.log.home" defaultValue="/var/log/app/"/>
-
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
     <appender name="JSON_CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="io.anyway.bigbang.framework.logging.XLoggingEventCompositeJsonEncoder">
             <providers>

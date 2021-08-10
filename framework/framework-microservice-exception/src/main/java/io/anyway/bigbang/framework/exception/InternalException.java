@@ -13,6 +13,7 @@ class InternalException extends RuntimeException {
 
     private String code;
     private String message;
+    private Object body;
     private int httpStatus= HttpStatus.SERVICE_UNAVAILABLE.value();
 
     public InternalException(){}

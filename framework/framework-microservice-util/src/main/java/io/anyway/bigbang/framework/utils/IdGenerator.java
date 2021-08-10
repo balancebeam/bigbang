@@ -1,31 +1,14 @@
 package io.anyway.bigbang.framework.utils;
 
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 
-import java.net.InetAddress;
+import java.util.UUID;
 
-@Configuration
-public class IdGenerator implements InitializingBean {
+public class IdGenerator {
 
-    private static IdGenerator ID_GENERATOR;
+    final private static IdWorker idWorker=
+            new IdWorker(System.identityHashCode(UUID.randomUUID().toString()));
 
-    private IdWorker idWorker;
-
-    @Value("${spring.application.name}")
-    private String appName;
-
-    public static String next() {
-        String id =ID_GENERATOR.idWorker.getId()+"";
-        return id;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        String id= InetAddress.getLocalHost()+":"+appName+":"+Math.random();
-        long idepoch= System.identityHashCode(id);
-        idWorker= new IdWorker(idepoch);
-        ID_GENERATOR= this;
+    public static long next() {
+        return idWorker.getId();
     }
 }

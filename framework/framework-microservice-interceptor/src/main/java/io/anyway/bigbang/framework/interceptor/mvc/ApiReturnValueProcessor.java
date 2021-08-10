@@ -1,6 +1,7 @@
 package io.anyway.bigbang.framework.interceptor.mvc;
 
-import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
+import io.aanyway.bigbang.framework.model.api.ApiResponseEntity;
+import io.anyway.bigbang.framework.security.mask.MaskSensitiveDataContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -13,11 +14,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
-
-import static io.anyway.bigbang.framework.interceptor.mvc.ApiHandlerInterceptor.STOPWATCH;
 
 @Slf4j
 public class ApiReturnValueProcessor extends RequestResponseBodyMethodProcessor {
@@ -36,15 +36,26 @@ public class ApiReturnValueProcessor extends RequestResponseBodyMethodProcessor 
     }
 
     @Override
-    public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws IOException, HttpMediaTypeNotAcceptableException {
+    public void handleReturnValue(Object returnValue,
+                                  MethodParameter returnType,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest) throws IOException, HttpMediaTypeNotAcceptableException {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         if(returnValue instanceof ApiResponseEntity){
-            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-            StopWatch stopWatch= (StopWatch)((ServletRequestAttributes)requestAttributes).getRequest().getAttribute(STOPWATCH);
+            StopWatch stopWatch= (StopWatch)request.getAttribute(ApiHandlerInterceptor.STOPWATCH);
             if(stopWatch!= null){
                 stopWatch.stop();
-                //((APIResponse)returnValue).setDuration(stopWatch.getTotalTimeMillis());
+                ((ApiResponseEntity)returnValue).setDuration(stopWatch.getTotalTimeMillis());
             }
         }
-        super.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
+        try {
+            if ("TRUE".equals(request.getAttribute(ApiHandlerInterceptor.APIMASKSENSITIVE))) {
+                MaskSensitiveDataContextHolder.anchorExecutorMarkSensitive();
+            }
+            super.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
+        }finally {
+            MaskSensitiveDataContextHolder.resetExecutorMarkSensitive();
+        }
     }
 }

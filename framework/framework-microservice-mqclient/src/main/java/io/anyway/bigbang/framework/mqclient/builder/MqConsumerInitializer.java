@@ -1,9 +1,9 @@
 package io.anyway.bigbang.framework.mqclient.builder;
 
-import com.google.common.collect.Maps;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientConfig;
 import io.anyway.bigbang.framework.mqclient.domain.MqType;
 import io.anyway.bigbang.framework.mqclient.service.impl.MqMessageConsumer;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

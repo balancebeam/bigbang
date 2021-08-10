@@ -1,4 +1,4 @@
-description = "bigbang useragent module"
+description = "useragent module"
 archivesBaseName = 'io.anyway.bigbang.framework.useragent'
 
 dependencies {

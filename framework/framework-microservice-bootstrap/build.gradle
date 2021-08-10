@@ -1,4 +1,4 @@
-description = "bigbang header module"
+description = "header module"
 archivesBaseName = 'io.anyway.bigbang.framework.bootstrap'
 
 dependencies {

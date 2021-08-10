@@ -35,7 +35,8 @@ public class EnvironmentPostProcessorImpl implements EnvironmentPostProcessor {
             for(BootstrapPropertiesEnhancementEvent each: serviceLoader){
                 each.process(environment,additionalProperties);
             }
-            mutablePropertySources.addFirst(new MapPropertySource("overwriteBootstrapProperties",additionalProperties));
+            log.info("overwriteBootstrapProperties: {}",additionalProperties);
+            mutablePropertySources.addLast(new MapPropertySource("overwriteBootstrapProperties",additionalProperties));
         }
         else{
             ServiceLoader<ApplicationPropertiesEnhancementEvent> serviceLoader = ServiceLoader.load(ApplicationPropertiesEnhancementEvent.class);
@@ -43,6 +44,7 @@ public class EnvironmentPostProcessorImpl implements EnvironmentPostProcessor {
             for(ApplicationPropertiesEnhancementEvent each: serviceLoader){
                 each.process(environment,additionalProperties);
             }
+            log.info("defaultApplicationProperties: {}",additionalProperties);
             mutablePropertySources.addLast(new MapPropertySource("defaultApplicationProperties",additionalProperties));
         }
     }

@@ -1,5 +1,5 @@
 description = "session module"
-archivesBaseName = 'io.anyway.bigbang.framework.security'
+archivesBaseName = 'io.anyway.bigbang.framework.session'
 
 dependencies {
     compile(project(":framework-microservice-header"))

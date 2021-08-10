@@ -1,7 +1,0 @@
-description = "protection module"
-archivesBaseName = 'io.anyway.bigbang.framework.protection'
-
-dependencies {
-    compile("org.springframework.boot:spring-boot")
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
-}

@@ -1,7 +1,7 @@
 package io.anyway.bigbang.framework.mqclient.domain;
 
-import com.google.common.collect.Maps;
 import io.anyway.bigbang.framework.mqclient.service.MqMessageListener;
+import com.google.common.collect.Maps;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

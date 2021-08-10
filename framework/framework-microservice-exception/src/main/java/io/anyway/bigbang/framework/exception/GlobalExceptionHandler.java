@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.exception;
 
-import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
+import io.aanyway.bigbang.framework.model.api.ApiResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.MessageSource;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @ControllerAdvice
-@ConditionalOnClass(ControllerAdvice.class)
+@ConditionalOnClass(HttpServletRequest.class)
 public class GlobalExceptionHandler {
 
     private static String CONTENT_TYPE= "application/json;charset=UTF-8";
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
             MissingServletRequestParameterException e){
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(CONTENT_TYPE);
-
+        log.warn("Illegal Arguments Exception, url: {}, reason: {}",request.getRequestURI(),e.getMessage());
         return ApiResponseEntity.fail(
                 HttpStatus.FORBIDDEN.value()+"",
                 messageSource.getMessage("BAD_REQUEST_PARAMETER",
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
             Exception e) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setContentType(CONTENT_TYPE);
-
+        log.error("Default Exception, url: {}",request.getRequestURI(),e);
         return ApiResponseEntity.fail(
                 HttpStatus.INTERNAL_SERVER_ERROR.value()+"",
                 messageSource.getMessage("INTERNAL_SERVER_ERROR",
@@ -76,7 +76,8 @@ public class GlobalExceptionHandler {
                 e.getMessageResourceArgs(),
                 e.getApiResultStatus()+ (!StringUtils.isEmpty(e.getMessage())?"_"+e.getMessage() :""),
                 LocaleContextHolder.getLocale());
-        return ApiResponseEntity.fail(e.getApiResultStatus(),message);
+        log.warn("ApiException, url: {}, reason: {}",request.getRequestURI(),message);
+        return ApiResponseEntity.fail(e.getApiResultStatus(),message,e.getDetail());
     }
 
     @ResponseBody
@@ -89,7 +90,7 @@ public class GlobalExceptionHandler {
         response.setStatus(e.getHttpStatus());
         response.setContentType(CONTENT_TYPE);
 
-        return ApiResponseEntity.fail(e.getCode(),e.getMessage());
+        return ApiResponseEntity.fail(e.getCode(),e.getMessage(),e.getBody());
     }
 
 

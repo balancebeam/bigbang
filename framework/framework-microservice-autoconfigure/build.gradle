@@ -1,4 +1,4 @@
-description = "bigbang autoconfigure module"
+description = "autoconfigure module"
 archivesBaseName = 'io.anyway.bigbang.framework.autoconfigure'
 
 dependencies {
@@ -7,16 +7,17 @@ dependencies {
     compile(project(":framework-microservice-useragent"))
     compile(project(":framework-microservice-util"))
     compile(project(":framework-microservice-exception"))
+    compile(project(":framework-microservice-security"))
     compile(project(":framework-microservice-executor"))
+    compile(project(":framework-microservice-interceptor"))
     compile(project(":framework-microservice-discovery"))
     compile(project(":framework-microservice-gray"))
     compile(project(":framework-microservice-metrics"))
     compile(project(":framework-microservice-swagger"))
-    compile(project(":framework-microservice-interceptor"))
     compile(project(":framework-microservice-discovery"))
     compile(project(":framework-microservice-model"))
     compile(project(":framework-microservice-apm"))
-    compile(project(":framework-microservice-protection"))
+    compile(project(":framework-microservice-fuze"))
     compile(project(":framework-microservice-keystore"))
     compile(project(":framework-microservice-config"))
     compile(project(":framework-microservice-bootstrap"))

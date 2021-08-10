@@ -14,7 +14,7 @@
     <appender name="JSON_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logFilePath}/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${logFilePath}/app.log%i</fileNamePattern>
+            <fileNamePattern>${logFilePath}/app_%i.log</fileNamePattern>
             <minIndex>${minIndex}</minIndex>
             <maxIndex>${maxIndex}</maxIndex>
         </rollingPolicy>

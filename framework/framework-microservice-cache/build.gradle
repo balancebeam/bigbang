@@ -1,4 +1,4 @@
-description = "bigbang cache module"
+description = "cache module"
 archivesBaseName = 'io.anyway.bigbang.framework.cache'
 
 dependencies {

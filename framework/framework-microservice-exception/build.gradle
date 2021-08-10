@@ -1,4 +1,4 @@
-description = "bigbang exception module"
+description = "exception module"
 archivesBaseName = 'io.anyway.bigbang.framework.exception'
 
 dependencies {

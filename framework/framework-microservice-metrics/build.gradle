@@ -1,4 +1,4 @@
-description = "bigbang metrics module"
+description = "metrics module"
 archivesBaseName = 'io.anyway.bigbang.framework.metrics'
 
 dependencies {

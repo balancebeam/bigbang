@@ -1,4 +1,4 @@
-description = "bigbang swagger module"
+description = "swagger module"
 archivesBaseName = 'io.anyway.bigbang.framework.swagger'
 
 dependencies {

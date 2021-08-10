@@ -1,6 +1,6 @@
 package io.anyway.bigbang.framework.logging.marker;
 
-import com.alibaba.fastjson.JSONArray;
+import io.anyway.bigbang.framework.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Method;
@@ -16,10 +15,10 @@ import java.util.Objects;
 
 @Slf4j
 @Aspect
-@Configuration
 public class LoggingMarkerAspect {
 
-    @Pointcut("@annotation(io.anyway.bigbang.framework.logging.marker.LoggingMarker) || @within(io.anyway.bigbang.framework.logging.marker.LoggingMarker)")
+    @Pointcut("@annotation(io.anyway.bigbang.framework.logging.marker.LoggingMarker) " +
+            "|| @within(io.anyway.bigbang.framework.logging.marker.LoggingMarker)")
     public void pointcut(){}
 
     @Around("pointcut()")
@@ -49,7 +48,9 @@ public class LoggingMarkerAspect {
             }
         }
         LoggingMarkerContext.markers(markers);
-        log.info(new LoggingMarkerWrapper(description,"IN"),"{}#{},args: {}",className,methodName, JSONArray.toJSONString(args));
+        log.info(new LoggingMarkerWrapper(description,"IN"),"{}#{},args: {}",
+                className,methodName,
+                JsonUtil.fromObject2String(args));
         StopWatch stopWatch= new StopWatch();
         stopWatch.start();
         try{

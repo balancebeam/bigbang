@@ -1,4 +1,4 @@
-description = "bigbang datasource module"
+description = "datasource module"
 archivesBaseName = 'io.anyway.bigbang.framework.datasource'
 
 dependencies {

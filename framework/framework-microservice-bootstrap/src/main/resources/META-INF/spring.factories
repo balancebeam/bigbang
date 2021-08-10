@@ -1,6 +1,5 @@
 # Auto Configure
-org.springframework.boot.env.EnvironmentPostProcessor=\
-io.anyway.bigbang.framework.bootstrap.EnvironmentPostProcessorImpl
+org.springframework.boot.env.EnvironmentPostProcessor=io.anyway.bigbang.framework.bootstrap.EnvironmentPostProcessorImpl
 
 #init bootstrap parent application context
 #org.springframework.cloud.bootstrap.BootstrapConfiguration=\

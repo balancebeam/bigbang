@@ -1,20 +1,28 @@
 package io.anyway.bigbang.framework.logging.marker;
 
+import io.anyway.bigbang.framework.utils.JsonUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Marker;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.*;
 
 @Setter
 @Getter
 public class LoggingMarkerWrapper implements Marker {
 
-    private String[] markers;
+    private String[] tags;
 
-    public LoggingMarkerWrapper(String... markers){
-        this.markers= markers;
+    private Object data;
+
+    public LoggingMarkerWrapper(String... tags){
+        this.tags= tags;
+    }
+
+    public LoggingMarkerWrapper(Object data,String... tags){
+        this.data= data;
+        this.tags= tags;
     }
 
     @Override
@@ -55,5 +63,23 @@ public class LoggingMarkerWrapper implements Marker {
     @Override
     public boolean contains(String name) {
         return false;
+    }
+
+    @Override
+    public String toString(){
+        Map<String, Object> map = new LinkedHashMap<>();
+        List<String> tagList = new ArrayList<>(LoggingMarkerContext.markers());
+        String[] tags = getTags();
+        if (tags != null) {
+            tagList.addAll(Arrays.asList(tags));
+        }
+        map.put("name", getName());
+        if (!CollectionUtils.isEmpty(tagList)) {
+            map.put("tags", tagList);
+        }
+        if(Objects.nonNull(getData())){
+            map.put("data", getData());
+        }
+        return JsonUtil.fromObject2String(map);
     }
 }

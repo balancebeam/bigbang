@@ -1,17 +1,17 @@
 package io.anyway.bigbang.framework.mqclient.builder;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
 import io.anyway.bigbang.framework.mqclient.domain.MessageType;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientConfig;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
 import io.anyway.bigbang.framework.mqclient.metrics.MqClientMetric;
 import io.anyway.bigbang.framework.mqclient.service.impl.MqMessageConsumer;
+import io.anyway.bigbang.framework.mqclient.utils.MqUtils;
 import io.anyway.bigbang.framework.mqclient.service.impl.MqMessageListenerWrapper;
 import io.anyway.bigbang.framework.mqclient.utils.MqClientConstants;
-import io.anyway.bigbang.framework.mqclient.utils.MqUtils;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;

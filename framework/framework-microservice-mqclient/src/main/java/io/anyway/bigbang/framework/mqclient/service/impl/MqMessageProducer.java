@@ -3,8 +3,8 @@ package io.anyway.bigbang.framework.mqclient.service.impl;
 
 import io.anyway.bigbang.framework.mqclient.domain.MqClientConfig;
 import io.anyway.bigbang.framework.mqclient.entity.MqClientMessageEntity;
-import io.anyway.bigbang.framework.mqclient.utils.MqClientConstants;
 import io.anyway.bigbang.framework.mqclient.utils.MqUtils;
+import io.anyway.bigbang.framework.mqclient.utils.MqClientConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;

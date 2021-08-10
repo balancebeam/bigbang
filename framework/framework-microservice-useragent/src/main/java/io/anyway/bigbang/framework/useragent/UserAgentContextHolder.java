@@ -2,7 +2,7 @@ package io.anyway.bigbang.framework.useragent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import io.anyway.bigbang.framework.bootstrap.HeaderContextHolder;
+import io.anyway.bigbang.framework.header.HeaderContextHolder;
 
 import java.util.Optional;
 

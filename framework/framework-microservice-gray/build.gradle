@@ -1,4 +1,4 @@
-description = "bigbang discovery module"
+description = "discovery module"
 archivesBaseName = 'io.anyway.bigbang.framework.gray'
 
 dependencies {

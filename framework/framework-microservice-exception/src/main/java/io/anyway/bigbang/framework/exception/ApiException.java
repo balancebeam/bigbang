@@ -13,6 +13,7 @@ public class ApiException extends RuntimeException{
     private HttpStatus httpStatus= HttpStatus.INTERNAL_SERVER_ERROR;
     private String apiResultStatus;
     private Object[] messageResourceArgs;
+    private Object detail;
 
     public ApiException(String apiResultStatus){
         this.apiResultStatus= apiResultStatus;

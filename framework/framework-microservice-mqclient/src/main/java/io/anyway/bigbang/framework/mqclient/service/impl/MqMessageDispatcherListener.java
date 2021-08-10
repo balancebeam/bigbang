@@ -1,7 +1,7 @@
 package io.anyway.bigbang.framework.mqclient.service.impl;
 
-import io.anyway.bigbang.framework.mqclient.annotation.Listener;
 import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
+import io.anyway.bigbang.framework.mqclient.annotation.Listener;
 import io.anyway.bigbang.framework.mqclient.service.MqMessageListener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,10 @@
 package io.anyway.bigbang.framework.mqclient.config;
 
 import io.anyway.bigbang.framework.discovery.DiscoveryMetadataService;
+import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
+import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
+import io.anyway.bigbang.framework.mqclient.service.MqRequestRouter;
+import io.anyway.bigbang.framework.mqclient.domain.RestHeader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,10 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
-import io.anyway.bigbang.framework.mqclient.domain.MessageHeader;
-import io.anyway.bigbang.framework.mqclient.domain.MqClientMessage;
-import io.anyway.bigbang.framework.mqclient.domain.RestHeader;
-import io.anyway.bigbang.framework.mqclient.service.MqRequestRouter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

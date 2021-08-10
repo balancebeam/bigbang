@@ -1,4 +1,4 @@
-description = "bigbang scheduler module"
+description = "scheduler module"
 archivesBaseName = 'io.anyway.bigbang.framework.scheduler'
 
 dependencies {
