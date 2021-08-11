@@ -2,5 +2,6 @@ description = "model module"
 archivesBaseName = 'io.anyway.bigbang.framework.model'
 
 dependencies {
-
+    compile("io.swagger:swagger-annotations")
+    compile("io.swagger:swagger-models")
 }

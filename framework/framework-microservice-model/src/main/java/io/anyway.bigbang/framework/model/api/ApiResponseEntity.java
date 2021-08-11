@@ -1,6 +1,8 @@
 package io.anyway.bigbang.framework.model.api;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,11 +10,16 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@ApiModel(value = "ApiResponseEntity",description = "Api Response Body attribute description")
 public class ApiResponseEntity<T> {
 
+    @ApiModelProperty(value = "biz code",example = "E0001")
     private String code;
+    @ApiModelProperty(value = "biz tip message",example = "Success")
     private String message;
+    @ApiModelProperty(value = "biz duration",example = "200")
     private long duration;
+    @ApiModelProperty(value = "biz response body",example = "{\"name\":\"Jerry\",\"age\": 21}")
     private T body;
 
     public static <E> ApiResponseEntity<E> ok(E body){
