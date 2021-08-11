@@ -1,0 +1,104 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "com.stehno.gradle.dependency-checker" version "0.2.3"
+}
+
+repositories {
+    maven {
+        url = repositoryMavenCentral
+    }
+}
+
+dependencies {
+    api 'io.anyway.bigbang:3rd-dependencies:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-autoconfigure:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-apm:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-bootstrap:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-cache:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-config:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-datasource:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-discovery:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-exception:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-executor:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-interceptor:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-gray:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-header:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-keystore:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-logging:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-metrics:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-model:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-mqclient:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-fuze:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-security:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-scheduler:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-session:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-swagger:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-useragent:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang.framework:framework-microservice-util:1.0.0-SNAPSHOT'
+    api 'io.anyway.bigbang:oauth2-api:1.0.0-SNAPSHOT'
+}
+
+publishing {
+    repositories {
+        maven {
+            if (version.contains('SNAPSHOT')) {
+                url = repositoryMavenSnapshot
+            } else {
+                url = repositoryMavenRelease
+            }
+            credentials {
+                username = repositoryUsername
+                password = repositoryPassword
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "${project.group}"
+            artifactId = "${project.name}"
+            version = "${project.version}"
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+
+                    name 'framework-dependencies'
+                    description 'framwork dependencies management (BOM)'
+
+                    dependencyManagement {
+                        dependencies {
+                            project.configurations.each { conf ->
+                                conf.dependencies.each { dep ->
+                                    dependency {
+                                        groupId "${dep.group}"
+                                        artifactId "${dep.name}"
+                                        version "${dep.version}"
+                                        if ("${dep.name}".contains('dependencies')) {
+                                            type "pom"
+                                            scope "import"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    repositories {
+                        repository {
+                            id "nexus"
+                            url repositoryMavenCentral
+                            snapshots {
+                                enabled true
+                            }
+                            releases {
+                                enabled true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+[publish, publishAllPublicationsToMavenRepository, publishMavenJavaPublicationToMavenLocal, publishMavenJavaPublicationToMavenRepository, publishToMavenLocal]*.dependsOn checkDependencies

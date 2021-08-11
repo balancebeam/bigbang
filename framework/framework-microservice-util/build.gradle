@@ -4,6 +4,6 @@ archivesBaseName = 'io.anyway.bigbang.framework.util'
 dependencies {
     compile("org.springframework.boot:spring-boot")
     compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("org.bouncycastle:bcprov-jdk15on:1.64")
+    compile("org.bouncycastle:bcprov-jdk15on")
     compile("org.slf4j:slf4j-api")
 }
