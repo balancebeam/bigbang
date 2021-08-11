@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
-MAINTAINER tiarang
-ADD build/libs/gateway*.jar /opt/apps/gateway.jar
+MAINTAINER bigbang
+ADD oauth2-service/build/libs/*.jar /opt/apps/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/opt/apps/gateway.jar"]
+ENTRYPOINT ["java","-jar","/opt/apps/app.jar"]
 
