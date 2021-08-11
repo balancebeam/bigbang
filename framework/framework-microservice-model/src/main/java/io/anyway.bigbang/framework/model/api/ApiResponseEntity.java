@@ -10,14 +10,14 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@ApiModel(value = "ApiResponseEntity",description = "Api Response Body attribute description")
+@ApiModel(value = "ApiResponseEntity",description = "Api response body attribute description")
 public class ApiResponseEntity<T> {
 
-    @ApiModelProperty(value = "biz code",example = "E0001")
+    @ApiModelProperty(value = "biz code",example = "0")
     private String code;
     @ApiModelProperty(value = "biz tip message",example = "Success")
     private String message;
-    @ApiModelProperty(value = "biz duration",example = "200")
+    @ApiModelProperty(value = "biz duration",example = "201")
     private long duration;
     @ApiModelProperty(value = "biz response body",example = "{\"name\":\"Jerry\",\"age\": 21}")
     private T body;
