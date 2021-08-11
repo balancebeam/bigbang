@@ -5,7 +5,6 @@ import io.anyway.bigbang.framework.utils.RSAUtil;
 import io.anyway.bigbang.gateway.filter.CacheRequestBodyGlobalFilter;
 import io.anyway.bigbang.gateway.service.impl.AbstractMerchantApiRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -21,6 +20,7 @@ import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
@@ -74,10 +74,10 @@ public class MerchantSignatureValidationBlockingFilter
         long cts= System.currentTimeMillis();
         if(cts < ts && ts-cts< 5000 ) { //must be an effective request in 5 seconds .
             try {
-                Signature signature = Signature.getInstance("RSA");
+                Signature signature = Signature.getInstance("SHA1WithRSA");
                 signature.initVerify(getPublicKey(appId));
                 signature.update(JSONObject.toJSONString(content).getBytes("UTF-8"));
-                return signature.verify(Base64.decodeBase64(sign));
+                return signature.verify(Base64.getDecoder().decode(sign));
             } catch (Exception e) {
                 log.error("rsa verification was error", e);
             }

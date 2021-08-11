@@ -163,4 +163,44 @@ public interface RSAUtil {
         }
         return null;
     }
+
+    static byte[] decrypt(Key key, byte[] data) {
+        if (key != null) {
+            try {
+                Cipher cipher = Cipher.getInstance("RSA",
+                        new BouncyCastleProvider());
+                cipher.init(Cipher.DECRYPT_MODE, key);
+                return cipher.doFinal(data);
+            } catch (Exception e) {
+                log.error("encrypt data error, key: {}, data: {}", key, data, e);
+            }
+        }
+        return null;
+    }
+
+    static String generateSign(RSAPrivateKey privateKey, byte[] data){
+        try{
+            Signature signature = Signature.getInstance("SHA1WithRSA");
+            signature.initSign(privateKey);
+            signature.update(data);
+            byte[] b = signature.sign();
+            String sign = Base64.getEncoder().encodeToString(b);
+            return sign;
+        }catch(Exception e){
+            log.error("create sign error", e);
+            return null;
+        }
+    }
+
+    static boolean verifySign(RSAPublicKey publicKey, byte[] data, String sign){
+        try{
+            Signature signature = Signature.getInstance("SHA1WithRSA");
+            signature.initVerify(publicKey);
+            signature.update(data);
+            return signature.verify(Base64.getDecoder().decode(sign));
+        }catch(Exception e){
+            log.error("create sign error", e);
+            return false;
+        }
+    }
 }
