@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.util.Base64;
+import java.security.interfaces.RSAPublicKey;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
@@ -74,10 +74,7 @@ public class MerchantSignatureValidationBlockingFilter
         long cts= System.currentTimeMillis();
         if(cts < ts && ts-cts< 5000 ) { //must be an effective request in 5 seconds .
             try {
-                Signature signature = Signature.getInstance("SHA1WithRSA");
-                signature.initVerify(getPublicKey(appId));
-                signature.update(JSONObject.toJSONString(content).getBytes("UTF-8"));
-                return signature.verify(Base64.getDecoder().decode(sign));
+                return RSAUtil.verifySign(getPublicKey(appId),JSONObject.toJSONString(content).getBytes("UTF-8"),sign);
             } catch (Exception e) {
                 log.error("rsa verification was error", e);
             }
@@ -85,19 +82,19 @@ public class MerchantSignatureValidationBlockingFilter
         return false;
     }
 
-    private PublicKey getPublicKey(String appId){
+    private RSAPublicKey getPublicKey(String appId){
         Cache cache= cacheManager.getCache("MerchantPublicKey");
         Cache.ValueWrapper valueWrapper= cache.get(appId);
         if(valueWrapper!= null){
-            return (PublicKey)valueWrapper.get();
+            return (RSAPublicKey)valueWrapper.get();
         }
         String publicKeyString = execute("/internal/merchant/public-key/"+appId,String.class);
-        PublicKey publicKey= RSAUtil.decodeToPublicKey(publicKeyString);
+        RSAPublicKey publicKey= RSAUtil.decodeToPublicKey(publicKeyString);
         if(publicKey== null){
             throw new RuntimeException(appId+" public key was invalid");
         }
         valueWrapper= new SimpleValueWrapper(publicKey);
         Cache.ValueWrapper currentValueWrapper= cache.putIfAbsent(appId,valueWrapper);
-        return (PublicKey)(currentValueWrapper== null? valueWrapper.get(): currentValueWrapper.get());
+        return (RSAPublicKey)(currentValueWrapper== null? valueWrapper.get(): currentValueWrapper.get());
     }
 }
