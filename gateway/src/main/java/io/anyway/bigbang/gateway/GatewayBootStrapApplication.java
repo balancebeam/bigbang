@@ -1,12 +1,12 @@
 package io.anyway.bigbang.gateway;
 
-import com.djtgroup.framework.autoconfigure.MicroserviceAutoConfigure;
-import com.djtgroup.framework.bootstrap.SpringApplicationBootStrap;
-import com.djtgroup.framework.bootstrap.config.RestTemplateConfigure;
+import io.anyway.bigbang.framework.autoconfigure.MicroserviceAutoConfigure;
+import io.anyway.bigbang.framework.bootstrap.SpringApplicationBootStrap;
+import io.anyway.bigbang.framework.bootstrap.config.RestTemplateConfigure;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ImportAutoConfiguration(RestTemplateConfigure.class)
+@ImportAutoConfiguration({RestTemplateConfigure.class})
 @SpringBootApplication(exclude={MicroserviceAutoConfigure.class})
 public class GatewayBootStrapApplication {
 

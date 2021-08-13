@@ -1,7 +1,7 @@
 package io.anyway.bigbang.gateway.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.djtgroup.framework.model.api.ApiResponseEntity;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;

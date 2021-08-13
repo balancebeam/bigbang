@@ -44,13 +44,13 @@ public class RequestPathConfigure {
             if(StringUtils.isEmpty(whiteListInfo)){
                 whiteListInfo= "";
             }
-            applicationEventPublisher.publishEvent(new GrayStrategyEvent(whiteListInfo));
+            applicationEventPublisher.publishEvent(new RequestPathWhiteListServiceImpl.WhiteListEvent(whiteListInfo));
 
             String backListInfo = configService.getConfig(blackDataId, group, 5000);
             if(StringUtils.isEmpty(backListInfo)){
                 backListInfo= "";
             }
-            applicationEventPublisher.publishEvent(new GrayStrategyEvent(backListInfo));
+            applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(backListInfo));
 
             // Add listener
             configService.addListener(whiteDataId, group, new AbstractListener() {

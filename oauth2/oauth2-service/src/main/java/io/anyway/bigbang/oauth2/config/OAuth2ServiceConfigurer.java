@@ -1,6 +1,6 @@
 package io.anyway.bigbang.oauth2.config;
 
-import io.anyway.bigbang.framework.bootstrap.HeaderContextHolder;
+import io.anyway.bigbang.framework.header.HeaderContextHolder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerEndpointsConfiguration;

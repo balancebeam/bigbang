@@ -3,7 +3,7 @@ package io.anyway.bigbang.gateway.service.impl;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.djtgroup.framework.session.UserDetailContext;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.framework.utils.RSAUtil;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import lombok.extern.slf4j.Slf4j;

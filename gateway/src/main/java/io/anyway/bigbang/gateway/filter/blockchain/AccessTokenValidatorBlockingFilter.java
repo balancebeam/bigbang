@@ -1,8 +1,8 @@
 package io.anyway.bigbang.gateway.filter.blockchain;
 
 import com.alibaba.fastjson.JSONObject;
-import com.djtgroup.framework.session.SessionContextHolder;
-import com.djtgroup.framework.session.UserDetailContext;
+import io.anyway.bigbang.framework.session.SessionContextHolder;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import io.anyway.bigbang.gateway.service.RequestPathBlackListService;
 import io.anyway.bigbang.gateway.service.RequestPathWhiteListService;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.djtgroup.framework.session.UserDetailContext.USER_HEADER_NAME;
+import static io.anyway.bigbang.framework.session.UserDetailContext.USER_HEADER_NAME;
 
 @Slf4j
 @Component

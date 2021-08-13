@@ -10,7 +10,7 @@ spring:
     host: redis.bigbang.local
     port: 6379
     database: 5
-    password: 123qwe
+#    password: 123qwe
   sleuth:
     enabled: false
     sampler:

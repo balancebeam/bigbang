@@ -34,7 +34,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         } else {
             msg = "Internal Server Error";
         }
-        log.error("gateway error:{}, cause reason:{}", exchange.getRequest().getPath(), ex.getMessage());
+        log.error("gateway error:{}, cause reason:{}", exchange.getRequest().getPath(), ex.getMessage(),ex);
         return WebExchangeResponseUtil.handleError(exchange,HttpStatus.INTERNAL_SERVER_ERROR,msg);
     }
 }

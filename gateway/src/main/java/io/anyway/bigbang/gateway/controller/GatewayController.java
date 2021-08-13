@@ -1,7 +1,7 @@
 package io.anyway.bigbang.gateway.controller;
 
 import io.anyway.bigbang.gateway.service.DynamicRouteService;
-import com.djtgroup.framework.model.api.ApiResponseEntity;
+import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

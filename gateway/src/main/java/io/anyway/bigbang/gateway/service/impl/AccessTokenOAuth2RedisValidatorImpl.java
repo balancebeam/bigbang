@@ -1,6 +1,6 @@
 package io.anyway.bigbang.gateway.service.impl;
 
-import com.djtgroup.framework.session.UserDetailContext;
+import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import io.anyway.bigbang.oauth2.domain.XUserDetails;
 import lombok.extern.slf4j.Slf4j;
