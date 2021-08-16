@@ -5,11 +5,11 @@ spring:
   application:
     version: 1.0.0
   profiles:
-    active: nacos-dev
-  redis:
-    host: redis.bigbang.local
-    port: 6379
-    database: 5
+    active: k8s-dev
+#  redis:
+#    host: redis.bigbang.local
+#    port: 6379
+#    database: 5
 #    password: 123qwe
   sleuth:
     enabled: false
@@ -24,8 +24,8 @@ spring:
     gateway:
       token-validator:
         enabled: true
-        mode: redis
-#        mode: api
+#        mode: redis
+        mode: api
 #        mode: jwt
 #        public-key-location: keystore/rsa_id.pub
       client-validator:

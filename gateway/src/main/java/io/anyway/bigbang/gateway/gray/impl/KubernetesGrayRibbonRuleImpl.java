@@ -1,22 +1,19 @@
 package io.anyway.bigbang.gateway.gray.impl;
 
-import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.anyway.bigbang.framework.gray.GrayContext;
+import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.fabric8.kubernetes.api.model.EndpointAddress;
+import io.fabric8.kubernetes.api.model.Endpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
-import org.springframework.cloud.kubernetes.discovery.KubernetesServiceInstance;
+import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClient;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import javax.annotation.Resource;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -25,12 +22,8 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
 
     private AtomicInteger position= new AtomicInteger(new Random().nextInt(1000));
 
-    final private Field f;
-
-    public KubernetesGrayRibbonRuleImpl(){
-        f= ReflectionUtils.findField(KubernetesServiceInstance.class,"endpointAddress");
-        ReflectionUtils.makeAccessible(f);
-    }
+    @Resource
+    private KubernetesDiscoveryClient kubernetesDiscoveryClient;
 
     @Override
     public Response<ServiceInstance> choose(String serviceId,
@@ -47,13 +40,18 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
             log.debug("gateway chose service instance: {}", instance.getInstanceId());
             return new DefaultResponse(instance);
         }
-
+        Map<String,EndpointAddress> endpointAddressMap= new LinkedHashMap<>();
+        List<Endpoints> endpointsList= kubernetesDiscoveryClient.getEndPointsList(serviceId);
+        for(Endpoints each: endpointsList){
+            EndpointAddress endpointAddress= each.getSubsets().get(0).getAddresses().get(0);
+            endpointAddressMap.put(endpointAddress.getTargetRef().getUid(),endpointAddress);
+        }
         GrayContext ctx= optional.get();
 
         List<ServiceInstance> availableInstances= Collections.emptyList();
         if(!CollectionUtils.isEmpty(ctx.getInVers())){
             availableInstances= instances.stream().filter(each-> {
-                EndpointAddress endpointAddress= (EndpointAddress)ReflectionUtils.getField(f,each);
+                EndpointAddress endpointAddress= endpointAddressMap.get(each.getInstanceId());
                 for(String version: ctx.getInVers()) {
                     if(endpointAddress.getTargetRef().getName().startsWith(serviceId+"-"+version)){
                         return true;
@@ -65,7 +63,7 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         if(CollectionUtils.isEmpty(availableInstances)){
             if(CollectionUtils.isEmpty(ctx.getExVers())) {
                 availableInstances = instances.stream().filter(each-> {
-                    EndpointAddress endpointAddress= (EndpointAddress)ReflectionUtils.getField(f,each);
+                    EndpointAddress endpointAddress= endpointAddressMap.get(each.getInstanceId());
                     for(String version: ctx.getExVers()) {
                         if(endpointAddress.getTargetRef().getName().startsWith(serviceId+"-"+version)){
                             return false;

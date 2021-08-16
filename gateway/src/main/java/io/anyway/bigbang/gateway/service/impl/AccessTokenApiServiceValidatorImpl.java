@@ -15,6 +15,11 @@ public class AccessTokenApiServiceValidatorImpl implements AccessTokenValidator 
 
     @Override
     public Optional<UserDetailContext> check(String accessToken) {
-        return null;
+        UserDetailContext context= new UserDetailContext();
+        context.setAppId("test");
+        context.setType("client");
+        context.setUid("1001");
+        context.setUsername("tom");
+        return Optional.of(context);
     }
 }

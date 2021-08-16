@@ -63,9 +63,9 @@ public class AccessTokenValidatorBlockingFilter implements BlockingFilter, Order
                 throw new BlockingFilterException(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED.");
             }
             UserDetailContext ctx= optional.get();
-            if(!ctx.getAppId().equals(exchange.getRequest().getQueryParams().getFirst("app_id"))){
-                throw new RuntimeException("Invalid application identify (app_id) request.");
-            }
+//            if(!ctx.getAppId().equals(exchange.getRequest().getQueryParams().getFirst("app_id"))){
+//                throw new RuntimeException("Invalid application identify (app_id) request.");
+//            }
             header.put(USER_HEADER_NAME, JSONObject.toJSONString(ctx));
             SessionContextHolder.setUserDetailContext(ctx);
         }

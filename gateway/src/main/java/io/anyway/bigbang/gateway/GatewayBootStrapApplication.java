@@ -5,7 +5,9 @@ import io.anyway.bigbang.framework.bootstrap.SpringApplicationBootStrap;
 import io.anyway.bigbang.framework.bootstrap.config.RestTemplateConfigure;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
+@EnableDiscoveryClient
 @ImportAutoConfiguration({RestTemplateConfigure.class})
 @SpringBootApplication(exclude={MicroserviceAutoConfigure.class})
 public class GatewayBootStrapApplication {
