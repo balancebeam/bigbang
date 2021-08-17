@@ -5,9 +5,9 @@ spring:
   application:
     version: 1.0.0
   profiles:
-    active: k8s-dev
+    active: nacos-dev
 #  redis:
-#    host: redis.bigbang.local
+#    host: redis.djtgroup.local
 #    port: 6379
 #    database: 5
 #    password: 123qwe

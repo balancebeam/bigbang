@@ -24,16 +24,15 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
-        String msg;
-
-        if (ex instanceof NotFoundException) {
-            msg = "Not Found Service";
-        } else if (ex instanceof ResponseStatusException) {
-            ResponseStatusException responseStatusException = (ResponseStatusException) ex;
-            msg = responseStatusException.getMessage();
-        } else {
-            msg = "Internal Server Error";
-        }
+        String msg= ex.getMessage();
+//        if (ex instanceof NotFoundException) {
+//            msg = "Not Found Service";
+//        } else if (ex instanceof ResponseStatusException) {
+//            ResponseStatusException responseStatusException = (ResponseStatusException) ex;
+//            msg = responseStatusException.getMessage();
+//        } else {
+//            msg = "Internal Server Error";
+//        }
         log.error("gateway error:{}, cause reason:{}", exchange.getRequest().getPath(), ex.getMessage(),ex);
         return WebExchangeResponseUtil.handleError(exchange,HttpStatus.INTERNAL_SERVER_ERROR,msg);
     }
