@@ -3,6 +3,7 @@ package io.anyway.bigbang.gateway.service.impl;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
+import io.anyway.bigbang.framework.session.DefaultUserDetailContext;
 import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.framework.utils.RSAUtil;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ServerWebExchange;
 
 import java.io.InputStream;
 import java.security.PublicKey;
@@ -18,10 +21,12 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.anyway.bigbang.gateway.filter.blockchain.AccessTokenValidatorBlockingFilter.accessTokenName;
+
 @Slf4j
 @Service
 @ConditionalOnProperty(prefix = "spring.cloud.gateway.token-validator",name = "mode",havingValue = "jwt")
-public class AccessTokenOAuth2JwtValidatorImpl implements AccessTokenValidator, InitializingBean {
+public class AccessTokenOAuth2JwtValidatorImpl  implements AccessTokenValidator, InitializingBean {
 
     private JWSVerifier verifier;
 
@@ -29,7 +34,11 @@ public class AccessTokenOAuth2JwtValidatorImpl implements AccessTokenValidator, 
     private String location;
 
     @Override
-    public Optional<UserDetailContext> check(String accessToken) {
+    public Optional<UserDetailContext> check(ServerWebExchange exchange) {
+        String accessToken = exchange.getRequest().getHeaders().getFirst(accessTokenName);
+        if (StringUtils.isEmpty(accessToken)) {
+            accessToken = exchange.getRequest().getQueryParams().getFirst(accessTokenName);
+        }
         try {
             JWSObject jwsObject = JWSObject.parse(accessToken);
             if (jwsObject.verify(verifier)) {
@@ -46,7 +55,7 @@ public class AccessTokenOAuth2JwtValidatorImpl implements AccessTokenValidator, 
                         String userId = (String)jsonOBj.get("user_id");
                         String username = (String)jsonOBj.get("user_name");
                         String userType = (String)jsonOBj.get("user_type");
-                        UserDetailContext userDetail = new UserDetailContext(appId,userId, username, userType);
+                        UserDetailContext userDetail = new DefaultUserDetailContext(appId,userId, username, userType);
                         log.debug("jwt UserDetail: {}", userDetail);
                         return Optional.of(userDetail);
                     }

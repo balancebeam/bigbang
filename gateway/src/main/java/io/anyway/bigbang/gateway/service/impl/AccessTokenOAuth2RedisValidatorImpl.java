@@ -1,5 +1,6 @@
 package io.anyway.bigbang.gateway.service.impl;
 
+import io.anyway.bigbang.framework.session.DefaultUserDetailContext;
 import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import io.anyway.bigbang.oauth2.domain.XUserDetails;
@@ -9,10 +10,14 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ServerWebExchange;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Optional;
+
+import static io.anyway.bigbang.gateway.filter.blockchain.AccessTokenValidatorBlockingFilter.accessTokenName;
 
 @Slf4j
 @Service
@@ -30,7 +35,11 @@ public class AccessTokenOAuth2RedisValidatorImpl implements AccessTokenValidator
     }
 
     @Override
-    public Optional<UserDetailContext> check(String accessToken) {
+    public Optional<UserDetailContext> check(ServerWebExchange exchange) {
+        String accessToken = exchange.getRequest().getHeaders().getFirst(accessTokenName);
+        if (StringUtils.isEmpty(accessToken)) {
+            accessToken = exchange.getRequest().getQueryParams().getFirst(accessTokenName);
+        }
         OAuth2Authentication authentication =redisTokenStore.readAuthentication(accessToken);
         if(authentication!= null) {
             XUserDetails details = (XUserDetails) authentication.getPrincipal();
@@ -38,7 +47,7 @@ public class AccessTokenOAuth2RedisValidatorImpl implements AccessTokenValidator
             String userId = details.getUsername();
             String username = details.getLoginName();
             String userType = details.getUserType();
-            UserDetailContext userDetail = new UserDetailContext(appId,userId, username, userType);
+            UserDetailContext userDetail = new DefaultUserDetailContext(appId,userId, username, userType);
             log.debug("redis UserDetail: {}", userDetail);
             return Optional.of(userDetail);
         }

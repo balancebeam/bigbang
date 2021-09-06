@@ -4,5 +4,6 @@ archivesBaseName = 'io.anyway.bigbang.framework.session'
 dependencies {
     compile(project(":framework-microservice-header"))
     compile(project(":framework-microservice-logging"))
-    compile("com.alibaba:fastjson")
+    compile(project(":framework-microservice-util"))
+    compile("org.springframework.boot:spring-boot-autoconfigure")
 }

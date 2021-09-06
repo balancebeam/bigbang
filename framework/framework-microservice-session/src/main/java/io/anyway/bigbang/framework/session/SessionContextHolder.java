@@ -1,34 +1,43 @@
 package io.anyway.bigbang.framework.session;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import io.anyway.bigbang.framework.header.HeaderContextHolder;
+import io.anyway.bigbang.framework.utils.JsonUtil;
 
 import java.util.Optional;
 
-public interface SessionContextHolder {
+public class SessionContextHolder {
 
-    ThreadLocal<UserDetailContext> threadLocal= new TransmittableThreadLocal<>();
+    private SessionContextHolder(){}
 
-    static Optional<UserDetailContext> getUserDetailContext(){
+    private static Class<? extends UserDetailContext> userDetailClass= DefaultUserDetailContext.class;
+
+    private static ThreadLocal<UserDetailContext> threadLocal= new TransmittableThreadLocal<>();
+
+    public static void setUserDetailClass(Class<? extends UserDetailContext> cls){
+        userDetailClass= cls;
+    }
+
+    public static Optional<UserDetailContext> getUserDetailContext(){
         UserDetailContext userDetail= threadLocal.get();
         if(userDetail!= null){
             return Optional.of(userDetail);
         }
         Optional<String> detail= HeaderContextHolder.getHeaderValue(UserDetailContext.USER_HEADER_NAME);
         if(detail.isPresent()){
-            userDetail= JSONObject.parseObject(detail.get(), UserDetailContext.class);
+
+            userDetail= JsonUtil.fromString2Object(detail.get(),userDetailClass);
             threadLocal.set(userDetail);
             return Optional.of(userDetail);
         }
         return Optional.empty();
     }
 
-    static void setUserDetailContext(UserDetailContext ctx){
+    public static void setUserDetailContext(UserDetailContext ctx){
         threadLocal.set(ctx);
     }
 
-    static void removeUserDetailContext(){
+    public static void removeUserDetailContext(){
         threadLocal.remove();
     }
 }

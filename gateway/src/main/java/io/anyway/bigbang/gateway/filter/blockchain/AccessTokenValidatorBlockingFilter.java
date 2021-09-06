@@ -1,8 +1,8 @@
 package io.anyway.bigbang.gateway.filter.blockchain;
 
-import com.alibaba.fastjson.JSONObject;
 import io.anyway.bigbang.framework.session.SessionContextHolder;
 import io.anyway.bigbang.framework.session.UserDetailContext;
+import io.anyway.bigbang.framework.utils.JsonUtil;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
 import io.anyway.bigbang.gateway.service.RequestPathBlackListService;
 import io.anyway.bigbang.gateway.service.RequestPathWhiteListService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 
 import javax.annotation.Resource;
@@ -54,11 +53,7 @@ public class AccessTokenValidatorBlockingFilter implements BlockingFilter, Order
             throw new BlockingFilterException(HttpStatus.FORBIDDEN,"FORBIDDEN.");
         }
         if(!enabled || !whiteListService.match(path)) {
-            String accessToken = exchange.getRequest().getHeaders().getFirst(accessTokenName);
-            if (StringUtils.isEmpty(accessToken)) {
-                accessToken = exchange.getRequest().getQueryParams().getFirst(accessTokenName);
-            }
-            Optional<UserDetailContext> optional= tokenValidator.check(accessToken);
+            Optional<UserDetailContext> optional= tokenValidator.check(exchange);
             if(!optional.isPresent()){
                 throw new BlockingFilterException(HttpStatus.UNAUTHORIZED,"UNAUTHORIZED.");
             }
@@ -66,7 +61,7 @@ public class AccessTokenValidatorBlockingFilter implements BlockingFilter, Order
 //            if(!ctx.getAppId().equals(exchange.getRequest().getQueryParams().getFirst("app_id"))){
 //                throw new RuntimeException("Invalid application identify (app_id) request.");
 //            }
-            header.put(USER_HEADER_NAME, JSONObject.toJSONString(ctx));
+            header.put(USER_HEADER_NAME, JsonUtil.fromObject2String(ctx));
             SessionContextHolder.setUserDetailContext(ctx);
         }
         try {
