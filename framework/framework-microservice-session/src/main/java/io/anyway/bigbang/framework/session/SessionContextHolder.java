@@ -18,17 +18,16 @@ public class SessionContextHolder {
         userDetailClass= cls;
     }
 
-    public static Optional<UserDetailContext> getUserDetailContext(){
+    public static <T extends UserDetailContext> Optional<T> getUserDetailContext(){
         UserDetailContext userDetail= threadLocal.get();
         if(userDetail!= null){
-            return Optional.of(userDetail);
+            return Optional.of((T)userDetail);
         }
         Optional<String> detail= HeaderContextHolder.getHeaderValue(UserDetailContext.USER_HEADER_NAME);
         if(detail.isPresent()){
-
             userDetail= JsonUtil.fromString2Object(detail.get(),userDetailClass);
             threadLocal.set(userDetail);
-            return Optional.of(userDetail);
+            return Optional.of((T)userDetail);
         }
         return Optional.empty();
     }
