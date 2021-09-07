@@ -7,7 +7,6 @@ import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class DynamicRouteService implements ApplicationEventPublisherAware {
 
     @Resource

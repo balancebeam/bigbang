@@ -3,7 +3,6 @@ package io.anyway.bigbang.gateway.filter;
 import io.anyway.bigbang.gateway.service.impl.AbstractMerchantApiRepository;
 import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.support.SimpleValueWrapper;
@@ -11,7 +10,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
@@ -23,8 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-@Component
-
 public class MerchantAuthenticationValidatorGatewayFilter
         extends AbstractMerchantApiRepository<List>
         implements GatewayFilter, Ordered {

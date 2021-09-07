@@ -4,10 +4,7 @@ import io.anyway.bigbang.framework.bootstrap.config.RestTemplateConfigure;
 import io.anyway.bigbang.gateway.controller.GatewayController;
 import io.anyway.bigbang.gateway.exception.GatewayExceptionHandler;
 import io.anyway.bigbang.gateway.filter.*;
-import io.anyway.bigbang.gateway.service.AccessTokenValidator;
-import io.anyway.bigbang.gateway.service.MerchantApiMappingDefinitionService;
-import io.anyway.bigbang.gateway.service.RequestPathBlackListService;
-import io.anyway.bigbang.gateway.service.RequestPathWhiteListService;
+import io.anyway.bigbang.gateway.service.*;
 import io.anyway.bigbang.gateway.service.impl.*;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,6 +21,11 @@ import org.springframework.context.annotation.Configuration;
         GatewayExceptionHandler.class
 })
 public class GatewayConfigure {
+
+    @Bean
+    public DynamicRouteService createDynamicRouteService(){
+        return new DynamicRouteService();
+    }
 
     @Bean
     public GatewayController createGatewayController(){
@@ -95,5 +97,11 @@ public class GatewayConfigure {
     @ConditionalOnProperty(prefix = "spring.cloud.gateway.token-validator",name = "mode",havingValue = "jwt")
     public AccessTokenValidator createAccessTokenOAuth2JwtValidatorImpl(){
         return new AccessTokenOAuth2JwtValidatorImpl();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.cloud.gateway.token-validator",name = "mode",havingValue = "mock")
+    public AccessTokenValidator createAccessTokenMockServiceValidatorImpl(){
+        return new AccessTokenMockServiceValidatorImpl();
     }
 }
