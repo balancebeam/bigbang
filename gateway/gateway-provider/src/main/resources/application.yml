@@ -28,7 +28,7 @@ spring:
         mode: api
 #        mode: jwt
 #        public-key-location: keystore/rsa_id.pub
-      client-validator:
+      app-validator:
         enabled: false
         signature:
           enabled: true
