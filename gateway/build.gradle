@@ -11,61 +11,51 @@ buildscript {
     }
 }
 
+subprojects {
 
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: "org.springframework.boot"
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
-tasks.withType(JavaCompile) {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
 //    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-}
-
-repositories {
-    maven {
-        url repositoryMavenCentral
     }
-}
 
-dependencyManagement {
-    resolutionStrategy {
-        cacheChangingModulesFor 0, 'seconds'
+    repositories {
+        maven {
+            url repositoryMavenCentral
+        }
     }
-    imports {
-        mavenBom "io.anyway.bigbang:bg-dependencies:1.0.0-SNAPSHOT"
+
+    dependencyManagement {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
+        imports {
+            mavenBom "io.anyway.bigbang:bg-dependencies:1.0.0-SNAPSHOT"
+        }
     }
-}
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
-    exclude group: "org.springframework.cloud",module: "spring-cloud-starter-netflix-ribbon"
-    exclude group: "org.springframework.boot", module: "spring-boot-starter-web"
-    exclude group: "org.springframework.security", module: "spring-security-config"
-    exclude group: "org.springframework.security", module: "spring-security-web"
-    exclude group: "org.springframework.cloud", module: "spring-cloud-starter-openfeign"
-}
-
-dependencies {
-    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
-    compile("io.anyway.bigbang:oauth2-api")
-    compile("com.github.ben-manes.caffeine:caffeine")
-    compile("org.springframework.cloud:spring-cloud-starter-gateway")
-    compile("org.springframework.boot:spring-boot-starter-data-redis")
-    compile("org.springframework.security.oauth:spring-security-oauth2"){
-        exclude group: "org.springframework"
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+        exclude group: "org.springframework.cloud", module: "spring-cloud-starter-netflix-ribbon"
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-web"
+        exclude group: "org.springframework.security", module: "spring-security-config"
+        exclude group: "org.springframework.security", module: "spring-security-web"
+        exclude group: "org.springframework.cloud", module: "spring-cloud-starter-openfeign"
     }
-    compile("com.nimbusds:nimbus-jose-jwt")
-//    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel")
-//    compile("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway")
-//    compile("org.springframework.cloud:spring-cloud-loadbalancer")
-    annotationProcessor("org.projectlombok:lombok")
-    compileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
-}
 
+    dependencies {
+        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok")
+        testAnnotationProcessor("org.projectlombok:lombok")
+        testCompileOnly("org.projectlombok:lombok")
+    }
+
+}
 
 

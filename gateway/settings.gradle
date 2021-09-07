@@ -17,6 +17,9 @@ include 'services:webservice'
 
 rootProject.name = 'gateway'
 
+include 'gateway-api'
+include 'gateway-provider'
+
 
 
 

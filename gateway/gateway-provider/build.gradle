@@ -1,0 +1,7 @@
+apply plugin: "org.springframework.boot"
+description = "gateway"
+archivesBaseName = 'gateway'
+
+dependencies {
+    compile(project(":gateway-api"))
+}

@@ -1,0 +1,44 @@
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+//打包源码
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            if(version.contains('SNAPSHOT')){
+                url = repositoryMavenSnapshot
+            }else{
+                url = repositoryMavenRelease
+            }
+            credentials{
+                username repositoryUsername
+                password repositoryPassword
+            }
+        }
+    }
+}
