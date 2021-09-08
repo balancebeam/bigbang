@@ -1,5 +1,6 @@
 package io.anyway.bigbang.gateway.filter;
 
+import io.anyway.bigbang.framework.session.SessionContextHolder;
 import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.anyway.bigbang.framework.utils.JsonUtil;
 import io.anyway.bigbang.gateway.service.AccessTokenValidator;
@@ -8,8 +9,8 @@ import io.anyway.bigbang.gateway.service.RequestPathWhiteListService;
 import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -22,7 +23,7 @@ import java.util.Optional;
 import static io.anyway.bigbang.framework.session.UserDetailContext.USER_HEADER_NAME;
 
 @Slf4j
-public class AccessTokenValidatorGatewayFilter implements GatewayFilter, Ordered {
+public class AccessTokenValidatorGatewayFilter implements GlobalFilter, Ordered {
 
     @Resource
     private RequestPathWhiteListService whiteListService;
@@ -56,15 +57,19 @@ public class AccessTokenValidatorGatewayFilter implements GatewayFilter, Ordered
             ServerHttpRequest request = exchange.getRequest().mutate()
                     .header(USER_HEADER_NAME, JsonUtil.fromObject2String(ctx))
                     .build();
-
+            SessionContextHolder.setUserDetailContext(ctx);
             exchange= exchange.mutate().request(request).build();
             exchange.getAttributes().put(USER_HEADER_NAME,ctx);
         }
-        return chain.filter(exchange);
+        try {
+            return chain.filter(exchange);
+        }finally {
+            SessionContextHolder.removeUserDetailContext();
+        }
     }
 
     @Override
     public int getOrder() {
-        return 50;
+        return Ordered.HIGHEST_PRECEDENCE+100050;
     }
 }

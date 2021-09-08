@@ -4,8 +4,8 @@ import io.anyway.bigbang.gateway.domain.ApiMappingDefinition;
 import io.anyway.bigbang.gateway.service.MerchantApiMappingDefinitionService;
 import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -20,7 +20,7 @@ import java.util.*;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
 @Slf4j
-public class MerchantApiMappingGatewayFilter implements GatewayFilter, Ordered {
+public class MerchantApiMappingGatewayFilter implements GlobalFilter, Ordered {
 
     @Resource
     private MerchantApiMappingDefinitionService merchantApiMappingDefinitionService;
@@ -49,7 +49,7 @@ public class MerchantApiMappingGatewayFilter implements GatewayFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return 100;
+        return Ordered.HIGHEST_PRECEDENCE+1000100;
     }
 
 

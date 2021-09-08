@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.support.SimpleValueWrapper;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -23,7 +23,7 @@ import java.util.Set;
 @Slf4j
 public class MerchantAuthenticationValidatorGatewayFilter
         extends AbstractMerchantApiRepository<List>
-        implements GatewayFilter, Ordered {
+        implements GlobalFilter, Ordered {
 
     @Resource
     private CacheManager cacheManager;
@@ -57,7 +57,7 @@ public class MerchantAuthenticationValidatorGatewayFilter
 
     @Override
     public int getOrder() {
-        return 150;
+        return Ordered.HIGHEST_PRECEDENCE+1000150;
     }
 
 }
