@@ -6,8 +6,8 @@ import io.anyway.bigbang.gateway.utils.WebExchangeResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -21,7 +21,7 @@ import java.util.*;
 import static io.anyway.bigbang.gateway.filter.AccessTokenValidatorGatewayFilter.accessTokenName;
 
 @Slf4j
-public class AppSignatureValidationGatewayFilter implements GatewayFilter, Ordered  {
+public class AppSignatureValidationGatewayFilter implements GlobalFilter, Ordered  {
 
     private volatile Map<String, MacSigner> macSignerMapping= Collections.emptyMap();
 
@@ -81,7 +81,7 @@ public class AppSignatureValidationGatewayFilter implements GatewayFilter, Order
 
     @Override
     public int getOrder() {
-        return 20;
+        return Ordered.HIGHEST_PRECEDENCE+100020;
     }
 
 }
