@@ -8,9 +8,11 @@ import io.anyway.bigbang.gateway.service.*;
 import io.anyway.bigbang.gateway.service.impl.*;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@RefreshScope
 @Configuration
 @ImportAutoConfiguration({
         RestTemplateConfigure.class,

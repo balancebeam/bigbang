@@ -1,24 +1,26 @@
 package io.anyway.bigbang.gateway.config;
 
+import com.alibaba.cloud.nacos.NacosConfigProperties;
 import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
-import io.anyway.bigbang.gateway.gray.GrayStrategyEvent;
 import io.anyway.bigbang.gateway.service.impl.RequestPathBlackListServiceImpl;
 import io.anyway.bigbang.gateway.service.impl.RequestPathWhiteListServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Properties;
 
 @Slf4j
 @Configuration
-public class RequestPathConfigure {
+public class RequestPathConfigure implements SmartInitializingSingleton {
 
     @Value("${spring.cloud.gateway.request-path.black-dataId:gateway-black-list}")
     private String blackDataId;
@@ -26,52 +28,55 @@ public class RequestPathConfigure {
     @Value("${spring.cloud.gateway.request-path.white-dataId:gateway-white-list}")
     private String whiteDataId;
 
-    @Value("${spring.cloud.gateway.request-path.group:DEFAULT_GROUP}")
-    private String group;
-
-    @Value("${spring.cloud.nacos.config.server-addr}")
-    private String serverAddr;
+    @Resource
+    private NacosConfigProperties nacosConfigProperties;
 
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
 
-    @PostConstruct
-    public void init() {
+    @Override
+    public void afterSingletonsInstantiated() {
         try {
-            ConfigService configService = NacosFactory.createConfigService(serverAddr);
+            Properties properties = new Properties();
+            if(!StringUtils.isEmpty(nacosConfigProperties.getNamespace())){
+                properties.put(PropertyKeyConst.NAMESPACE, nacosConfigProperties.getNamespace());
+            }
+            properties.put(PropertyKeyConst.SERVER_ADDR, nacosConfigProperties.getServerAddr());
+            properties.put("fileExtension","text");
+            if(!StringUtils.isEmpty(nacosConfigProperties.getUsername())){
+                properties.put(PropertyKeyConst.USERNAME,nacosConfigProperties.getUsername());
+                properties.put(PropertyKeyConst.PASSWORD,nacosConfigProperties.getPassword());
+            }
 
-            String whiteListInfo = configService.getConfig(whiteDataId, group, 5000);
+            ConfigService configService = NacosFactory.createConfigService(properties);
+            //white list
+            String whiteListInfo =configService.getConfigAndSignListener(whiteDataId, nacosConfigProperties.getGroup(), 5000, new AbstractListener() {
+                @Override
+                public void receiveConfigInfo(String whiteListInfo) {
+                    if(StringUtils.isEmpty(whiteListInfo)){
+                        whiteListInfo= "";
+                    }
+                    applicationEventPublisher.publishEvent(new RequestPathWhiteListServiceImpl.WhiteListEvent(whiteListInfo));
+                }
+            });
             if(StringUtils.isEmpty(whiteListInfo)){
                 whiteListInfo= "";
             }
-            applicationEventPublisher.publishEvent(new RequestPathWhiteListServiceImpl.WhiteListEvent(whiteListInfo));
-
-            String backListInfo = configService.getConfig(blackDataId, group, 5000);
+            applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(whiteListInfo));
+            //black list
+            String backListInfo =configService.getConfigAndSignListener(blackDataId, nacosConfigProperties.getGroup(), 5000, new AbstractListener() {
+                @Override
+                public void receiveConfigInfo(String backListInfo) {
+                    if(StringUtils.isEmpty(backListInfo)){
+                        backListInfo= "";
+                    }
+                    applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(backListInfo));
+                }
+            });
             if(StringUtils.isEmpty(backListInfo)){
                 backListInfo= "";
             }
             applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(backListInfo));
-
-            // Add listener
-            configService.addListener(whiteDataId, group, new AbstractListener() {
-                @Override
-                public void receiveConfigInfo(String whiteListInfo) {
-                if(StringUtils.isEmpty(whiteListInfo)){
-                    whiteListInfo= "";
-                }
-                applicationEventPublisher.publishEvent(new RequestPathWhiteListServiceImpl.WhiteListEvent(whiteListInfo));
-                }
-            });
-
-            configService.addListener(blackDataId, group, new AbstractListener() {
-                @Override
-                public void receiveConfigInfo(String backListInfo) {
-                if(StringUtils.isEmpty(backListInfo)){
-                    backListInfo= "";
-                }
-                applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(backListInfo));
-                }
-            });
         } catch (NacosException e) {
             log.error("init request path error", e);
         }

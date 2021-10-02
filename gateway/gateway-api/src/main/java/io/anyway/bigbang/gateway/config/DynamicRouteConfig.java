@@ -1,66 +1,65 @@
 package io.anyway.bigbang.gateway.config;
 
+import com.alibaba.cloud.nacos.NacosConfigProperties;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
 import io.anyway.bigbang.gateway.service.DynamicRouteService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 
 @Slf4j
-@RefreshScope
 @Configuration
-public class DynamicRouteConfig {
+public class DynamicRouteConfig implements SmartInitializingSingleton {
 
     private Map<String, RouteDefinition> ROUTE_MAPPING= new HashMap<>();
 
     @Value("${spring.cloud.gateway.dynamic-route.dataId:gateway-dynamic-route}")
     private String dataId;
 
-    @Value("${spring.cloud.gateway.dynamic-route.group:DEFAULT_GROUP}")
-    private String group;
-
-    @Value("${spring.cloud.nacos.config.server-addr}")
-    private String serverAddr;
+    @Resource
+    private NacosConfigProperties nacosConfigProperties;
 
     @Resource
     private DynamicRouteService dynamicRouteService;
 
-    @PostConstruct
-    public void dynamicRouteByNacosListener() {
+    @Override
+    public void afterSingletonsInstantiated() {
         try {
-            ConfigService configService = NacosFactory.createConfigService(serverAddr);
-
-            // When the app startups, fetch gateway dynamic router information firstly.
-            String configInfo = configService.getConfig(dataId, group, 5000);
-            if(StringUtils.isEmpty(configInfo)){
-                configInfo= "";
+            Properties properties = new Properties();
+            if(!StringUtils.isEmpty(nacosConfigProperties.getNamespace())){
+                properties.put(PropertyKeyConst.NAMESPACE, nacosConfigProperties.getNamespace());
             }
-            addAndPublishBatchRoute(configInfo);
+            properties.put(PropertyKeyConst.SERVER_ADDR, nacosConfigProperties.getServerAddr());
+            properties.put("fileExtension","json");
+            if(!StringUtils.isEmpty(nacosConfigProperties.getUsername())){
+                properties.put(PropertyKeyConst.USERNAME,nacosConfigProperties.getUsername());
+                properties.put(PropertyKeyConst.PASSWORD,nacosConfigProperties.getPassword());
+            }
 
-            // Add gateway router listener
-            configService.addListener(dataId, group, new AbstractListener() {
+            ConfigService configService = NacosFactory.createConfigService(properties);
+            // When the app startups, fetch gateway gray router information firstly.
+            String configInfo =configService.getConfigAndSignListener(dataId, nacosConfigProperties.getGroup(), 5000, new AbstractListener() {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
-                if(StringUtils.isEmpty(configInfo)){
-                    configInfo= "";
-                }
-                addAndPublishBatchRoute(configInfo);
+                    addAndPublishBatchRoute(configInfo);
                 }
             });
+            addAndPublishBatchRoute(configInfo);
         } catch (NacosException e) {
             log.error("init route definition error",e);
         }
@@ -94,3 +93,4 @@ public class DynamicRouteConfig {
     }
 
 }
+
