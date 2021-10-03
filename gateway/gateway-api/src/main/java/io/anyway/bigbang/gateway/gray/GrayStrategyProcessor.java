@@ -98,6 +98,7 @@ public class GrayStrategyProcessor implements ApplicationListener<GrayStrategyEv
     @Override
     public void onApplicationEvent(GrayStrategyEvent event) {
         String text= (String)event.getSource();
+        log.info("gray strategy: {}", text);
         if(StringUtils.isEmpty(text)){
             text= "{}";
         }

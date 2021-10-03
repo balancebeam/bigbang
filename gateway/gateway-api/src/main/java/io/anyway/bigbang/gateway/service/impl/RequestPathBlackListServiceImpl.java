@@ -37,7 +37,7 @@ public class RequestPathBlackListServiceImpl implements RequestPathBlackListServ
             String[] slt = content.split("\n");
             setBlackList(Arrays.asList(slt));
         }
-        log.info("WhiteList: {}",blackList);
+        log.info("BlackList: {}",blackList);
     }
 
     public static class BlackListEvent extends ApplicationEvent{
