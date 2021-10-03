@@ -62,7 +62,7 @@ public class RequestPathConfigure implements SmartInitializingSingleton {
             if(StringUtils.isEmpty(whiteListInfo)){
                 whiteListInfo= "";
             }
-            applicationEventPublisher.publishEvent(new RequestPathBlackListServiceImpl.BlackListEvent(whiteListInfo));
+            applicationEventPublisher.publishEvent(new RequestPathWhiteListServiceImpl.WhiteListEvent(whiteListInfo));
             //black list
             String backListInfo =configService.getConfigAndSignListener(blackDataId, nacosConfigProperties.getGroup(), 5000, new AbstractListener() {
                 @Override
