@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       config:
-        enabled: true
+        enabled: false
         server-addr: nacos.bigbang.local:8848
         prefix: myconfig #support multi version,such as myconfig.properties,myconfig-dev.properties,myconfig-dev-1.0.0.properties,
         file-extension: properties

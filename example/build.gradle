@@ -1,9 +1,10 @@
+println "---------------gradle maven env: "+(System.getenv("gradle_build_env")=="prod"?"prod":"dev")+"---------------"
 buildscript {
 	repositories{
         mavenLocal()
         mavenCentral()
         maven {
-            url repositoryMavenCentral
+            url System.getenv("gradle_build_env")=="prod" ? repositoryProdMavenCentral: repositoryMavenCentral
         }
 	}
     dependencies {
@@ -36,7 +37,7 @@ subprojects{
 
     repositories {
         maven {
-            url repositoryMavenCentral
+            url System.getenv("gradle_build_env")=="prod" ? repositoryProdMavenCentral: repositoryMavenCentral
         }
     }
 
