@@ -11,10 +11,12 @@ buildscript {
     }
 }
 
+
 subprojects {
 
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
+
 
 
     sourceCompatibility = 1.8

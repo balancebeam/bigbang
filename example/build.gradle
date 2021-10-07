@@ -1,10 +1,10 @@
-println "---------------gradle maven env: "+(System.getenv("gradle_build_env")=="prod"?"prod":"dev")+"---------------"
+println "---------------gradle maven env: "+(System.getProperty("gradle_build_env") ?: "dev")+"---------------"
 buildscript {
 	repositories{
         mavenLocal()
         mavenCentral()
         maven {
-            url System.getenv("gradle_build_env")=="prod" ? repositoryProdMavenCentral: repositoryMavenCentral
+            url System.getProperty("gradle_build_env")=="jekins" ? repositoryProdMavenCentral: repositoryMavenCentral
         }
 	}
     dependencies {
@@ -37,7 +37,7 @@ subprojects{
 
     repositories {
         maven {
-            url System.getenv("gradle_build_env")=="prod" ? repositoryProdMavenCentral: repositoryMavenCentral
+            url System.getProperty("gradle_build_env")=="jekins" ? repositoryProdMavenCentral: repositoryMavenCentral
         }
     }
 

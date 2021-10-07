@@ -5,4 +5,5 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("io.springfox:springfox-swagger2")
     compile("io.springfox:springfox-swagger-ui")
+    compile("com.github.xiaoymin:swagger-bootstrap-ui:1.9.6")
 }
