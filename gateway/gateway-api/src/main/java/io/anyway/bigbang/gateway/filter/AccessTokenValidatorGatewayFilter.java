@@ -18,6 +18,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static io.anyway.bigbang.framework.session.UserDetailContext.USER_HEADER_NAME;
@@ -54,12 +57,18 @@ public class AccessTokenValidatorGatewayFilter implements GlobalFilter, Ordered 
                 return WebExchangeResponseUtil.handleError(exchange, HttpStatus.UNAUTHORIZED,"UNAUTHORIZED.");
             }
             UserDetailContext ctx= optional.get();
-            ServerHttpRequest request = exchange.getRequest().mutate()
-                    .header(USER_HEADER_NAME, JsonUtil.fromObject2String(ctx))
-                    .build();
-            SessionContextHolder.setUserDetailContext(ctx);
-            exchange= exchange.mutate().request(request).build();
-            exchange.getAttributes().put(USER_HEADER_NAME,ctx);
+            try {
+                String userDetail= JsonUtil.fromObject2String(ctx);
+                String encodeUserDetail= URLEncoder.encode(userDetail,"UTF-8");
+                ServerHttpRequest request = exchange.getRequest().mutate()
+                        .header(USER_HEADER_NAME, encodeUserDetail)
+                        .build();
+                SessionContextHolder.setUserDetailContext(ctx);
+                exchange= exchange.mutate().request(request).build();
+                exchange.getAttributes().put(USER_HEADER_NAME,ctx);
+            } catch (UnsupportedEncodingException e) {
+                log.error("encode message :{}  error",ctx,e);
+            }
         }
         try {
             return chain.filter(exchange);

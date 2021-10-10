@@ -17,7 +17,7 @@ public class AccessTokenMockServiceValidatorImpl implements AccessTokenValidator
         ctx.setUserId("1");
         ctx.setAppId("app");
         ctx.setType("c");
-        ctx.setUserName("Tom");
+        ctx.setUserName("张三丰");
         return Optional.of(ctx);
     }
 

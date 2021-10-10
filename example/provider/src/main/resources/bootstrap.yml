@@ -4,18 +4,18 @@ spring:
   cloud:
     nacos:
       config:
-        enabled: false
+        enabled: true
         server-addr: nacos.bigbang.local:8848
-        prefix: myconfig #support multi version,such as myconfig.properties,myconfig-dev.properties,myconfig-dev-1.0.0.properties,
-        file-extension: properties
-        group: DEFAULT_GROUP
-        extension-configs:
-          - dataId: myextension #didn't support multiple version, it was used to share config,
-            group: DEFAULT_GROUP
-            refresh: true
-          - dataId: myextension2
-            group: DEFAULT_GROUP
-            refresh: true
+#        prefix: myconfig #support multi version,such as myconfig.properties,myconfig-dev.properties,myconfig-dev-1.0.0.properties,
+#        file-extension: properties
+#        group: DEFAULT_GROUP
+#        extension-configs:
+#          - dataId: myextension #didn't support multiple version, it was used to share config,
+#            group: DEFAULT_GROUP
+#            refresh: true
+#          - dataId: myextension2
+#            group: DEFAULT_GROUP
+#            refresh: true
 #        namespace: public
     vault:
       enabled: false

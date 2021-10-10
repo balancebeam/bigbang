@@ -25,7 +25,7 @@ spring:
       token-validator:
         enabled: true
 #        mode: redis
-        mode: api
+        mode: mock
 #        mode: jwt
 #        public-key-location: keystore/rsa_id.pub
       app-validator:

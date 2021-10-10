@@ -1,9 +1,12 @@
 package io.anyway.bigbang.framework.header;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
-
+@Slf4j
 public abstract class HeaderContextHolder {
 
     final static ThreadLocal<Map<String,String>> threadLocal = new TransmittableThreadLocal<>();
@@ -20,7 +23,13 @@ public abstract class HeaderContextHolder {
     public static Optional<String> getHeaderValue(String name){
         Map<String,String> headers= threadLocal.get();
         if(headers!= null && headers.containsKey(name)){
-            return Optional.of(headers.get(name));
+            String value= headers.get(name);
+            try {
+                value= URLDecoder.decode(value,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                log.error("decode value: {} error",value,e);
+            }
+            return Optional.of(value);
         }
         return Optional.empty();
     }
