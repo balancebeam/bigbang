@@ -1,5 +1,6 @@
 package io.anyway.bigbang.framework.swagger.config;
 
+import com.google.common.base.Predicates;
 import io.anyway.bigbang.framework.swagger.SwaggerWebConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,6 +68,7 @@ public class Swagger2Configure {
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RequestMapping.class))
                 .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build();
     }
 
