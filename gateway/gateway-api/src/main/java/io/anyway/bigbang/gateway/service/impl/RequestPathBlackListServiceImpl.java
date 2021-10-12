@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -34,8 +35,15 @@ public class RequestPathBlackListServiceImpl implements RequestPathBlackListServ
             setBlackList(Collections.emptyList());
         }
         else {
+            List<String> list= new LinkedList<>();
             String[] slt = content.split("\n");
-            setBlackList(Arrays.asList(slt));
+            for(String each: slt){
+                String s= each.trim();
+                if(!"".equals(s)) {
+                    list.add(s);
+                }
+            }
+            setBlackList(list);
         }
         log.info("BlackList: {}",blackList);
     }
