@@ -1,5 +1,6 @@
 package io.anyway.bigbang.gateway.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.route.*;
@@ -10,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Slf4j
 public class DynamicRouteService implements ApplicationEventPublisherAware {
 
     @Resource
@@ -54,6 +53,15 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
         this.routeDefinitionWriter.delete(Mono.just(id))
             .then(Mono.defer(() -> Mono.just(ResponseEntity.ok().build())))
             .onErrorResume(t -> t instanceof NotFoundException, t -> Mono.just(ResponseEntity.notFound().build()));
+    }
+
+    public List<RouteDefinition> getRouteRouteDefinitionList() {
+        try {
+            return routeDefinitionLocator.getRouteDefinitions().collectList().toFuture().get();
+        }catch (Exception e){
+            log.error("get route definition list error",e);
+            return Collections.emptyList();
+        }
     }
 
     public List<Map<String, Object>> getRoutesList() throws Exception{

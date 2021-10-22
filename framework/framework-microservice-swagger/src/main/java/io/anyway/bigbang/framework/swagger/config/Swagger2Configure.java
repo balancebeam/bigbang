@@ -47,6 +47,15 @@ public class Swagger2Configure {
 
     @Value("${spring.swagger.token:access_token}")
     private String token;
+    
+    @Value("${spring.swagger.contact.name:development}")
+    private String name;
+
+    @Value("${spring.swagger.contact.url:bigbang.anyway.io}")
+    private String url;
+
+    @Value("${spring.swagger.contact.email:development@bigbang.anyway.io}")
+    private String email;
 
     @Bean
     @ConditionalOnMissingBean
@@ -76,7 +85,7 @@ public class Swagger2Configure {
         return new ApiInfoBuilder()
                 .title(title)
                 .description(description)
-                .contact(new Contact("development","bigbang.anyway.io","development@bigbang.anyway.io"))
+                .contact(new Contact(name,url,email))
                 .version(version)
                 .license("The Apache License")
                 .licenseUrl("http://license.bigbang.anyway.io")
