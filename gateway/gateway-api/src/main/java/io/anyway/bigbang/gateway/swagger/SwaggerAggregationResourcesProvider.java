@@ -4,7 +4,6 @@ import io.anyway.bigbang.gateway.service.DynamicRouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -46,7 +45,7 @@ public class SwaggerAggregationResourcesProvider implements SwaggerResourcesProv
         list.stream().forEach(routeDefinition -> {
             Map<String, Object> metadata= routeDefinition.getMetadata();
             if(metadata==null || !"true".equals(String.valueOf(metadata.get("NO_SWAGGER")))){
-                resources.add(swaggerResource(routeDefinition.getId(), SWAGGER2URLPREFIX + routeDefinition.getId() + SWAGGER2URL));
+                resources.add(swaggerResource(routeDefinition.getId(), SWAGGER2URLPREFIX + routeDefinition.getUri().getHost() + SWAGGER2URL));
             }
         });
         return resources;

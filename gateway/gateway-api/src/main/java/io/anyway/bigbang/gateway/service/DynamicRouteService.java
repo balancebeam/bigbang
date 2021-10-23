@@ -38,21 +38,19 @@ public class DynamicRouteService implements ApplicationEventPublisherAware {
     }
 
     public void update(RouteDefinition definition) {
-        if(getRouteById(definition.getId()).block().hasBody()) {
-            try {
-                this.routeDefinitionWriter.delete(Mono.just(definition.getId()));
-            } catch (Exception e) {
-//                log.warn("update error in delete old", e);
-            }
-        }
+//        if(getRouteById(definition.getId()).block().hasBody()) {
+//            try {
+//                this.routeDefinitionWriter.delete(Mono.just(definition.getId()));
+//            } catch (Exception e) {
+////                log.warn("update error in delete old", e);
+//            }
+//        }
         routeDefinitionWriter.save(Mono.just(definition)).subscribe();
         this.publisher.publishEvent(new RefreshRoutesEvent(definition));
     }
 
     public void delete(String id) {
-        this.routeDefinitionWriter.delete(Mono.just(id))
-            .then(Mono.defer(() -> Mono.just(ResponseEntity.ok().build())))
-            .onErrorResume(t -> t instanceof NotFoundException, t -> Mono.just(ResponseEntity.notFound().build()));
+        this.routeDefinitionWriter.delete(Mono.just(id)).subscribe();
     }
 
     public List<RouteDefinition> getRouteRouteDefinitionList() {

@@ -57,6 +57,9 @@ public class MerchantApiMappingDefinitionServiceImpl extends AbstractMerchantApi
         args.put("pattern","/merchant/api");
         predicateDefinition.setArgs(args);
         routeDefinition.setPredicates(Arrays.asList(predicateDefinition));
+        Map<String, Object> metadata = new LinkedHashMap<>();
+        metadata.put("NO_SWAGGER",true);
+        routeDefinition.setMetadata(metadata);
         log.info("Merchant RouteDefinition: {}",routeDefinition);
         dynamicRouteService.add(routeDefinition);
     }
