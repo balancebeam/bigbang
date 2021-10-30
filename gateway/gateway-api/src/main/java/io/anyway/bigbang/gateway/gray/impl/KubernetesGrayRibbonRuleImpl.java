@@ -1,6 +1,7 @@
 package io.anyway.bigbang.gateway.gray.impl;
 
 import io.anyway.bigbang.framework.gray.GrayContext;
+import io.anyway.bigbang.framework.utils.JsonUtil;
 import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.fabric8.kubernetes.api.model.EndpointAddress;
 import io.fabric8.kubernetes.api.model.Endpoints;
@@ -29,7 +30,9 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
     public Response<ServiceInstance> choose(String serviceId,
                                             List<ServiceInstance> instances,
                                             Optional<GrayContext> optional){
-        log.debug("kubernetes service {} instances: {}",serviceId,instances);
+        if(log.isDebugEnabled()) {
+            log.debug("kubernetes service {} instances: {}", serviceId, JsonUtil.fromObject2String(instances));
+        }
         if (instances.isEmpty()) {
             log.warn("No servers available for service: " + serviceId);
             return new EmptyResponse();
@@ -37,7 +40,7 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         if(!optional.isPresent()) {
             int pos = Math.abs(position.incrementAndGet());
             ServiceInstance instance = instances.get(pos % instances.size());
-            log.debug("gateway chose service instance: {}", instance.getInstanceId());
+            log.info("gateway chose service {} instance: {}", serviceId,JsonUtil.fromObject2String(instance));
             return new DefaultResponse(instance);
         }
         Map<String,EndpointAddress> endpointAddressMap= new LinkedHashMap<>();
