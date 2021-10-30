@@ -6,11 +6,13 @@ import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.fabric8.kubernetes.api.model.EndpointAddress;
 import io.fabric8.kubernetes.api.model.Endpoints;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.kubernetes.discovery.KubernetesDiscoveryClient;
+import org.springframework.cloud.kubernetes.discovery.KubernetesServiceInstance;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -40,8 +42,10 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         if(!optional.isPresent()) {
             int pos = Math.abs(position.incrementAndGet());
             ServiceInstance instance = instances.get(pos % instances.size());
-            log.info("gateway chose service {} instance: {}", serviceId,JsonUtil.fromObject2String(instance));
-            return new DefaultResponse(instance);
+            if(log.isDebugEnabled()) {
+                log.debug("gateway chose service {} instance: {}", serviceId,JsonUtil.fromObject2String(instance));
+            }
+            return new DefaultResponse(reviseIncorrectPortServiceInstance(instance));
         }
         Map<String,EndpointAddress> endpointAddressMap= new LinkedHashMap<>();
         List<Endpoints> endpointsList= kubernetesDiscoveryClient.getEndPointsList(serviceId);
@@ -81,10 +85,31 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         }
         if(!CollectionUtils.isEmpty(availableInstances)){
             ServiceInstance instance= availableInstances.get(Math.abs(position.incrementAndGet()) % availableInstances.size());
-            return new DefaultResponse(instance);
+            return new DefaultResponse(reviseIncorrectPortServiceInstance(instance));
 
         }
         log.warn("cannot find appropriate match candidate server: {}",ctx);
         return new EmptyResponse();
+    }
+
+    private ServiceInstance reviseIncorrectPortServiceInstance(ServiceInstance serviceInstance){
+        if(serviceInstance.getPort()==8080){
+            return serviceInstance;
+        }
+        if(serviceInstance instanceof KubernetesServiceInstance){
+            return new KubernetesServiceInstance(serviceInstance.getInstanceId(),
+                    serviceInstance.getServiceId(),
+                    serviceInstance.getHost(),
+                    8080,
+                    serviceInstance.getMetadata(),
+                    serviceInstance.isSecure());
+        }
+        return new DefaultServiceInstance(serviceInstance.getInstanceId(),
+                serviceInstance.getServiceId(),
+                serviceInstance.getHost(),
+                8080,
+                serviceInstance.isSecure(),
+                serviceInstance.getMetadata()
+                );
     }
 }
