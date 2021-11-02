@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/system/gateway")
 public class GatewayController {
 
     @Resource

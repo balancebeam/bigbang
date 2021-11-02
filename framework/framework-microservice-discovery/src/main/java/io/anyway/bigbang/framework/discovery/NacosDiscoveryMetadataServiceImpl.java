@@ -10,8 +10,9 @@ public class NacosDiscoveryMetadataServiceImpl extends DiscoveryMetadataService 
     private NacosDiscoveryProperties props;
 
     @Override
-    public String getIp() {
-        return props.getIp();
+    public void loadIpAddress() {
+        ip= props.getIp();
     }
 
 }
+

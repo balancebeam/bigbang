@@ -1,6 +1,7 @@
 package io.anyway.bigbang.gateway.config;
 
 import io.anyway.bigbang.framework.bootstrap.config.RestTemplateConfigure;
+import io.anyway.bigbang.framework.discovery.config.DiscoveryConfigure;
 import io.anyway.bigbang.gateway.controller.GatewayController;
 import io.anyway.bigbang.gateway.exception.GatewayExceptionHandler;
 import io.anyway.bigbang.gateway.filter.*;
@@ -23,7 +24,8 @@ import org.springframework.context.annotation.Configuration;
         DynamicRouteConfig.class,
         GrayRouteConfig.class,
         RequestPathConfigure.class,
-        GatewayExceptionHandler.class
+        GatewayExceptionHandler.class,
+        DiscoveryConfigure.class
 })
 public class GatewayConfigure {
 

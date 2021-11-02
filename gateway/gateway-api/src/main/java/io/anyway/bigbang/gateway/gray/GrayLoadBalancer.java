@@ -42,7 +42,9 @@ public class GrayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
     }
 
     private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances, Optional<GrayContext> optional) {
-        return grayRibbonRule != null ? grayRibbonRule.choose(serviceId, instances, optional) : new EmptyResponse();
+        Response<ServiceInstance> response= grayRibbonRule != null ? grayRibbonRule.choose(serviceId, instances, optional) : new EmptyResponse();
+        log.info("route serviceId: {}, explicit service uri: {}",serviceId,response.getServer()!= null ?  response.getServer().getUri(): "empty");
+        return response;
     }
 
 }

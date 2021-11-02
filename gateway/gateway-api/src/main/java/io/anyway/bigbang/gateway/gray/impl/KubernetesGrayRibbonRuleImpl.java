@@ -6,7 +6,6 @@ import io.anyway.bigbang.gateway.gray.GrayRibbonRule;
 import io.fabric8.kubernetes.api.model.EndpointAddress;
 import io.fabric8.kubernetes.api.model.Endpoints;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.reactive.EmptyResponse;
@@ -45,7 +44,7 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
             if(log.isDebugEnabled()) {
                 log.debug("gateway chose service {} instance: {}", serviceId,JsonUtil.fromObject2String(instance));
             }
-            return new DefaultResponse(reviseIncorrectPortServiceInstance(instance));
+            return new DefaultResponse(reviseIncorrectPort(instance));
         }
         Map<String,EndpointAddress> endpointAddressMap= new LinkedHashMap<>();
         List<Endpoints> endpointsList= kubernetesDiscoveryClient.getEndPointsList(serviceId);
@@ -85,31 +84,31 @@ public class KubernetesGrayRibbonRuleImpl implements GrayRibbonRule {
         }
         if(!CollectionUtils.isEmpty(availableInstances)){
             ServiceInstance instance= availableInstances.get(Math.abs(position.incrementAndGet()) % availableInstances.size());
-            return new DefaultResponse(reviseIncorrectPortServiceInstance(instance));
+            return new DefaultResponse(reviseIncorrectPort(instance));
 
         }
         log.warn("cannot find appropriate match candidate server: {}",ctx);
         return new EmptyResponse();
     }
 
-    private ServiceInstance reviseIncorrectPortServiceInstance(ServiceInstance serviceInstance){
-        if(serviceInstance.getPort()==8080){
-            return serviceInstance;
+    private ServiceInstance reviseIncorrectPort(ServiceInstance instance){
+        if(instance instanceof KubernetesServiceInstance){
+            Map<String, String> map= instance.getMetadata();
+            if(!CollectionUtils.isEmpty(map)
+                    && map.containsKey("port.http")
+                    && Integer.parseInt(map.get("port.http"))!=instance.getPort() ){
+                log.info("KubernetesServiceInstance({}) had incorrect port, amending port from {} to {}",instance.getUri(),instance.getPort(),map.get("port.http"));
+                return new KubernetesServiceInstance(
+                        instance.getInstanceId(),
+                        instance.getServiceId(),
+                        instance.getHost(),
+                        Integer.parseInt(map.get("port.http")),
+                        instance.getMetadata(),
+                        instance.isSecure());
+            }
         }
-        if(serviceInstance instanceof KubernetesServiceInstance){
-            return new KubernetesServiceInstance(serviceInstance.getInstanceId(),
-                    serviceInstance.getServiceId(),
-                    serviceInstance.getHost(),
-                    8080,
-                    serviceInstance.getMetadata(),
-                    serviceInstance.isSecure());
-        }
-        return new DefaultServiceInstance(serviceInstance.getInstanceId(),
-                serviceInstance.getServiceId(),
-                serviceInstance.getHost(),
-                8080,
-                serviceInstance.isSecure(),
-                serviceInstance.getMetadata()
-                );
+        return instance;
     }
+
+
 }

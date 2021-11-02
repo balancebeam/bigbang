@@ -5,8 +5,12 @@ server:
 spring:
   application:
     version: 1.0.0
-  profiles:
-    active: nacos-dev
+    tag: dev_20210912_01
+  cloud:
+    discovery:
+      platform: nacos
+#  profiles:
+#    active: dev
   sleuth:
     enabled: false
     sampler:

@@ -1,6 +1,7 @@
 package io.anyway.bigbang.framework.discovery.config;
 
 import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
+import io.anyway.bigbang.framework.discovery.DiscoveryMetadataController;
 import io.anyway.bigbang.framework.discovery.DiscoveryMetadataService;
 import io.anyway.bigbang.framework.discovery.KubernetesDiscoveryMetadataServiceImpl;
 import io.anyway.bigbang.framework.discovery.NacosDiscoveryMetadataServiceImpl;
@@ -23,6 +24,11 @@ public class DiscoveryConfigure {
     @ConditionalOnMissingBean
     public DiscoveryMetadataService createNoneDiscoveryMetadataService(){
         return new KubernetesDiscoveryMetadataServiceImpl();
+    }
+
+    @Bean
+    public DiscoveryMetadataController createDiscoveryMetadataController(){
+        return new DiscoveryMetadataController();
     }
 
 }

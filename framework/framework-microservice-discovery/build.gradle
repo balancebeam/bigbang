@@ -3,6 +3,7 @@ archivesBaseName = 'io.anyway.bigbang.framework.discovery'
 
 dependencies {
     compile(project(':framework-microservice-util'))
+    compile(project(':framework-microservice-model'))
     compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
     compile("org.springframework.cloud:spring-cloud-starter-kubernetes-loadbalancer")
     compile("org.springframework.cloud:spring-cloud-starter-kubernetes-ribbon")
