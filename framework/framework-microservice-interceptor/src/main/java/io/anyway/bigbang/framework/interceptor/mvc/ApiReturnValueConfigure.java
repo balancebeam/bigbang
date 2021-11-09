@@ -1,6 +1,8 @@
 package io.anyway.bigbang.framework.interceptor.mvc;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
@@ -18,11 +20,16 @@ import java.util.List;
 @ConditionalOnClass(HttpServletRequest.class)
 public class ApiReturnValueConfigure {
 
-    @Resource
+    @Autowired(required = false)
     private List<HandlerMethodReturnValueHandler> handlerMethodReturnValueHandlers= Collections.emptyList();
 
     @Resource
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
+
+    @Bean
+    public ApiReturnValueProcessor createApiReturnValueProcessor(){
+        return new ApiReturnValueProcessor(requestMappingHandlerAdapter.getMessageConverters());
+    }
 
     @PostConstruct
     public void init(){

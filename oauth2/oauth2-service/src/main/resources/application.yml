@@ -5,6 +5,8 @@ server:
       timeout: 6h
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     version: 1.0.0
   profiles:
