@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum MessageTypeEnum implements EnumStatement {
+public enum MessageTypeEnum implements EnumStatement<String> {
     TOPIC("topic","广播"),
     QUEUE("queue","队列");
 

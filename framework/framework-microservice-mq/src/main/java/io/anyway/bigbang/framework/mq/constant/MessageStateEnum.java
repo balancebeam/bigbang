@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum MessageStateEnum implements EnumStatement {
+public enum MessageStateEnum implements EnumStatement<String> {
     SUBMIT("Submit","提交"),
     SUCCESS("Success","成功"),
     FAILURE("Failure","失败"),

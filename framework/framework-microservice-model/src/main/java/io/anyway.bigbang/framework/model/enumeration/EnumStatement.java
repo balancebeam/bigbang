@@ -1,15 +1,15 @@
 package io.anyway.bigbang.framework.model.enumeration;
 
-public interface EnumStatement {
+public interface EnumStatement<T> {
 
-    String getCode();
+    T getCode();
 
     default String getMessage(){
-        return getCode();
+        return String.valueOf(getCode());
     }
 
-    static <T extends EnumStatement> T of(Class<T> enumClass, String code){
-        for (T each : enumClass.getEnumConstants()){
+    static <C extends EnumStatement,T> C of(Class<C> enumClass, T code){
+        for (C each : enumClass.getEnumConstants()){
             if(each.getCode().equals(code)){
                 return each;
             }

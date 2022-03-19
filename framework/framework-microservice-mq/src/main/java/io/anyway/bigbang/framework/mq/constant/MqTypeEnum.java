@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum MqTypeEnum implements EnumStatement {
+public enum MqTypeEnum implements EnumStatement<String>{
     ACTIVEMQ("activemq","activemq"),
     RABBITMQ("rabbitmq","rabbitmq"),
     ROCKETMQ("rocketmq","rocketmq"),
