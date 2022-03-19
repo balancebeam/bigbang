@@ -1,6 +1,7 @@
 package io.anyway.bigbang.framework.model.api;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@JsonIgnoreProperties
 @ApiModel(value = "ApiResponseEntity",description = "Api response body attribute description")
 public class ApiResponseEntity<T> {
 
@@ -18,7 +20,7 @@ public class ApiResponseEntity<T> {
     @ApiModelProperty(value = "biz tip message",example = "Success")
     private String message;
     @ApiModelProperty(value = "biz duration",example = "201")
-    private long duration;
+    private Long duration;
     @ApiModelProperty(value = "biz response body",example = "{\"name\":\"Jerry\",\"age\": 21}")
     private T body;
 
@@ -45,3 +47,4 @@ public class ApiResponseEntity<T> {
         return response;
     }
 }
+

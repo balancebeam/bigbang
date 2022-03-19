@@ -1,6 +1,7 @@
 package io.anyway.bigbang.framework.apm.config;
 
-import io.anyway.bigbang.framework.apm.DefaultLoggingTraceIdConverter;
+import io.anyway.bigbang.framework.header.HeaderContext;
+import io.anyway.bigbang.framework.header.HeaderContextHolder;
 import io.anyway.bigbang.framework.utils.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,21 +22,35 @@ import java.io.IOException;
 @ConditionalOnProperty(name = "spring.sleuth.enabled",havingValue = "false")
 public class LocalTraceConfigure {
 
+    final public static String TRACE_HEADER_NAME = "X-Trace-Id";
+
     @Bean
     public GenericFilterBean createLocalTraceFilterBean() {
         return new GenericFilterBean(){
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-                try{
-                    String traceId= ((HttpServletRequest)request).getHeader("X-Trace-Id");
-                    if(StringUtils.isEmpty(traceId)){
-                        traceId = IdGenerator.next()+"";
-                    }
-                    DefaultLoggingTraceIdConverter.LOCAL_TRACE_HOLDER.set(traceId);
-                    chain.doFilter(request,response);
-                }finally {
-                    DefaultLoggingTraceIdConverter.LOCAL_TRACE_HOLDER.remove();
+                String traceId= ((HttpServletRequest)request).getHeader(TRACE_HEADER_NAME);
+                if(StringUtils.isEmpty(traceId)){
+                    traceId = IdGenerator.nextRadixId("TRC");
+                    HeaderContextHolder.addHeader(TRACE_HEADER_NAME,traceId);
                 }
+                chain.doFilter(request,response);
+            }
+        };
+    }
+
+    @Bean
+    public HeaderContext createApmHeaderContext() {
+
+        return new HeaderContext() {
+
+            @Override
+            public String getName() {
+                return TRACE_HEADER_NAME;
+            }
+
+            public void removeThreadLocal() {
+                HeaderContextHolder.removeHeader(TRACE_HEADER_NAME);
             }
         };
     }

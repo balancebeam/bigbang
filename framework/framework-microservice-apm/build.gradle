@@ -5,6 +5,7 @@ dependencies {
     compile(project(":framework-microservice-logging"))
     compile(project(":framework-microservice-util"))
     compile(project(":framework-microservice-bootstrap"))
+    compile(project(":framework-microservice-header"))
     compile("org.springframework.cloud:spring-cloud-starter-sleuth")
     compile("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     provided("org.springframework.boot:spring-boot-starter-web")

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static io.anyway.bigbang.framework.interceptor.mvc.ApiHandlerInterceptor.APIMASKSENSITIVE;
+import static io.anyway.bigbang.framework.interceptor.mvc.ApiHandlerInterceptor.STOPWATCH;
+
 @Slf4j
 public class ApiReturnValueProcessor extends RequestResponseBodyMethodProcessor {
 
@@ -43,14 +46,14 @@ public class ApiReturnValueProcessor extends RequestResponseBodyMethodProcessor 
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         if(returnValue instanceof ApiResponseEntity){
-            StopWatch stopWatch= (StopWatch)request.getAttribute(ApiHandlerInterceptor.STOPWATCH);
+            StopWatch stopWatch= (StopWatch)request.getAttribute(STOPWATCH);
             if(stopWatch!= null){
                 stopWatch.stop();
                 ((ApiResponseEntity)returnValue).setDuration(stopWatch.getTotalTimeMillis());
             }
         }
         try {
-            if ("TRUE".equals(request.getAttribute(ApiHandlerInterceptor.APIMASKSENSITIVE))) {
+            if ("TRUE".equals(request.getAttribute(APIMASKSENSITIVE))) {
                 MaskSensitiveDataContextHolder.anchorExecutorMarkSensitive();
             }
             super.handleReturnValue(returnValue, returnType, mavContainer, webRequest);

@@ -11,4 +11,12 @@ public class IdGenerator {
     public static long next() {
         return idWorker.getId();
     }
+
+    public static String nextRadixId() {
+        return idWorker.getRadixId();
+    }
+
+    public static String nextRadixId(String prefix) {
+        return new StringBuilder().append(prefix).append(nextRadixId()).toString();
+    }
 }

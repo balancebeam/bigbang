@@ -1,11 +1,13 @@
 package io.anyway.bigbang.framework.utils;
 
+import java.math.BigInteger;
+import java.util.Locale;
 import java.util.Random;
 
 class IdWorker {
-    private final long workerId;
-    private final long datacenterId;
-    private final long idepoch;
+    private final Long workerId;
+    private final Long datacenterId;
+    private final Long idepoch;
 
     private static final long workerIdBits = 5L;
     private static final long datacenterIdBits = 5L;
@@ -18,7 +20,7 @@ class IdWorker {
     private static final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
     private static final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
-    private long lastTimestamp = -1L;
+    private Long lastTimestamp = -1L;
     private long sequence;
     private static final Random r = new Random();
 
@@ -63,12 +65,20 @@ class IdWorker {
         return System.currentTimeMillis();
     }
 
-    public long getId() {
-        long id = nextId();
-        return id;
+    public synchronized long getId() {
+        return nextId();
     }
 
-    private synchronized long nextId() {
+    public synchronized String getRadixId(){
+        Long id= nextId();
+//        return new StringBuffer()
+//            .append(new BigInteger(workerId.toString()).toString(36).toUpperCase())
+//            .append(sequence)
+//            .append(new BigInteger(lastTimestamp.toString()).toString(36).toUpperCase()).toString();
+        return new BigInteger(id.toString()).toString(36).toUpperCase(Locale.ROOT);
+    }
+
+    private long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
             throw new IllegalStateException("Clock moved backwards.");
@@ -88,6 +98,8 @@ class IdWorker {
                 | sequence;
         return id;
     }
+
+
 
     /**
      * get the timestamp (millis second) of id

@@ -1,0 +1,11 @@
+description = "mutex module"
+archivesBaseName = 'io.anyway.bigbang.framework.mutex'
+
+dependencies {
+    compile(project(":framework-microservice-model"))
+    compile(project(":framework-microservice-discovery"))
+    compile("org.springframework.boot:spring-boot")
+    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
+    compile("org.aspectj:aspectjrt")
+    compile("org.slf4j:slf4j-api")
+}

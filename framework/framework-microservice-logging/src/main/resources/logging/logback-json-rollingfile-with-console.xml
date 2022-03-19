@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property scope="context" name="logFilePath" value="/var/log/app"/>
+    <property scope="context" name="maxFileSize" value="10MB"/>
+    <property scope="context" name="minIndex" value="1"/>
+    <property scope="context" name="maxIndex" value="3"/>
+    <springProperty scope="context" name="logFilePath" source="logging.rolling-file.path" defaultValue="/var/log/app/"/>
+    <springProperty scope="context" name="maxFileSize" source="logging.rolling-file.max-file-size" defaultValue="10MB"/>
+    <springProperty scope="context" name="minIndex" source="logging.rolling-file.min-index" defaultValue="1"/>
+    <springProperty scope="context" name="maxIndex" source="logging.rolling-file.max-index" defaultValue="3"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+
+    <appender name="JSON_FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logFilePath}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${logFilePath}/app_%i.log</fileNamePattern>
+            <minIndex>${minIndex}</minIndex>
+            <maxIndex>${maxIndex}</maxIndex>
+        </rollingPolicy>
+        <encoder class="com.djtgroup.framework.logging.XLoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>appTimestamp</fieldName>
+                    <timeZone>Asia/Shanghai</timeZone>
+                </timestamp>
+                <pattern >
+                    <omitEmptyFields>true</omitEmptyFields>
+                    <pattern>
+                        {
+                        "appName": "${appName}",
+                        "level": "%level",
+                        "thread": "%thread",
+                        "caller": "%logger{40}.%method:%line",
+                        "message": "%.-5000message",
+                        "marker": "#tryJson{%marker}",
+                        "stack_trace": "%exception{full}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>${maxFileSize}</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="ASYNC_JSON_FILE_APPENDER" class="com.djtgroup.framework.logging.InheritableThreadAsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>2048</queueSize>
+        <appender-ref ref="JSON_FILE_APPENDER"/>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+    <appender name="TEXT_CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="com.djtgroup.framework.logging.XPatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_TEXT_CONSOLE_APPENDER" class="com.djtgroup.framework.logging.InheritableThreadAsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>2048</queueSize>
+        <appender-ref ref="TEXT_CONSOLE_APPENDER"/>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC_JSON_FILE_APPENDER" />
+        <appender-ref ref="ASYNC_TEXT_CONSOLE_APPENDER" />
+    </root>
+
+</configuration>

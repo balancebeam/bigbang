@@ -18,8 +18,8 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
+        String errorContent= "";
         if (response.status() != HttpStatus.OK.value()) {
-            String errorContent;
             try {
                 errorContent = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
                 InternalException internalApiException = objectMapper.readValue(errorContent, InternalException.class);
@@ -29,6 +29,8 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                 log.error("(de)serialize error failure",e);
             }
         }
-        return new InternalException(HttpStatus.INTERNAL_SERVER_ERROR.value()+"","unknown error");
+        InternalException internalException= new InternalException(HttpStatus.INTERNAL_SERVER_ERROR.value()+"","UnknownHttpException");
+        internalException.setBody(errorContent);
+        return internalException;
     }
 }

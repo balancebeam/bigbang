@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,12 +33,12 @@ public class GlobalExceptionHandler {
             MissingServletRequestParameterException e){
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setContentType(CONTENT_TYPE);
-        log.warn("Illegal Arguments Exception, url: {}, reason: {}",request.getRequestURI(),e.getMessage());
+        log.warn("Illegal Arguments Exception, url: {}, reason: {}",request.getRequestURI(), getAvailableCause(e));
         return ApiResponseEntity.fail(
                 HttpStatus.FORBIDDEN.value()+"",
                 messageSource.getMessage("BAD_REQUEST_PARAMETER",
                         null,
-                        e.getMessage(),
+                        HttpStatus.FORBIDDEN.value()+" "+e.getClass().getName()+": "+ getAvailableCause(e),
                         LocaleContextHolder.getLocale()));
     }
 
@@ -56,7 +55,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value()+"",
                 messageSource.getMessage("INTERNAL_SERVER_ERROR",
                     null,
-                    e.getMessage(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.value()+" "+e.getClass().getName()+": " +getAvailableCause(e),
                     LocaleContextHolder.getLocale()));
     }
 
@@ -74,7 +73,7 @@ public class GlobalExceptionHandler {
         String message = messageSource.getMessage(
                 e.getApiResultStatus(),
                 e.getMessageResourceArgs(),
-                e.getApiResultStatus()+ (!StringUtils.isEmpty(e.getMessage())?"_"+e.getMessage() :""),
+                e.getApiResultStatus()+" "+e.getClass().getName()+": "+ getAvailableCause(e),
                 LocaleContextHolder.getLocale());
         log.warn("ApiException, url: {}, reason: {}",request.getRequestURI(),message);
         return ApiResponseEntity.fail(e.getApiResultStatus(),message,e.getDetail());
@@ -93,6 +92,12 @@ public class GlobalExceptionHandler {
         return ApiResponseEntity.fail(e.getCode(),e.getMessage(),e.getBody());
     }
 
-
+    private String getAvailableCause(Throwable e){
+        String message = null;
+        while(e!= null && (message=e.getMessage())==null){
+            e = e.getCause();
+        }
+        return message== null ? "" : message;
+    }
 
 }
