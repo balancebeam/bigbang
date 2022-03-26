@@ -4,6 +4,7 @@ archivesBaseName = 'io.awynay.bigbang.framework.mqclient'
 dependencies {
     compile(project(":framework-microservice-datasource"))
     compile(project(":framework-microservice-gray"))
+    compile(project(":framework-microservice-mutex"))
     compile("com.google.guava:guava")
     compile("joda-time:joda-time")
     compile("mysql:mysql-connector-java")
