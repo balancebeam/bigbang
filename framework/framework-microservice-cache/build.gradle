@@ -2,12 +2,12 @@ description = "cache module"
 archivesBaseName = 'io.anyway.bigbang.framework.cache'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-redis")
-    compile("com.github.ben-manes.caffeine:caffeine")
-    compile("com.esotericsoftware:kryo-shaded")
-    compile("org.springframework.boot:spring-boot-starter-cache")
-    compile("org.redisson:redisson")
-    compile("com.alibaba:fastjson")
-    compile("org.redisson:redisson-spring-data-23")
-    compile("io.netty:netty-all")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("com.github.ben-manes.caffeine:caffeine")
+    implementation("com.esotericsoftware:kryo-shaded")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.redisson:redisson")
+    implementation("com.alibaba:fastjson")
+    implementation("org.redisson:redisson-spring-data-23")
+    implementation("io.netty:netty-all")
 }

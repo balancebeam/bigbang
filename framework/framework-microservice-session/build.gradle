@@ -2,8 +2,8 @@ description = "session module"
 archivesBaseName = 'io.anyway.bigbang.framework.session'
 
 dependencies {
-    compile(project(":framework-microservice-header"))
-    compile(project(":framework-microservice-logging"))
-    compile(project(":framework-microservice-util"))
-    compile("org.springframework.boot:spring-boot-autoconfigure")
+    implementation(project(":framework-microservice-header"))
+    implementation(project(":framework-microservice-logging"))
+    implementation(project(":framework-microservice-util"))
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
 }

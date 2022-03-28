@@ -3,6 +3,6 @@ archivesBaseName = 'io.anyway.bigbang.framework.metrics'
 
 dependencies {
     provided("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
 }

@@ -2,7 +2,7 @@ description = "executor module"
 archivesBaseName = 'io.anyway.bigbang.framework.executor'
 
 dependencies {
-    compile(project(":framework-microservice-metrics"))
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("com.alibaba:transmittable-thread-local")
+    implementation(project(":framework-microservice-metrics"))
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.alibaba:transmittable-thread-local")
 }

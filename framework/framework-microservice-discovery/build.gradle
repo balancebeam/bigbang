@@ -2,14 +2,14 @@ description = "discovery module"
 archivesBaseName = 'io.anyway.bigbang.framework.discovery'
 
 dependencies {
-    compile(project(':framework-microservice-util'))
-    compile(project(':framework-microservice-model'))
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
-    compile("org.springframework.cloud:spring-cloud-starter-kubernetes-loadbalancer")
-    compile("org.springframework.cloud:spring-cloud-starter-kubernetes-ribbon")
-    compile("org.springframework.cloud:spring-cloud-starter-kubernetes")
-    compile("org.springframework.boot:spring-boot-starter-webflux")
-    compile("com.squareup.okhttp3:okhttp")
-    compile("com.google.guava:guava")
-    compile("com.alibaba:fastjson")
+    implementation(project(':framework-microservice-util'))
+    implementation(project(':framework-microservice-model'))
+    implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-loadbalancer")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes-ribbon")
+    implementation("org.springframework.cloud:spring-cloud-starter-kubernetes")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.google.guava:guava")
+    implementation("com.alibaba:fastjson")
 }

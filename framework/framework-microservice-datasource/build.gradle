@@ -2,7 +2,7 @@ description = "datasource module"
 archivesBaseName = 'io.anyway.bigbang.framework.datasource'
 
 dependencies {
-    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
-    compile("mysql:mysql-connector-java")
-    compile("com.h2database:h2")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter")
+    implementation("mysql:mysql-connector-java")
+    implementation("com.h2database:h2")
 }

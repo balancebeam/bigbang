@@ -2,8 +2,8 @@ description = "exception module"
 archivesBaseName = 'io.anyway.bigbang.framework.exception'
 
 dependencies {
-    compile(project(":framework-microservice-model"))
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
-    compile("com.alibaba:fastjson")
+    implementation(project(":framework-microservice-model"))
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("com.alibaba:fastjson")
 }

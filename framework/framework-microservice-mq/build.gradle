@@ -2,17 +2,17 @@ description = "mqclient module"
 archivesBaseName = 'io.awynay.bigbang.framework.mqclient'
 
 dependencies {
-    compile(project(":framework-microservice-datasource"))
-    compile(project(":framework-microservice-gray"))
-    compile(project(":framework-microservice-mutex"))
-    compile("com.google.guava:guava")
-    compile("joda-time:joda-time")
-    compile("mysql:mysql-connector-java")
-    compile("org.apache.commons:commons-lang3")
-    compile("org.mybatis.spring.boot:mybatis-spring-boot-starter")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile('org.apache.rocketmq:rocketmq-client')
-    compile('org.apache.rocketmq:rocketmq-common') {
+    implementation(project(":framework-microservice-datasource"))
+    implementation(project(":framework-microservice-gray"))
+    implementation(project(":framework-microservice-mutex"))
+    implementation("com.google.guava:guava")
+    implementation("joda-time:joda-time")
+    implementation("mysql:mysql-connector-java")
+    implementation("org.apache.commons:commons-lang3")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation('org.apache.rocketmq:rocketmq-client')
+    implementation('org.apache.rocketmq:rocketmq-common') {
         exclude group: 'io.netty', module: 'netty-tcnative'
     }
 }

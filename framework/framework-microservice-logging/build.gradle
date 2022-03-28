@@ -2,10 +2,10 @@ description = "logging module"
 archivesBaseName = 'io.anyway.bigbang.framework.logging'
 
 dependencies {
-    compile("ch.qos.logback:logback-classic")
-    compile("org.springframework.boot:spring-boot")
-    compile("com.alibaba:transmittable-thread-local")
-    compile("net.logstash.logback:logstash-logback-encoder")
-    compile("org.aspectj:aspectjweaver")
-    compile(project(":framework-microservice-util"))
+    implementation("ch.qos.logback:logback-classic")
+    implementation("org.springframework.boot:spring-boot")
+    implementation("com.alibaba:transmittable-thread-local")
+    implementation("net.logstash.logback:logstash-logback-encoder")
+    implementation("org.aspectj:aspectjweaver")
+    implementation(project(":framework-microservice-util"))
 }

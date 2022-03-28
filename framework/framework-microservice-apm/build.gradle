@@ -2,11 +2,11 @@ description = "trace module"
 archivesBaseName = 'io.anyway.bigbang.framework.trace'
 
 dependencies {
-    compile(project(":framework-microservice-logging"))
-    compile(project(":framework-microservice-util"))
-    compile(project(":framework-microservice-bootstrap"))
-    compile(project(":framework-microservice-header"))
-    compile("org.springframework.cloud:spring-cloud-starter-sleuth")
-    compile("org.springframework.cloud:spring-cloud-sleuth-zipkin")
+    implementation(project(":framework-microservice-logging"))
+    implementation(project(":framework-microservice-util"))
+    implementation(project(":framework-microservice-bootstrap"))
+    implementation(project(":framework-microservice-header"))
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("org.springframework.cloud:spring-cloud-sleuth-zipkin")
     provided("org.springframework.boot:spring-boot-starter-web")
 }

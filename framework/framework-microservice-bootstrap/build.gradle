@@ -2,6 +2,6 @@ description = "header module"
 archivesBaseName = 'io.anyway.bigbang.framework.bootstrap'
 
 dependencies {
-    compile(project(':framework-microservice-discovery'))
-    compile("org.springframework.boot:spring-boot")
+    implementation(project(':framework-microservice-discovery'))
+    implementation("org.springframework.boot:spring-boot")
 }
