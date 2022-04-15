@@ -20,6 +20,9 @@ import io.anyway.bigbang.framework.mq.service.MqMessageProducer;
 import io.anyway.bigbang.framework.mq.utils.AfterCommitTaskRegister;
 import io.anyway.bigbang.framework.utils.BeanMapUtils;
 import io.anyway.bigbang.framework.utils.JsonUtil;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.MeterBinder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
-public class MqProducerClientImpl implements MqProducerClient {
+public class MqProducerClientImpl implements MqProducerClient, MeterBinder {
 
     @Resource
     private DiscoveryMetadataService discoveryMetadataService;
@@ -53,6 +56,10 @@ public class MqProducerClientImpl implements MqProducerClient {
     final private Map<String,MqMessageProducer> mqMessageProducerMap= new HashMap<>();
 
     private volatile ExecutorService workQueueExecutor;
+
+    private MeterRegistry meterRegistry;
+
+    private volatile Map<String, Counter> producerCounterMap= new HashMap<>();
 
     @PostConstruct
     public void init(){
@@ -178,6 +185,7 @@ public class MqProducerClientImpl implements MqProducerClient {
             }
             MessageProducerOutbound result = mqMessageProducer.send(messageProducerInbound);
             if (MessageStateEnum.SUCCESS==result.getState()) {
+                doMqProducerMetrics(messageEntity.getDestination(),"success");
                 if (MessagePersistModeEnum.BURN_AFTER_SENT.getCode().equals(messageEntity.getPersistMode())) {
                     mqProducerMessageMapper.purgeMessageById(messageEntity.getId());
                     log.info("Sent message Successfully and purged it immediately, id: {}",messageEntity.getId());
@@ -186,12 +194,14 @@ public class MqProducerClientImpl implements MqProducerClient {
                 params.put("state", MessageStateEnum.SUCCESS.getCode());
                 params.put("messageId", result.getMessageId());
             } else {
+                doMqProducerMetrics(messageEntity.getDestination(),"failure");
                 params.put("state", MessageStateEnum.FAILURE.getCode());
                 params.put("cause", result.getCause());
                 params.put("retryCount",messageEntity.getRetryCount()-1);
                 params.put("retryNextAt", new Date(System.currentTimeMillis() + MqClientConstants.NEXT_RETRY_GAP));
             }
         } catch (Exception e) {
+            doMqProducerMetrics(messageEntity.getDestination(),"failure");
             log.error("Fail to send the message, messageSentApplication: {}", messageProducerInbound, e);
             params.put("state", MessageStateEnum.EXCEPTION.getCode());
             params.put("cause", e.getMessage());
@@ -204,4 +214,24 @@ public class MqProducerClientImpl implements MqProducerClient {
             log.info("Updating the message status with param: {}", params);
         }
     }
+
+    private void doMqProducerMetrics(String topic,String state){
+        String counterName= "mq."+state+".producer."+topic;
+        Counter counter= producerCounterMap.get(counterName);
+        if(counter==null){
+            synchronized (producerCounterMap) {
+                if((counter=producerCounterMap.get(counterName))== null) {
+                    counter = Counter.builder(counterName).register(meterRegistry);
+                    producerCounterMap.put(counterName,counter);
+                }
+            }
+        }
+        counter.increment();
+    }
+
+    @Override
+    public void bindTo(MeterRegistry registry) {
+        this.meterRegistry = registry;
+    }
 }
+

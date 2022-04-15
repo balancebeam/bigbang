@@ -2,6 +2,6 @@ description = "config module"
 archivesBaseName = 'io.anyway.bigbang.framework.config'
 
 dependencies {
-    compile(project(':framework-microservice-bootstrap'))
-    compile("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
+    api(project(':framework-microservice-bootstrap'))
+    api("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config")
 }

@@ -2,7 +2,7 @@ description = "useragent module"
 archivesBaseName = 'io.anyway.bigbang.framework.useragent'
 
 dependencies {
-    compile(project(":framework-microservice-header"))
-    compile(project(":framework-microservice-logging"))
-    compile("com.alibaba:fastjson")
+    api(project(":framework-microservice-header"))
+    api(project(":framework-microservice-logging"))
+    api("com.alibaba:fastjson")
 }

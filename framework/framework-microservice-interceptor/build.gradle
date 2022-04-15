@@ -2,9 +2,9 @@ description = "interceptor module"
 archivesBaseName = 'io.anyway.bigbang.framework.interceptor'
 
 dependencies {
-    compile(project(":framework-microservice-header"))
-    compile(project(":framework-microservice-model"))
-    compile(project(":framework-microservice-security"))
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    api(project(":framework-microservice-header"))
+    api(project(":framework-microservice-model"))
+    api(project(":framework-microservice-security"))
+    api("org.springframework.boot:spring-boot-starter-web")
+    api("org.springframework.cloud:spring-cloud-starter-openfeign")
 }

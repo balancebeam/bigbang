@@ -16,7 +16,7 @@ buildscript {
 
 subprojects{
 
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
@@ -29,14 +29,6 @@ subprojects{
     tasks.withType(JavaCompile) {
 //        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
-
-    configurations {
-        provided
-    }
-
-    sourceSets.main.compileClasspath += configurations.provided
-    sourceSets.test.compileClasspath += configurations.provided
-    sourceSets.test.runtimeClasspath += configurations.provided
 
     repositories {
         maven {

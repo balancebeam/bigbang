@@ -65,7 +65,7 @@ public class MqClientMessageEntity extends AbstractEntity {
     /**
      * 错误原因
      */
-    String reason;
+    String cause;
     /**
      * 重试次数
      */

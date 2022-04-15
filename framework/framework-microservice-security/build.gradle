@@ -2,9 +2,9 @@ description = "security module"
 archivesBaseName = 'io.anyway.bigbang.framework.security'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot")
-    compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("org.slf4j:slf4j-api")
-    compile(project(":framework-microservice-util"))
-    compile("org.springframework.boot:spring-boot-starter-validation")
+    api("org.springframework.boot:spring-boot")
+    api("com.fasterxml.jackson.core:jackson-databind")
+    api("org.slf4j:slf4j-api")
+    api(project(":framework-microservice-util"))
+    api("org.springframework.boot:spring-boot-starter-validation")
 }

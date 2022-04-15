@@ -13,10 +13,7 @@ import io.anyway.bigbang.framework.mq.schedule.MqMutexSchedule;
 import io.anyway.bigbang.framework.mq.service.*;
 import io.anyway.bigbang.framework.mq.service.impl.*;
 import io.anyway.bigbang.framework.utils.SpringUtil;
-import com.google.common.base.Joiner;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,7 +23,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -52,25 +48,25 @@ public class MqClientConfigure {
         private MqClientProperties mqClientProperties;
 
         @Bean
-        public MqProducerClient createMqProducerClient(){
+        public MqProducerClientImpl createMqProducerClient(){
             return new MqProducerClientImpl();
         }
 
         @Bean
         @MqProducerConditional(MqTypeEnum.ACTIVEMQ)
-        public MqMessageProducer createMqMessageActivemqProducer(){
+        public MqMessageActivemqProducerImpl createMqMessageActivemqProducer(){
             return new MqMessageActivemqProducerImpl();
         }
 
         @Bean
         @MqProducerConditional(MqTypeEnum.RABBITMQ)
-        public MqMessageProducer createMqMessageRabbitmqProducer(){
+        public MqMessageRabbitmqProducerImpl createMqMessageRabbitmqProducer(){
             return new MqMessageRabbitmqProducerImpl();
         }
 
         @Bean
         @MqProducerConditional(MqTypeEnum.KAFKA)
-        public MqMessageProducer createMqMessageKafkaProducer(){
+        public MqMessageKafkaProducerImpl createMqMessageKafkaProducer(){
             return new MqMessageKafkaProducerImpl();
         }
 
@@ -82,7 +78,7 @@ public class MqClientConfigure {
 
         @Bean
         @MqProducerConditional(MqTypeEnum.PULSAR)
-        public MqMessageProducer createMqMessagePulsarProducer(){
+        public MqMessagePulsarProducerImpl createMqMessagePulsarProducer(){
             return new MqMessagePulsarProducerImpl();
         }
 
@@ -98,7 +94,7 @@ public class MqClientConfigure {
     }
 
     @Configuration
-    public static class MqConsumerConfigure implements BeanPostProcessor {
+    public static class MqConsumerConfigure{
 
         @Resource
         private MqClientProperties mqClientProperties;
@@ -114,7 +110,7 @@ public class MqClientConfigure {
         }
 
         @Bean
-        public MqMessageRouteForward createMqMessageGrayRouter(){
+        public MqMessageRouteForwardImpl createMqMessageGrayRouter(){
             return new MqMessageRouteForwardImpl();
         }
 
@@ -125,37 +121,37 @@ public class MqClientConfigure {
         }
 
         @Bean
-        public MqMessageListenerDispatcher createMqMessageListenerDispatcher(){
+        public MqMessageListenerDispatcherImpl createMqMessageListenerDispatcher(){
             return new MqMessageListenerDispatcherImpl();
         }
 
         @Bean
         @MqConsumerConditional(MqTypeEnum.ACTIVEMQ)
-        public MqMessageListener createMqMessageActivemqListener(){
+        public MqMessageActivemqListenerImpl createMqMessageActivemqListener(){
             return new MqMessageActivemqListenerImpl();
         }
 
         @Bean
         @MqConsumerConditional(MqTypeEnum.RABBITMQ)
-        public MqMessageListener createMqMessageRabbitmqListener(){
+        public MqMessageRabbitmqListenerImpl createMqMessageRabbitmqListener(){
             return new MqMessageRabbitmqListenerImpl();
         }
 
         @Bean
         @MqConsumerConditional(MqTypeEnum.KAFKA)
-        public MqMessageListener createMqMessageKafkaListener(){
+        public MqMessageKafkaListenerImpl createMqMessageKafkaListener(){
             return new MqMessageKafkaListenerImpl();
         }
 
         @Bean
         @MqConsumerConditional(MqTypeEnum.ROCKETMQ)
-        public MqMessageListener createMqMessageRocketmqListener(){
+        public MqMessageRocketmqListenerImpl createMqMessageRocketmqListener(){
             return new MqMessageRocketmqListenerImpl();
         }
 
         @Bean
         @MqConsumerConditional(MqTypeEnum.PULSAR)
-        public MqMessageListener createMqMessagePulsarListener(){
+        public MqMessagePulsarListenerImpl createMqMessagePulsarListener(){
             return new MqMessagePulsarListenerImpl();
         }
 
@@ -169,42 +165,6 @@ public class MqClientConfigure {
             return new MqConsumerController();
         }
 
-        //TODO change @Import(SpringFactoryImportSelector)
-        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-            Object target = SpringUtil.getProxyTarget(bean);
-            for (Method method : target.getClass().getDeclaredMethods()) {
-                MqListener listener = method.getAnnotation(MqListener.class);
-                if (listener != null) {
-                    List<String> tags= Arrays.asList(listener.tags());
-                    Collections.sort(tags);
-                    String key= listener.group()+"@"+listener.value()+"["+(tags.isEmpty()? "*" : Joiner.on("||").join(tags))+"]";
-                    MqTypeEnum mqType= mqClientProperties.getMqType();
-                    if(listener.mqType()!=MqTypeEnum.DEFAULT){
-                        mqType= listener.mqType();
-                    }
-                    if(!messageListenerDefinitionMap.containsKey(mqType)){
-                        messageListenerDefinitionMap.put(mqType,new LinkedHashMap<>());
-                    }
-                    Map<String,MessageListenerDefinition> definitionMap = messageListenerDefinitionMap.get(mqType);
-                    MessageListenerDefinition wrapper= definitionMap.get(key);
-                    if(wrapper== null){
-                        wrapper= new MessageListenerDefinition();
-                        wrapper.setId(key).setDestination(listener.value()).setTags(tags).setGroup(listener.group());
-                        definitionMap.put(key,wrapper);
-                    }
-                    MessageListenerInvoker invoker= new MessageListenerInvoker();
-                    invoker.setInstance(bean);
-                    invoker.setMethod(method);
-                    if(method.getParameterTypes().length!=1) {
-                        throw new IllegalArgumentException("method "+method+" parameter was incorrect.");
-                    }
-                    invoker.setParameterType(method.getParameterTypes()[0]);
-                    ReflectionUtils.makeAccessible(method);
-                    wrapper.getInvokerList().add(invoker);
-                }
-            }
-            return bean;
-        }
     }
 
     @Configuration

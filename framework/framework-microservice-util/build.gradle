@@ -2,9 +2,9 @@ description = "util module"
 archivesBaseName = 'io.anyway.bigbang.framework.util'
 
 dependencies {
-    compile(project(":framework-microservice-model"))
-    compile("org.springframework.boot:spring-boot")
-    compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("org.bouncycastle:bcprov-jdk15on")
-    compile("org.slf4j:slf4j-api")
+    api(project(":framework-microservice-model"))
+    api("org.springframework.boot:spring-boot")
+    api("com.fasterxml.jackson.core:jackson-databind")
+    api("org.bouncycastle:bcprov-jdk15on")
+    api("org.slf4j:slf4j-api")
 }

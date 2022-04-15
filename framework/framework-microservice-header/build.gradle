@@ -2,6 +2,6 @@ description = "header module"
 archivesBaseName = 'io.anyway.bigbang.framework.header'
 
 dependencies {
-    compile("com.alibaba:transmittable-thread-local")
-    provided("org.springframework.boot:spring-boot-starter-web")
+    api("com.alibaba:transmittable-thread-local")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 }

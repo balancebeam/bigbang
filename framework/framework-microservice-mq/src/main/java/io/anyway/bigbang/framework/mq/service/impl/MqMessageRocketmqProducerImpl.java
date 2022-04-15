@@ -1,5 +1,6 @@
 package io.anyway.bigbang.framework.mq.service.impl;
 
+import io.anyway.bigbang.framework.discovery.DiscoveryMetadataService;
 import io.anyway.bigbang.framework.mq.config.MqClientDescriptor;
 import io.anyway.bigbang.framework.mq.config.MqClientProperties;
 import io.anyway.bigbang.framework.mq.constant.MessageStateEnum;
@@ -40,12 +41,15 @@ public class MqMessageRocketmqProducerImpl implements MqMessageProducer {
 
     private MessageQueueSelector messageQueueSelector;
 
+    @Resource
+    private DiscoveryMetadataService discoveryMetadataService;
+
     @PostConstruct
     private void init() {
 
         MqClientDescriptor descriptor = mqClientProperties.getClient().get(MqTypeEnum.ROCKETMQ.getCode());
         Map<String,Object> properties= descriptor.getProducer();
-        mqMessageProducer = new DefaultMQProducer((String)properties.get("group"));
+        mqMessageProducer = new DefaultMQProducer((String)properties.getOrDefault("group",discoveryMetadataService.getServiceId()));
         mqMessageProducer.setRetryTimesWhenSendFailed((Integer) properties.getOrDefault("retry-times-when-send-failed",2));
         mqMessageProducer.setRetryTimesWhenSendAsyncFailed((Integer) properties.getOrDefault("retry-times-when-send-async-failed",2));
         mqMessageProducer.setSendMsgTimeout((Integer) properties.getOrDefault("send-message-timeout",3000));

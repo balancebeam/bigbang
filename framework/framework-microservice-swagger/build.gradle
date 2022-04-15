@@ -2,8 +2,8 @@ description = "swagger module"
 archivesBaseName = 'io.anyway.bigbang.framework.swagger'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("io.springfox:springfox-swagger2")
-    compile("io.springfox:springfox-swagger-ui")
-    compile("com.github.xiaoymin:swagger-bootstrap-ui:1.9.6")
+    api("org.springframework.boot:spring-boot-starter-web")
+    api("io.springfox:springfox-swagger2")
+    api("io.springfox:springfox-swagger-ui")
+    api("com.github.xiaoymin:swagger-bootstrap-ui:1.9.6")
 }
