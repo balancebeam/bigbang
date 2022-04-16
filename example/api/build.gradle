@@ -3,5 +3,5 @@ description = "example api project"
 archivesBaseName = 'io.anyway.bigbang.example.api'
 
 dependencies {
-    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    api("org.springframework.cloud:spring-cloud-starter-openfeign")
 }

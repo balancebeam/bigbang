@@ -4,7 +4,6 @@ import io.anyway.bigbang.example.model.User;
 import io.anyway.bigbang.example.service.UserService;
 import io.anyway.bigbang.framework.exception.ApiException;
 import io.anyway.bigbang.framework.model.api.ApiResponseEntity;
-import io.anyway.bigbang.framework.session.DefaultUserDetailContext;
 import io.anyway.bigbang.framework.session.SessionContextHolder;
 import io.anyway.bigbang.framework.session.UserDetailContext;
 import io.swagger.annotations.*;
@@ -17,7 +16,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -39,7 +37,7 @@ public class ProviderExternalController {
         String detail= request.getHeader("x-user-detail");
         String s= URLDecoder.decode(detail,"UTF-8");
 
-        Optional<DefaultUserDetailContext> opt= SessionContextHolder.getUserDetailContext();
+        Optional<UserDetailContext> opt= SessionContextHolder.getUserDetailContext();
         if(opt.isPresent()){
             log.info("session user: {}",opt.get());
         }

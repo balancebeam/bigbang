@@ -7,7 +7,7 @@ configurations.all {
     resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 dependencies {
-    compile(project(":api"))
-    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
+    api(project(":api"))
+    api("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
 
 }

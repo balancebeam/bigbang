@@ -3,7 +3,7 @@ archivesBaseName = 'io.anyway.bigbang.example.consumer'
 apply plugin: "org.springframework.boot"
 
 dependencies {
-    compile(project(":api"))
-    compile("io.anyway.bigbang.example:api:1.0")
-    compile("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
+    api(project(":api"))
+    api("io.anyway.bigbang.example:api:1.0")
+    api("io.anyway.bigbang.framework:framework-microservice-autoconfigure")
 }
