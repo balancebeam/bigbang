@@ -1,18 +1,17 @@
 package io.anyway.bigbang.framework.mq.config;
 
-import io.anyway.bigbang.framework.mutex.config.MutexConfigure;
 import io.anyway.bigbang.framework.mq.annotation.MqConsumerConditional;
-import io.anyway.bigbang.framework.mq.annotation.MqListener;
 import io.anyway.bigbang.framework.mq.annotation.MqProducerConditional;
 import io.anyway.bigbang.framework.mq.constant.MqTypeEnum;
 import io.anyway.bigbang.framework.mq.controller.MqConsumerController;
 import io.anyway.bigbang.framework.mq.controller.MqProducerController;
-import io.anyway.bigbang.framework.mq.domain.MessageListenerDefinition;
-import io.anyway.bigbang.framework.mq.domain.MessageListenerInvoker;
 import io.anyway.bigbang.framework.mq.schedule.MqMutexSchedule;
-import io.anyway.bigbang.framework.mq.service.*;
+import io.anyway.bigbang.framework.mq.service.MqConsumerClientManager;
+import io.anyway.bigbang.framework.mq.service.MqMessageIdempotentManager;
+import io.anyway.bigbang.framework.mq.service.MqMessageProducer;
+import io.anyway.bigbang.framework.mq.service.MqProducerClientManager;
 import io.anyway.bigbang.framework.mq.service.impl.*;
-import io.anyway.bigbang.framework.utils.SpringUtil;
+import io.anyway.bigbang.framework.mutex.config.MutexConfigure;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,10 +25,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import static io.anyway.bigbang.framework.mq.service.MqMessageListenerDispatcher.messageListenerDefinitionMap;
 
 @Configuration
 @MapperScan({"io.anyway.bigbang.framework.mq.dao"})

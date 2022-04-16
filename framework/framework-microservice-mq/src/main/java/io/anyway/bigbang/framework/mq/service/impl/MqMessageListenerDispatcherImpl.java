@@ -2,6 +2,7 @@ package io.anyway.bigbang.framework.mq.service.impl;
 
 import io.anyway.bigbang.framework.gray.GrayContextHolder;
 import io.anyway.bigbang.framework.header.HeaderContextHolder;
+import io.anyway.bigbang.framework.mq.annotation.MqListener;
 import io.anyway.bigbang.framework.mq.config.MqClientProperties;
 import io.anyway.bigbang.framework.mq.constant.MqTypeEnum;
 import io.anyway.bigbang.framework.mq.domain.*;
@@ -11,6 +12,7 @@ import io.anyway.bigbang.framework.mq.service.MqMessageRouteForward;
 import io.anyway.bigbang.framework.mq.utils.MqMessageContextHolder;
 import io.anyway.bigbang.framework.utils.JsonUtil;
 import com.google.common.base.Joiner;
+import io.anyway.bigbang.framework.utils.SpringUtil;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
