@@ -45,11 +45,12 @@ public class MqMessageRocketmqListenerImpl implements MqMessageListener {
     public void start(){
         Collection<MessageListenerDefinition> list= mqMessageDispatcherListener.getMessageListenerDefinitionList(MqTypeEnum.ROCKETMQ);
         MqClientDescriptor descriptor= mqClientProperties.getClient().get(MqTypeEnum.ROCKETMQ.getCode());
-//        Map<String,Object> properties= descriptor.getConsumer();
+        Map<String,Object> properties= descriptor.getConsumer();
         for(MessageListenerDefinition each: list) {
-            String group= !StringUtils.isEmpty(each.getGroup())? each.getGroup() :  MD5Util.getMD5String(discoveryMetadataService.getServiceId()+ "_"+ each.getDestination()+"_"+ each.getTags());
+            String group= !StringUtils.isEmpty(each.getGroup())? each.getGroup() :  discoveryMetadataService.getServiceId()+ "_"+ MD5Util.getMD5String(each.getDestination()+"_"+ each.getTags());
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(group);
-            consumer.setNamesrvAddr(descriptor.getServerAddress());
+            int heartbeatBrokerInterval= (Integer)properties.getOrDefault("heartbeatBrokerInterval",15000);
+            consumer.setHeartbeatBrokerInterval(heartbeatBrokerInterval);
             try {
                 List<String> tags = each.getTags();
                 if (tags.isEmpty()) {
